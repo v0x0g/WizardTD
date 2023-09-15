@@ -1,6 +1,7 @@
 package WizardTD;
 
 import WizardTD.Event.*;
+import WizardTD.Event.Event;
 import WizardTD.Ext.*;
 import WizardTD.UI.*;
 import WizardTD.Gameplay.Game.*;
@@ -49,6 +50,7 @@ public final class App extends PApplet {
         Logger.info("program start; args={}", Arrays.toString(args));
 
         EventManager.init();
+        EventManager.invokeEvent(new Event(EventType.Bootstrap));
 
         Logger.debug("run PApplet.main({})", APP_CLASS_NAME);
         try {
@@ -82,15 +84,11 @@ public final class App extends PApplet {
         Logger.debug("cap framerate: {} fps", GuiConfig.TARGET_FPS);
         frameRate(GuiConfig.TARGET_FPS);
 
-        // Load images during setup
-        // Eg:
-//         loadImage("src/main/resources/WizardTD/tower0.png");
-        // loadImage("src/main/resources/WizardTD/tower1.png");
-        // loadImage("src/main/resources/WizardTD/tower2.png");
+        EventManager.invokeEvent(new Event(EventType.AppSetup));
 
         Logger.debug("calling UiManager::loadGraphics()");
         UiManager.loadGraphics(this);
-
+        
         Logger.info("done setup");
     }
 
@@ -132,12 +130,15 @@ public final class App extends PApplet {
     @Override
     public void draw() {
         Logger.trace("enter draw");
-        if(millis() > 1_000){
+        if(millis() > 500){
             exit();
         }
         Logger.trace("exit draw");
     }
 
+    /**
+     * Special exception type for when the app can't be init'ed
+     */
     @StandardException
     public static final class AppInitException extends Exception {}
 

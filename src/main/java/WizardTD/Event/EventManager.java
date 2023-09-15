@@ -122,7 +122,7 @@ public class EventManager {
                             @Override
                             public void processEvent(@NonNull final Event event) {
                                 try {
-                                    method.invoke(event);
+                                    method.invoke(null, event);
                                 } catch (InvocationTargetException e) {
                                     warn(e, "exception when invoking event method {}", method);
                                     throw new RuntimeException(e);
