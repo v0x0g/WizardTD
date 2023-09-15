@@ -1,8 +1,9 @@
 package WizardTD.Event;
 
 import io.github.classgraph.*;
-import lombok.experimental.*;
+import lombok.*;
 import lombok.var;
+import lombok.experimental.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.lang.reflect.*;
@@ -11,6 +12,7 @@ import java.util.*;
 import static org.tinylog.Logger.*;
 
 @UtilityClass
+@ExtensionMethod(java.util.Arrays.class)
 public class EventManager {
 
     private final @NonNull HashMap<@NonNull EventType, @NonNull Set<@NonNull EventMethod>> eventsMap = new HashMap<>();
@@ -41,7 +43,7 @@ public class EventManager {
     /**
      * Adds a subscriber to a given event type
      */
-    public void subscribe(final EventType type, final EventMethod method) {
+    public void subscribe(final @NonNull EventType type, final @NonNull EventMethod method) {
         debug("adding subscriber for {}: {}", type, method);
         subscriberList(type).add(method);
     }
@@ -49,15 +51,11 @@ public class EventManager {
     /**
      * Removes a subscriber from a given event type
      */
-    public void unsubscribe(final EventType type, final EventMethod method) {
+    public void unsubscribe(final @NonNull EventType type, final @NonNull EventMethod method) {
         debug("removing subscriber for {}: {}", type, method);
         subscriberList(type).remove(method);
     }
 
-    private void helper(Event event, Method method){
-        
-    }
-    
     public void init() {
         info("init event manager");
 
@@ -114,9 +112,31 @@ public class EventManager {
                     // Map each method to a Key-Value pair of [the method instance] and [the @OnEvent attribute instance]
                     // This loads both the method's class and the attribute's class
                     .map(meth -> new AbstractMap.SimpleImmutableEntry<>(meth.loadClassAndGetMethod(), (OnEvent) meth.getAnnotationInfo(OnEvent.class).loadClassAndInstantiate()))
+                    // Iterate over each event method we have
                     .forEach(pair -> {
-                        Arrays.stream(pair.getValue().eventTypes())
-                                .forEach(eventType -> EventManager.subscribe(eventType, event -> helper(event, pair.getKey())));
+
+                        @AllArgsConstructor
+                        @ToString
+                        class Helper implements EventMethod {
+                            public final @NonNull Method method;
+
+                            @Override
+                            public void processEvent(@NonNull final Event event) {
+                                try {
+                                    method.invoke(event);
+                                } catch (InvocationTargetException e) {
+                                    warn(e, "exception when invoking event method {}", method);
+                                    throw new RuntimeException(e);
+                                } catch (IllegalAccessException e) {
+                                    error(e, "couldn't invoke event method for {} (Illegal Access)", method);
+                                }
+                            }
+                        }
+                        // Loop over each event type this method is subscribed to 
+                        // And subscribe it to that event type
+                        final OnEvent events = pair.getValue();
+                        final Method meth = pair.getKey();
+                        events.eventTypes().stream().forEach(eventType -> EventManager.subscribe(eventType, new Helper(meth)));
                     });
 
 //
