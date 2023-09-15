@@ -16,11 +16,7 @@ public final class Wave {
 
     public final @NonNull List<@NonNull EnemyFactory<?>> enemyFactories;
 
-    Wave(
-            final double duration,
-            final double delayBeforeWave,
-            @NonNull final List<@NonNull EnemyFactory<?>> enemyFactories
-    ) {
+    Wave(final double duration, final double delayBeforeWave, @NonNull final List<@NonNull EnemyFactory<?>> enemyFactories) {
         this.duration = duration;
         this.delayBeforeWave = delayBeforeWave;
         this.enemyFactories = enemyFactories;

@@ -20,7 +20,7 @@ public class UiManager {
     public void loadGraphics(@NonNull final PApplet app) {
         UiLog.debug("starting load graphics");
         //TODO: Images
-        
+
         // Unfortunately I gotta load all the images here and forward them onto the classes here
         WizardTD.Gameplay.Tiles.Grass.tileImage = loadImage(app, Resources.Tiles.Grass.Tile);
         WizardTD.Gameplay.Tiles.Path.tileImage = loadImage(app, Resources.Tiles.Path.Tile);
@@ -30,17 +30,17 @@ public class UiManager {
         WizardTD.Gameplay.Tiles.Grass.tileImage = loadImage(app, Resources.Tiles.Grass.Tile);
         WizardTD.Gameplay.Tiles.Grass.tileImage = loadImage(app, Resources.Tiles.Grass.Tile);
         WizardTD.Gameplay.Tiles.Grass.tileImage = loadImage(app, Resources.Tiles.Grass.Tile);
-        
+
         UiLog.debug("done load graphics");
     }
-    
-    private boolean isValidImage(@Nullable final PImage img){
+
+    private boolean isValidImage(@Nullable final PImage img) {
         return img != null && img.loaded && img.height > 0 && img.width > 0;
     }
-    
-    private @NonNull PImage loadImage(@NonNull final PApplet app, @NonNull @CompileTimeConstant final String path){
+
+    private @NonNull PImage loadImage(@NonNull final PApplet app, @NonNull @CompileTimeConstant final String path) {
         UiLog.trace("loading image at {}", path);
-        val img = app.loadImage(path);
+        final val img = app.loadImage(path);
         UiLog.trace("loaded image at {}: {}", path, img);
         return img;
     }
@@ -58,25 +58,25 @@ public class UiManager {
             @UtilityClass
             private static class Grass {
                 public static final @NonNull String DIR = Tiles.DIR + "/Grass";
-                public static final @NonNull String Tile = DIR + "/grass.png";                    
+                public static final @NonNull String Tile = DIR + "/grass.png";
             }
 
             @UtilityClass
             private static class Path {
                 public static final @NonNull String DIR = Tiles.DIR + "/Path";
-                public static final @NonNull String Tile = DIR + "/path.png";                    
+                public static final @NonNull String Tile = DIR + "/path.png";
             }
 
             @UtilityClass
             private static class Shrub {
                 public static final @NonNull String DIR = Tiles.DIR + "/Shrub";
-                public static final @NonNull String Tile = DIR + "/shrub.png";                    
+                public static final @NonNull String Tile = DIR + "/shrub.png";
             }
 
             @UtilityClass
             private static class Tower {
                 public static final @NonNull String DIR = Tiles.DIR + "/Tower";
-                public static final @NonNull String Tile = DIR + "/tower.png";                    
+                public static final @NonNull String Tile = DIR + "/tower.png";
             }
 
         }

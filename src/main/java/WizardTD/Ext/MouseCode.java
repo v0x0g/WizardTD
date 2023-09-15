@@ -7,9 +7,7 @@ import java.util.*;
 @ToString
 @AllArgsConstructor
 public enum MouseCode {
-    LMB(37),
-    RMB(39),
-    MMB(3),
+    LMB(37), RMB(39), MMB(3),
     ;
 
     final int code;

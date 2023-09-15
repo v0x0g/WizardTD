@@ -65,14 +65,7 @@ public final class GameData {
         }
 
         error("TODO: Waves");
-        return Optional.of(new GameData(
-                board,
-                enemies,
-                towers,
-                waves,
-                fourPrivetDrive,
-                desc.config
-        ));
+        return Optional.of(new GameData(board, enemies, towers, waves, fourPrivetDrive, desc.config));
     }
 
 }

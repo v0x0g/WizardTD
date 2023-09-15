@@ -1,10 +1,10 @@
 package WizardTD;
 
-import WizardTD.Event.*;
 import WizardTD.Event.Event;
+import WizardTD.Event.*;
 import WizardTD.Ext.*;
-import WizardTD.UI.*;
 import WizardTD.Gameplay.Game.*;
+import WizardTD.UI.*;
 import lombok.experimental.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.tinylog.*;
@@ -16,7 +16,7 @@ import java.util.*;
 
 public final class App extends PApplet {
 
-    private @NonNull GameData gameData;
+    private final @NonNull GameData gameData;
 
     public App() throws AppInitException {
         Logger.info("app ctor");
@@ -88,7 +88,7 @@ public final class App extends PApplet {
 
         Logger.debug("calling UiManager::loadGraphics()");
         UiManager.loadGraphics(this);
-        
+
         Logger.info("done setup");
     }
 
@@ -130,7 +130,7 @@ public final class App extends PApplet {
     @Override
     public void draw() {
         Logger.trace("enter draw");
-        if(millis() > 500){
+        if (millis() > 500) {
             exit();
         }
         Logger.trace("exit draw");

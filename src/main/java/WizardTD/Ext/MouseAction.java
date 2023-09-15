@@ -9,14 +9,7 @@ import java.util.*;
 @ToString
 @AllArgsConstructor
 public enum MouseAction {
-    CLICK(MouseEvent.CLICK),
-    DRAG(MouseEvent.DRAG),
-    ENTER(MouseEvent.ENTER),
-    EXIT(MouseEvent.EXIT),
-    MOVE(MouseEvent.MOVE),
-    PRESS(MouseEvent.PRESS),
-    RELEASE(MouseEvent.RELEASE),
-    WHEEL(MouseEvent.WHEEL);
+    CLICK(MouseEvent.CLICK), DRAG(MouseEvent.DRAG), ENTER(MouseEvent.ENTER), EXIT(MouseEvent.EXIT), MOVE(MouseEvent.MOVE), PRESS(MouseEvent.PRESS), RELEASE(MouseEvent.RELEASE), WHEEL(MouseEvent.WHEEL);
 
     final int actionCode;
 

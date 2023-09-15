@@ -1,8 +1,8 @@
 package WizardTD.Gameplay.Tiles;
 
 import lombok.*;
-import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.*;
 import processing.core.*;
 
 import java.util.*;

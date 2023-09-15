@@ -8,17 +8,13 @@ import processing.core.*;
 @EqualsAndHashCode(callSuper = false)
 public final class WizardHouse extends Tile {
 
+    public static @Nullable PImage tileImage = null;
     /**
      * How much mana the wizard has remaining
      */
     public double mana;
-
     public double manaCap;
-
     public double manaTrickle;
-
-
-    public static @Nullable PImage tileImage = null;
 
     @Override
     public @Nullable PImage getImage() {

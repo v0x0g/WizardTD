@@ -11,9 +11,8 @@ public enum EventType {
 
     /**
      * Called inside the `PApplet::setup()` method
-     * 
+     * <p>
      * Should be used to init graphics, sprites, etc
      */
     AppSetup,
-    ;
 }

@@ -93,7 +93,7 @@ public class EventManager {
                             warn("param not a class reference for method {}", meth);
                             return true;
                         }
-                        ClassRefTypeSignature paramType = (ClassRefTypeSignature) params[0].getTypeDescriptor();
+                        final ClassRefTypeSignature paramType = (ClassRefTypeSignature) params[0].getTypeDescriptor();
                         // Try and load the class instance associated with the parameter
                         // And then compare it with the class of our event type
                         // To avoid loading the class when not necessary, check class names first as a short-circuit
@@ -123,10 +123,10 @@ public class EventManager {
                             public void processEvent(@NonNull final Event event) {
                                 try {
                                     method.invoke(null, event);
-                                } catch (InvocationTargetException e) {
+                                } catch (final InvocationTargetException e) {
                                     warn(e, "exception when invoking event method {}", method);
                                     throw new RuntimeException(e);
-                                } catch (IllegalAccessException e) {
+                                } catch (final IllegalAccessException e) {
                                     error(e, "couldn't invoke event method for {} (Illegal Access)", method);
                                 }
                             }
