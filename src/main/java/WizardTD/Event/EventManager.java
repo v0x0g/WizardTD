@@ -58,7 +58,6 @@ public class EventManager {
 
     public void init() {
         info("init event manager");
-
         // If we wanted to restrict this slightly, we'd do `newClassGraph.acceptPackages("WizardTD")...`
         try (final ScanResult scanResult = new ClassGraph().enableAllInfo().ignoreClassVisibility().ignoreMethodVisibility().scan()) {
             // DO NOT UNCOMMENT THIS LINE
@@ -138,37 +137,6 @@ public class EventManager {
                         final Method meth = pair.getKey();
                         events.eventTypes().stream().forEach(eventType -> EventManager.subscribe(eventType, new Helper(meth)));
                     });
-
-//
-//            // List of classes that have [methods annotated with @OnEvent]
-//            final ClassInfoList classesWithEventMethodsList = scanResult.getClassesWithMethodAnnotation(OnEvent.class);
-//            debug("classes with `@OnEvent` attributed methods: \n[\n\t{}\n]",
-//                    String.join("\t\n", (Iterable<String>) classesWithEventMethodsList
-//                            .stream()
-//                            .map(ClassInfo::toString)
-//                            ::iterator)
-//            );
-//
-//            // Loop over each class that has some annotated methods
-//            for (final ClassInfo eventClassInfo : classesWithEventMethodsList) {
-//                trace("processing class {}", eventClassInfo.getName());
-//                // Get the Route annotation on the class
-//                eventClassInfo.getMethodInfo();
-//                final AnnotationInfo annotationInfo = eventClassInfo.getAnnotationInfo(OnEvent.class);
-//                final AnnotationParameterValueList paramVals = annotationInfo.getParameterValues();
-////
-//////                // The OnEvent annotation has a parameter named "event"
-//////                final String routePath = paramVals.get("event");
-////
-////                // Alternatively, you can load and instantiate the annotation, so that the annotation
-////                // methods can be called directly to get the annotation parameter values (this sets up
-////                // an InvocationHandler to emulate the Route annotation instance, since annotations
-////                // can't be instantiated directly without also loading the annotated class).
-////                final OnEvents route = (OnEvents) annotationInfo.loadClassAndInstantiate();
-////                final OnEvent[] events = route.value();
-////
-////                // ...
-//            }
         }
         info("done init event manager");
     }
