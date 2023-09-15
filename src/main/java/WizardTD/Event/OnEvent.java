@@ -1,15 +1,16 @@
 package WizardTD.Event;
 
+import org.checkerframework.checker.nullness.qual.*;
+
 import java.lang.annotation.*;
 
 /**
- * Event attribute to mark a method as subscribing to a given event
+ * Event attribute to mark a method as subscribing to some given event(s)
  */
 @Retention(RetentionPolicy.RUNTIME) // Read via reflection
 @Target(ElementType.METHOD)
-@Repeatable(OnEvents.class)
 public @interface OnEvent {
 
-    EventType event();// default EventType.Init;
+    EventType @NonNull [] eventTypes();// default EventType.Init;
 
 }
