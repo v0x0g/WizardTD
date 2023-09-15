@@ -19,6 +19,8 @@ public class UiManager {
      */
     public void loadGraphics(@NonNull final PApplet app) {
         UiLog.debug("starting load graphics");
+        //TODO: Images
+        
         // Unfortunately I gotta load all the images here and forward them onto the classes here
         WizardTD.Gameplay.Tiles.Grass.tileImage = loadImage(app, Resources.Tiles.Grass.Tile);
         WizardTD.Gameplay.Tiles.Path.tileImage = loadImage(app, Resources.Tiles.Path.Tile);
@@ -56,8 +58,25 @@ public class UiManager {
             @UtilityClass
             private static class Grass {
                 public static final @NonNull String DIR = Tiles.DIR + "/Grass";
-                
                 public static final @NonNull String Tile = DIR + "/grass.png";                    
+            }
+
+            @UtilityClass
+            private static class Path {
+                public static final @NonNull String DIR = Tiles.DIR + "/Path";
+                public static final @NonNull String Tile = DIR + "/path.png";                    
+            }
+
+            @UtilityClass
+            private static class Shrub {
+                public static final @NonNull String DIR = Tiles.DIR + "/Shrub";
+                public static final @NonNull String Tile = DIR + "/shrub.png";                    
+            }
+
+            @UtilityClass
+            private static class Tower {
+                public static final @NonNull String DIR = Tiles.DIR + "/Tower";
+                public static final @NonNull String Tile = DIR + "/tower.png";                    
             }
 
         }

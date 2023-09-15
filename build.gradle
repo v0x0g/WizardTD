@@ -33,6 +33,8 @@ dependencies {
     implementation 'org.tinylog:tinylog-impl:2.6.2'
     implementation 'net.mikera:vectorz:0.52.0'
 
+    implementation 'io.github.classgraph:classgraph:4.8.162'
+
     // Dev tools
     compileOnly 'org.projectlombok:lombok:1.18.28'
     annotationProcessor 'org.projectlombok:lombok:1.18.28'

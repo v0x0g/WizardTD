@@ -1,5 +1,6 @@
 package WizardTD;
 
+import WizardTD.Event.*;
 import WizardTD.Ext.*;
 import WizardTD.UI.*;
 import WizardTD.Gameplay.Game.*;
@@ -46,6 +47,8 @@ public final class App extends PApplet {
         final String APP_CLASS_NAME = "WizardTD.App";
 
         Logger.info("program start; args={}", Arrays.toString(args));
+
+        EventManager.init();
 
         Logger.debug("run PApplet.main({})", APP_CLASS_NAME);
         try {
@@ -129,7 +132,7 @@ public final class App extends PApplet {
     @Override
     public void draw() {
         Logger.trace("enter draw");
-        if(millis() > 5_000){
+        if(millis() > 1_000){
             exit();
         }
         Logger.trace("exit draw");

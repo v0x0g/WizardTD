@@ -1,6 +1,8 @@
 package WizardTD.Gameplay.Tiles;
 
 import lombok.*;
+import org.checkerframework.checker.nullness.qual.*;
+import processing.core.*;
 
 /**
  * A tile that represents an invalid tile that has not been initialised
@@ -9,5 +11,8 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode(callSuper = false)
 public final class InvalidTile extends Tile {
-
+    @Override
+    public @Nullable PImage getImage() {
+        return null;
+    } //TODO: INVALID TILE
 }
