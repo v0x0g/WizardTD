@@ -50,7 +50,7 @@ public class UiManager {
         UiLog.debug("start render tiles");
         Vector2 tileStartCoord = new Vector2(0, TOPBAR_HEIGHT_PX);
         for (int r = 0; r < BOARD_SIZE_TILES; r++) {
-            for (int c = 0; c < 1; c++) {
+            for (int c = 0; c < BOARD_SIZE_TILES; c++) {
                 UiLog.trace("render tile [{00}}, {00}]", r, c);
                 Tile tile = game.board.getTile(r, c);
                 PImage img = tile.getImage();
