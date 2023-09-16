@@ -1,6 +1,7 @@
 package WizardTD.Ext;
 
 import lombok.experimental.*;
+import org.checkerframework.checker.nullness.qual.*;
 import processing.core.*;
 
 import java.awt.*;
@@ -18,8 +19,8 @@ public class ImageExt {
      * @param applet PApplet so we can create the image
      * @return the new rotated image
      */
-    public PImage rotate(final PApplet applet, final PImage pimg, final double angle) {
-        final BufferedImage img = (BufferedImage) pimg.getNative();
+    public @NonNull PImage rotate(final PApplet applet, final PImage pImg, final double angle) {
+        final BufferedImage img = (BufferedImage) pImg.getNative();
         final double rads = Math.toRadians(angle);
         final double sin = Math.abs(Math.sin(rads));
         final double cos = Math.abs(Math.cos(rads));
@@ -51,4 +52,50 @@ public class ImageExt {
         return result;
     }
 
+    public @NonNull PImage generatePattern(final int w, final int h, final int thickness, final int spacing, @NonNull final ImagePattern pattern, final int col1, final int col2) {
+        final PImage img = new PImage(w, h);
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                final int a = (x / thickness % spacing);
+                final int b = (y / thickness % spacing);
+                int v = 0;
+                switch (pattern) {
+                    case DOTS:
+                        v = a | b;
+                        break;
+                    case DOTS_ALT:
+                        v = a + b;
+                        break;
+                    case DIAGONAL_LINES:
+                        v = a ^ b;
+                        break;
+                    case GRID_LINES:
+                        v = a * b;
+                        break;
+                    case TRIANGLES:
+                        v = a - b;
+                        break;
+                    case VERTICAL_LINES:
+                        v = a; // << b;
+                        break;
+                    case HORIZONTAL_LINES:
+                        v = b; // << a;
+                        break;
+                    case CHECKERS:
+                        // If we change the `%2` we get some cool stuff
+                        v = (a + b) % 2;
+                        break;
+                    case SOLID:
+                        v = 1;
+                        break;
+                }
+                img.set(x, y, v != 0 ? col1 : col2);
+            }
+        }
+        return img;
+    }
+
+    public enum ImagePattern {
+        DOTS, DIAGONAL_LINES, GRID_LINES, DOTS_ALT, TRIANGLES, VERTICAL_LINES, HORIZONTAL_LINES, CHECKERS, SOLID
+    }
 }

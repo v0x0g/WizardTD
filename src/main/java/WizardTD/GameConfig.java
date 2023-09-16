@@ -13,11 +13,6 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 public class GameConfig {
 
     /**
-     * How many pixels large each tile is
-     */
-    public static final int CELL_SIZE_PX = 32;
-
-    /**
      * How many tiles large the board is (each dimension)
      */
     public static final int BOARD_SIZE_TILES = 20;

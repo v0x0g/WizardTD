@@ -15,14 +15,18 @@ public class GuiConfig {
     public static final int TOPBAR_HEIGHT_PX = 40;
 
     /**
+     * How many pixels large each tile is
+     */
+    public static final int CELL_SIZE_PX = 32;
+    /**
      * Total window width, in pixels
      */
-    public static final int WINDOW_HEIGHT_PX = GameConfig.BOARD_SIZE_TILES * GameConfig.CELL_SIZE_PX + TOPBAR_HEIGHT_PX;
+    public static final int WINDOW_HEIGHT_PX = GameConfig.BOARD_SIZE_TILES * CELL_SIZE_PX + TOPBAR_HEIGHT_PX;
 
     /**
      * Total window height, in pixels
      */
-    public static final int WINDOW_WIDTH_PX = GameConfig.CELL_SIZE_PX * GameConfig.BOARD_SIZE_TILES + SIDEBAR_WIDTH_PX;
+    public static final int WINDOW_WIDTH_PX = CELL_SIZE_PX * GameConfig.BOARD_SIZE_TILES + SIDEBAR_WIDTH_PX;
 
     public static final float TARGET_FPS = 60.0f;
 

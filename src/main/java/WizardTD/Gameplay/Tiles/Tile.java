@@ -1,5 +1,6 @@
 package WizardTD.Gameplay.Tiles;
 
+import WizardTD.Gameplay.Game.*;
 import lombok.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.*;
@@ -7,9 +8,16 @@ import processing.core.*;
 
 import java.util.*;
 
+@Getter
 @ToString
-
 public abstract class Tile {
+    @Setter(AccessLevel.PRIVATE) private int posX, posY;
+
+    /**
+     * Method to be called whenever something changes on the board, 
+     * and the tile should be updated to reflect this
+     */
+    public void boardDirty(@NonNull final Board board){}
 
     /**
      * Parses a char as a Tile

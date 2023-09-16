@@ -17,9 +17,9 @@ public class Resources {
         @UtilityClass
         public static class Path {
             public static final @NonNull String DIR = Tiles.DIR + "/Path";
-            public static final @NonNull String CORNER_LR = DIR + "/path0.png";
-            public static final @NonNull String TWO_WAY_HORZ = DIR + "/path1.png";
-            public static final @NonNull String THREE_WAY_DOWN = DIR + "/path2.png";
+            public static final @NonNull String STRAIGHT = DIR + "/path0.png";
+            public static final @NonNull String CORNER = DIR + "/path1.png";
+            public static final @NonNull String THREE_WAY = DIR + "/path2.png";
             public static final @NonNull String FOUR_WAY = DIR + "/path3.png";
         }
         @UtilityClass

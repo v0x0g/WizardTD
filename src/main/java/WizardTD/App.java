@@ -5,8 +5,9 @@ import WizardTD.Event.*;
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.UI.*;
+import lombok.*;
 import lombok.experimental.*;
-import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.tinylog.*;
 import processing.core.*;
 import processing.event.*;
@@ -124,15 +125,20 @@ public final class App extends PApplet {
     /**
      * Draw all elements in the game by current frame.
      */
+    @SneakyThrows
     @Override
     public void draw() {
         Logger.trace("enter draw");
-
-        UiManager.renderTiles(this);
-        
-        if (millis() > 500) {
-            exit();
+        for (int i = 0; i < GameConfig.BOARD_SIZE_TILES; i++) {
+            for (int j = 0; j < GameConfig.BOARD_SIZE_TILES; j++) {
+                this.gameData.board.getTile(i,j).boardDirty(this.gameData.board);
+            }
         }
+        UiManager.renderTiles(this, gameData);
+        Thread.sleep(1000);
+//        if (millis() > 5000) {
+//            exit();
+//        }
         Logger.trace("exit draw");
     }
 
