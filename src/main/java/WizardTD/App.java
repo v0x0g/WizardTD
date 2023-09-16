@@ -127,6 +127,9 @@ public final class App extends PApplet {
     @Override
     public void draw() {
         Logger.trace("enter draw");
+
+        UiManager.renderTiles(this);
+        
         if (millis() > 500) {
             exit();
         }

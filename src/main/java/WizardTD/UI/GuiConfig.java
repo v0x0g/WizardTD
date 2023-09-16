@@ -1,4 +1,6 @@
-package WizardTD;
+package WizardTD.UI;
+
+import WizardTD.*;
 
 public class GuiConfig {
 

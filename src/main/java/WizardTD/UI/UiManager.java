@@ -1,5 +1,6 @@
 package WizardTD.UI;
 
+import WizardTD.Gameplay.Game.*;
 import com.google.errorprone.annotations.*;
 import lombok.experimental.*;
 import lombok.*;
@@ -24,4 +25,8 @@ public class UiManager {
         return img;
     }
 
+    public void renderTiles(@NonNull final PApplet app, @NonNull final GameData game){
+        // Render UI
+    } 
+    
 }

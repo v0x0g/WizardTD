@@ -10,6 +10,9 @@ import processing.core.*;
 @ToString
 @EqualsAndHashCode(callSuper = false)
 public final class Grass extends Tile {
+    /**
+     * Only one tile for grass
+     */
     public static @Nullable PImage tileImage = null;
 
     @SuppressWarnings({"unused", "DataFlowIssue"})

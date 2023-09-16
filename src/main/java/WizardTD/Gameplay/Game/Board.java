@@ -42,5 +42,4 @@ public final class Board {
         // And then prints the tiles in a grid
         return MessageFormat.format("Board'{'tiles={0}'}'", String.join("\n", (Iterable<String>) Arrays.stream(tiles).map((row) -> String.join(" ", (Iterable<String>) Arrays.stream(row).map((tile) -> tile.toString().substring(0, 1))::iterator))::iterator));
     }
-
 }
