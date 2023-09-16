@@ -10,7 +10,6 @@ import processing.core.*;
 @ToString
 @EqualsAndHashCode(callSuper = false)
 public final class Shrub extends Tile {
-
     public static @Nullable PImage tileImage = null;
 
     @SuppressWarnings({"unused", "DataFlowIssue"})

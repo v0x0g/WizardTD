@@ -7,7 +7,6 @@ import processing.core.*;
 @ToString
 @EqualsAndHashCode(callSuper = false)
 public final class Path extends Tile {
-
     public static @Nullable PImage tileImage = null;
 
     @Override

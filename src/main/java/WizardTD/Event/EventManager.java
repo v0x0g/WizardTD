@@ -34,10 +34,10 @@ public class EventManager {
         // Ensure we have the entry for corresponding event type
         final Set<@NonNull EventMethod> subscribers = subscriberList(event.eventType);
         for (final EventMethod sub : subscribers) {
-            trace("invoke event {} for {}", event, sub);
+            trace("invoking event: {} for {}", event, sub);
             sub.processEvent(event);
         }
-        debug("done invoke event: {}");
+        debug("done invoke event: {}", event);
     }
 
     /**
@@ -59,6 +59,7 @@ public class EventManager {
     public void init() {
         info("init event manager");
         // If we wanted to restrict this slightly, we'd do `newClassGraph.acceptPackages("WizardTD")...`
+        // But I don't care lol
         try (final ScanResult scanResult = new ClassGraph().enableAllInfo().ignoreClassVisibility().ignoreMethodVisibility().scan()) {
             // DO NOT UNCOMMENT THIS LINE
             // Last time I did it dumped 46MiB worth of JSON to stdout
@@ -125,7 +126,6 @@ public class EventManager {
                                     method.invoke(null, event);
                                 } catch (final InvocationTargetException e) {
                                     warn(e, "exception when invoking event method {}", method);
-                                    throw new RuntimeException(e);
                                 } catch (final IllegalAccessException e) {
                                     error(e, "couldn't invoke event method for {} (Illegal Access)", method);
                                 }
@@ -135,7 +135,7 @@ public class EventManager {
                         // And subscribe it to that event type
                         final OnEvent events = pair.getValue();
                         final Method meth = pair.getKey();
-                        // Have to override Java's acess rules, or we get IllegalAccessException on invoking
+                        // Have to override Java's access rules, or we get IllegalAccessException on invoking
                         meth.setAccessible(true);
                         events.eventTypes().stream().forEach(eventType -> EventManager.subscribe(eventType, new Helper(meth)));
                     });
