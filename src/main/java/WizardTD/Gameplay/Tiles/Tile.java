@@ -11,8 +11,8 @@ import java.util.*;
 @Getter
 @ToString
 public abstract class Tile {
-    @Setter(AccessLevel.PRIVATE) private int posX, posY;
-
+    @Setter(AccessLevel.PUBLIC) private int posX, posY;
+    
     /**
      * Method to be called whenever something changes on the board, 
      * and the tile should be updated to reflect this

@@ -51,8 +51,14 @@ public final class Board {
         return Optional.of(getTile(row, col));
     }
 
-    public void setTile(final int row, final int col, @NonNull final Tile tile) {
+    public void setTile(final int row, final int col, @NonNull final Tile tile)
+    {
         this.tiles[row][col] = tile;
+        // As a note:
+        // This won't work if the tile instances are shared across positions (instanced tiling)
+        // So we hope the user creates a new instance each time
+        tile.setPosX(row);
+        tile.setPosY(col);
     }
 
     @Override
