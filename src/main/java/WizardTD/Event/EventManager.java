@@ -135,6 +135,8 @@ public class EventManager {
                         // And subscribe it to that event type
                         final OnEvent events = pair.getValue();
                         final Method meth = pair.getKey();
+                        // Have to override Java's acess rules, or we get IllegalAccessException on invoking
+                        meth.setAccessible(true);
                         events.eventTypes().stream().forEach(eventType -> EventManager.subscribe(eventType, new Helper(meth)));
                     });
         }

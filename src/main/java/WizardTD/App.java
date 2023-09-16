@@ -81,13 +81,10 @@ public final class App extends PApplet {
     public void setup() {
         Logger.info("enter setup");
 
-        Logger.debug("cap framerate: {} fps", GuiConfig.TARGET_FPS);
+        Logger.trace("cap framerate: {} fps", GuiConfig.TARGET_FPS);
         frameRate(GuiConfig.TARGET_FPS);
 
-        EventManager.invokeEvent(new Event(EventType.AppSetup));
-
-        Logger.debug("calling UiManager::loadGraphics()");
-        UiManager.loadGraphics(this);
+        EventManager.invokeEvent(new Event(EventType.AppSetup, this));
 
         Logger.info("done setup");
     }

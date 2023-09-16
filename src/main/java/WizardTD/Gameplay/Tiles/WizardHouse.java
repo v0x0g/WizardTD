@@ -1,7 +1,10 @@
 package WizardTD.Gameplay.Tiles;
 
+import WizardTD.Event.*;
+import WizardTD.UI.*;
 import lombok.*;
 import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import processing.core.*;
 
 @ToString
@@ -16,6 +19,13 @@ public final class WizardHouse extends Tile {
     public double manaCap;
     public double manaTrickle;
 
+
+    @SuppressWarnings({"unused", "DataFlowIssue"})
+    @OnEvent(eventTypes = EventType.AppSetup)
+    private static void loadImages(@NonNull final Event event) {
+        final @NonNull PApplet app = (PApplet) event.dataObject;
+        tileImage = UiManager.loadImage(app, Resources.Tiles.WizardHouse.ONLY_TILE);
+    }
     @Override
     public @Nullable PImage getImage() {
         return tileImage;
