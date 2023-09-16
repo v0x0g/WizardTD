@@ -15,9 +15,9 @@ import processing.core.*;
 public final class InvalidTile extends Tile {
 
     private static final @NonNull PImage invalidTileImg = ImageExt.generatePattern(
-            GuiConfig.CELL_SIZE_PX, GuiConfig.CELL_SIZE_PX, 1, 1,
+            GuiConfig.CELL_SIZE_PX, GuiConfig.CELL_SIZE_PX, GuiConfig.CELL_SIZE_PX/2, 2,
             ImageExt.ImagePattern.CHECKERS,
-            Colours.BRIGHT_PURPLE.code, Colours.BLACK.code
+            Colours.BRIGHT_PURPLE.code, Colours.RED.code
     );
 
     @Override

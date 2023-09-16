@@ -20,6 +20,7 @@ public final class Path extends Tile {
     private static @NonNull Hashtable<EnumSet<TileSides>, PImage> pathSidesMap = new Hashtable<>();
     private transient @NonNull EnumSet<TileSides> connectedPathSides = EnumSet.noneOf(TileSides.class);
 
+    @SuppressWarnings("DuplicatedCode")
     @OnEvent(eventTypes = EventType.AppSetup)
     private static void loadImages(@NonNull final Event evt) {
         assert evt.dataObject != null;
@@ -46,18 +47,27 @@ public final class Path extends Tile {
         map.put(EnumSet.of(UP), rotate(app, straight, CCW));
         map.put(EnumSet.of(LEFT), rotate(app, straight, NONE));
         map.put(EnumSet.of(RIGHT), rotate(app, straight, FLIP));
-        
         // Straight connections
         map.put(EnumSet.of(UP, DOWN), rotate(app, straight, CW));
+        map.put(EnumSet.of(DOWN, UP), rotate(app, straight, CW));
         map.put(EnumSet.of(LEFT, RIGHT), rotate(app, straight, NONE));
-        
+        map.put(EnumSet.of(RIGHT, LEFT), rotate(app, straight, NONE));
         // Corners
         map.put(EnumSet.of(LEFT, UP), rotate(app, corner, CW));
+        map.put(EnumSet.of(UP, LEFT), rotate(app, corner, CW));
         map.put(EnumSet.of(LEFT, DOWN), rotate(app, corner, NONE));
+        map.put(EnumSet.of(DOWN, LEFT), rotate(app, corner, NONE));
         map.put(EnumSet.of(UP, RIGHT), rotate(app, corner, FLIP));
+        map.put(EnumSet.of(RIGHT, UP), rotate(app, corner, FLIP));
         map.put(EnumSet.of(DOWN, RIGHT), rotate(app, corner, CCW));
-
-        
+        map.put(EnumSet.of(RIGHT, DOWN), rotate(app, corner, CCW));
+        // Three Way
+        map.put(EnumSet.of(LEFT, UP, RIGHT), rotate(app, threeWay, FLIP));
+        map.put(EnumSet.of(LEFT, DOWN, RIGHT), rotate(app, threeWay, NONE));
+        map.put(EnumSet.of(UP, RIGHT, DOWN), rotate(app, threeWay, CCW));
+        map.put(EnumSet.of(UP, LEFT, DOWN), rotate(app, threeWay, CW));
+        // ~~QUADRA KILL!~~
+        map.put(EnumSet.of(UP, DOWN, LEFT, RIGHT), rotate(app, fourWay, NONE));
     }
 
     /**
