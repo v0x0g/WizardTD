@@ -20,18 +20,18 @@ public final class WizardHouse extends Tile {
     public double manaCap;
     public double manaTrickle;
 
-
     @SuppressWarnings({"unused", "DataFlowIssue"})
     @OnEvent(eventTypes = EventType.AppSetup)
     private static void loadImages(@NonNull final Event event) {
         final @NonNull PApplet app = (PApplet) event.dataObject;
         tileImage = UiManager.loadImage(app, Resources.Tiles.WizardHouse.ONLY_TILE);
+        // Remove any pure white pixels
     }
 
     @Override
     public void render(@NonNull final PApplet app, final float centreX, final float centreY) {
-        app.translate(0,0, -1);
+        app.translate(0, 0, RenderOrder.TILE_PRIORITY.value);
         Renderer.renderSimpleTile(app, tileImage, centreX, centreY);
-        app.translate(0,0, 1);
+        app.translate(0, 0, -RenderOrder.TILE_PRIORITY.value);
     }
 }

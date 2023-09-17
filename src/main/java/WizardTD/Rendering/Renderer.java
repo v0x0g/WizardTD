@@ -30,6 +30,16 @@ public class Renderer {
                 tile.render(app, middlePosX, middlePosY);
             }
         }
+        for (int r = 0; r < BOARD_SIZE_TILES; r++) {
+            for (int c = 0; c < BOARD_SIZE_TILES; c++) {
+                Tile tile = game.board.getTile(r, c);
+                if (!(tile instanceof WizardHouse)) continue;
+                // Offset by the tile's coordinates, and then half a tile extra to move to the centre 
+                final int middlePosX = globalOffsetX + (r * CELL_SIZE_PX) + (CELL_SIZE_PX / 2);
+                final int middlePosY = globalOffsetY + (c * CELL_SIZE_PX) + (CELL_SIZE_PX / 2);
+                tile.render(app, middlePosX, middlePosY);
+            }
+        }
     }
 
     public void renderSimpleTile(
@@ -41,6 +51,7 @@ public class Renderer {
             Loggers.UI.trace("render tile [{00}, {00}]: missing texture", centreX, centreY);
         }
         app.imageMode(PConstants.CENTER);
+        app.colorMode(PConstants.ARGB);
         app.image(img, centreX, centreY);
     }
 }

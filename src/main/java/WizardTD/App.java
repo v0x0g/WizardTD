@@ -73,7 +73,7 @@ public final class App extends PApplet {
     public void settings() {
         Logger.info("enter init settings");
         smooth(8); // MSAA?
-        size(GuiConfig.WINDOW_WIDTH_PX, GuiConfig.WINDOW_HEIGHT_PX);
+        size(GuiConfig.WINDOW_WIDTH_PX, GuiConfig.WINDOW_HEIGHT_PX, P3D);
         Logger.info("done init settings");
     }
 
@@ -86,7 +86,8 @@ public final class App extends PApplet {
 
         Logger.trace("cap framerate: {} fps", GuiConfig.TARGET_FPS);
         frameRate(GuiConfig.TARGET_FPS);
-
+        hint(PConstants.ENABLE_DEPTH_SORT);
+        // TODO: render Depth sorting
         EventManager.invokeEvent(new Event(EventType.AppSetup, this));
 
         Logger.info("done setup");
@@ -131,6 +132,7 @@ public final class App extends PApplet {
     @Override
     public void draw() {
         Loggers.RENDER.trace("enter draw");
+        background(Colours.CYAN.code);
         for (int i = 0; i < GameConfig.BOARD_SIZE_TILES; i++) {
             for (int j = 0; j < GameConfig.BOARD_SIZE_TILES; j++) {
                 this.gameData.board.getTile(i,j).boardDirty(this.gameData.board);

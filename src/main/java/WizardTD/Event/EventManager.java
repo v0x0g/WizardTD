@@ -72,12 +72,11 @@ public class EventManager {
             scanResult
                     // Get classes where events are annotated by @OnEvent
                     .getClassesWithMethodAnnotation(OnEvent.class)
-                    // Make parallel
-                    .parallelStream()
+                    .stream()
                     // Map each class to it's methods
                     .map(ClassInfo::getMethodInfo)
                     // Flatmap all methods together
-                    .flatMap(Collection::parallelStream)
+                    .flatMap(Collection::stream)
                     // Filter to all @OnEvent methods
                     .filter(meth -> meth.hasAnnotation(OnEvent.class))
                     // Ensure all methods are static

@@ -52,43 +52,15 @@ public class ImageExt {
         return result;
     }
 
-    public @NonNull PImage generatePattern(final int w, final int h, final int thickness, final int spacing, @NonNull final ImagePattern pattern, final int col1, final int col2) {
+    public @NonNull PImage generatePattern(
+            final int w, final int h, final int thickness, final int spacing, @NonNull final ImagePattern pattern,
+            final int col1, final int col2) {
         final PImage img = new PImage(w, h);
         for (int x = 0; x < w; x++) {
             for (int y = 0; y < h; y++) {
                 final int a = (x / thickness % spacing);
                 final int b = (y / thickness % spacing);
-                int v = 0;
-                switch (pattern) {
-                    case DOTS:
-                        v = a | b;
-                        break;
-                    case DOTS_ALT:
-                        v = a + b;
-                        break;
-                    case DIAGONAL_LINES:
-                        v = a ^ b;
-                        break;
-                    case GRID_LINES:
-                        v = a * b;
-                        break;
-                    case TRIANGLES:
-                        v = a - b;
-                        break;
-                    case VERTICAL_LINES:
-                        v = a; // << b;
-                        break;
-                    case HORIZONTAL_LINES:
-                        v = b; // << a;
-                        break;
-                    case CHECKERS:
-                        // If we change the `%2` we get some cool stuff
-                        v = (a + b) % 2;
-                        break;
-                    case SOLID:
-                        v = 1;
-                        break;
-                }
+                final int v = pattern.calculate(a, b);
                 img.set(x, y, v != 0 ? col1 : col2);
             }
         }
@@ -96,6 +68,54 @@ public class ImageExt {
     }
 
     public enum ImagePattern {
-        DOTS, DIAGONAL_LINES, GRID_LINES, DOTS_ALT, TRIANGLES, VERTICAL_LINES, HORIZONTAL_LINES, CHECKERS, SOLID
+        CHECKERS {
+            @Override
+            int calculate(final int a, final int b) {
+                return (a + b) % 2;
+            }
+        } // If we change the `%2` we get some cool stuff
+        , DIAGONAL_LINES {
+            @Override
+            int calculate(final int a, final int b) {
+                return a ^ b;
+            }
+        }, DOTS {
+            @Override
+            int calculate(final int a, final int b) {
+                return a | b;
+            }
+        }, DOTS_ALT {
+            @Override
+            int calculate(final int a, final int b) {
+                return a + b;
+            }
+        }, GRID_LINES {
+            @Override
+            int calculate(final int a, final int b) {
+                return a * b;
+            }
+        }, HORIZONTAL_LINES {
+            @Override
+            int calculate(final int a, final int b) {
+                return b;
+            }
+        }, SOLID {
+            @Override
+            int calculate(final int a, final int b) {
+                return 1;
+            }
+        }, TRIANGLES {
+            @Override
+            int calculate(final int a, final int b) {
+                return a - b;
+            }
+        }, VERTICAL_LINES {
+            @Override
+            int calculate(final int a, final int b) {
+                return a;
+            }
+        };
+
+        abstract int calculate(final int a, final int b);
     }
 }
