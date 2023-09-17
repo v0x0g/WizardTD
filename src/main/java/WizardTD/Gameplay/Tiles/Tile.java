@@ -3,7 +3,6 @@ package WizardTD.Gameplay.Tiles;
 import WizardTD.Gameplay.Game.*;
 import lombok.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.*;
 import processing.core.*;
 
 import java.util.*;
@@ -40,12 +39,10 @@ public abstract class Tile {
      * and the tile should be updated to reflect this
      */
     public void boardDirty(@NonNull final Board board) {}
- 
+
     /**
-     * Gets the image that represents this tile.
-     * This will be rendered to display the tile.
-     * <p>
-     * Can return `null` if the image can't be displayed for some reason
+     * Renders the current tile, with the given coordinates `centreX, centreY`
+     * as the centre of the tile (on-screen)
      */
-    public abstract @Nullable PImage getImage();
+    public abstract void render(final @NonNull PApplet app, final float centreX, final float centreY);
 }

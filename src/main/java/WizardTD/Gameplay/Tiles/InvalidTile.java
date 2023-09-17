@@ -12,7 +12,7 @@ import processing.core.*;
  */
 @ToString
 @EqualsAndHashCode(callSuper = false)
-public final class InvalidTile extends Tile {
+public class InvalidTile extends Tile {
 
     private static final @NonNull PImage invalidTileImg = ImageExt.generatePattern(
             GuiConfig.CELL_SIZE_PX, GuiConfig.CELL_SIZE_PX, GuiConfig.CELL_SIZE_PX/2, 2,
@@ -21,5 +21,7 @@ public final class InvalidTile extends Tile {
     );
 
     @Override
-    public @NonNull PImage getImage() {return invalidTileImg;}
+    public void render(@NonNull final PApplet app, final float centreX, final float centreY) {
+        UiManager.renderSimpleTile(app, invalidTileImg, centreX, centreY);
+    }
 }

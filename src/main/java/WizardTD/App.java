@@ -71,6 +71,7 @@ public final class App extends PApplet {
     @Override
     public void settings() {
         Logger.info("enter init settings");
+        smooth(8); // MSAA?
         size(GuiConfig.WINDOW_WIDTH_PX, GuiConfig.WINDOW_HEIGHT_PX);
         Logger.info("done init settings");
     }

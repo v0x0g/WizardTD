@@ -45,36 +45,27 @@ public class UiManager {
         // Render the game tiles
         Loggers.UI.debug("start render tiles");
         // Where we start rendering all tiles (global offset)
+        //noinspection UnnecessaryLocalVariable
         final int globalOffsetX = 0, globalOffsetY = TOPBAR_HEIGHT_PX;
         for (int r = 0; r < BOARD_SIZE_TILES; r++) {
             for (int c = 0; c < BOARD_SIZE_TILES; c++) {
                 Loggers.UI.trace("render tile [{00}}, {00}]", r, c);
                 Tile tile = game.board.getTile(r, c);
-                PImage img = tile.getImage();
-                Loggers.UI.trace("tile [{00}, {00}]: tile {} img {}", r, c, tile, img);
-                if (!isValidImage(img)) {
-                    img = missingTextureImage;
-                    Loggers.UI.trace("tile [{00}, {00}]: missing texture", r, c);
-                }
-                // Offset for this tile (relative to global offset) 
-                final int localOffsetX = r * CELL_SIZE_PX, localOffsetY = c * CELL_SIZE_PX;
-                // The start and end coordinates where we render the image (opposite corners)
-                final int startPosX = globalOffsetX + localOffsetX, startPosY = globalOffsetY + localOffsetY;
-                //  final int endPosX = globalOffsetX + localOffsetX, endPosY = globalOffsetY + localOffsetY;
-
-                // A note on how processing works:
-                // It uses a really weird filtering (I think bicubic) on images, which does look kinda wack
-                // So 
-                if (img.width != CELL_SIZE_PX || img.height != CELL_SIZE_PX) {
-                    Loggers.UI.trace(
-                            "tile [{00}, {00}]: expected dimensions [{}x{}] but got [{}x{}], expect weird scaling", r,
-                            c, CELL_SIZE_PX, CELL_SIZE_PX, img.width, img.height
-                    );
-                    app.image(img, startPosX, startPosY, CELL_SIZE_PX, CELL_SIZE_PX);
-                }
-                else app.image(img, startPosX, startPosY);
+                // Offset by the tile's coordinates, and then half a tile extra to move to the centre 
+                final int middlePosX = globalOffsetX + (r * CELL_SIZE_PX) + (CELL_SIZE_PX / 2);
+                final int middlePosY = globalOffsetY + (c * CELL_SIZE_PX) + (CELL_SIZE_PX / 2);
+                tile.render(app, middlePosX, middlePosY);
             }
         }
     }
 
+    public void renderSimpleTile(
+            @NonNull final PApplet app, @Nullable PImage img, final float centreX, final float centreY) {
+        Loggers.UI.trace("tile [{00}}, {00}]: render img {}", centreX, centreY, img);
+        if (!isValidImage(img)) {
+            img = missingTextureImage;
+            Loggers.UI.trace("render tile [{00}, {00}]: missing texture", centreX, centreY);
+        }
+        app.image(img, centreX, centreY);
+    }
 }

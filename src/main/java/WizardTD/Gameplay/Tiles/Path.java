@@ -85,8 +85,7 @@ public final class Path extends Tile {
     }
 
     @Override
-    public @Nullable PImage getImage() {
-        // May return null
-        return pathSidesMap.get(this.connectedPathSides);
+    public void render(@NonNull final PApplet app, final float centreX, final float centreY) {
+        UiManager.renderSimpleTile(app, pathSidesMap.get(this.connectedPathSides), centreX, centreY);
     }
 }

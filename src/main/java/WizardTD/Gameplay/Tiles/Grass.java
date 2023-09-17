@@ -23,7 +23,7 @@ public final class Grass extends Tile {
     }
 
     @Override
-    public @Nullable PImage getImage() {
-        return tileImage;
+    public void render(@NonNull final PApplet app, final float centreX, final float centreY) {
+        UiManager.renderSimpleTile(app, Grass.tileImage, centreX, centreY);
     }
 }

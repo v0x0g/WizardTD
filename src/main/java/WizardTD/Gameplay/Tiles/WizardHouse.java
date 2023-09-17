@@ -26,8 +26,9 @@ public final class WizardHouse extends Tile {
         final @NonNull PApplet app = (PApplet) event.dataObject;
         tileImage = UiManager.loadImage(app, Resources.Tiles.WizardHouse.ONLY_TILE);
     }
+
     @Override
-    public @Nullable PImage getImage() {
-        return tileImage;
+    public void render(@NonNull final PApplet app, final float centreX, final float centreY) {
+        UiManager.renderSimpleTile(app, tileImage, centreX, centreY);
     }
 }

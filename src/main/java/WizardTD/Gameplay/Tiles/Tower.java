@@ -25,7 +25,7 @@ public final class Tower extends Tile {
     }
 
     @Override
-    public @Nullable PImage getImage() {
-        return tileLevel0;
+    public void render(@NonNull final PApplet app, final float centreX, final float centreY) {
+        UiManager.renderSimpleTile(app, null, centreX, centreY);
     }
 }

@@ -53,7 +53,7 @@ public final class GameData {
                     if (null != fourPrivetDrive) warn("only one wizard allowed");
                     else trace("You're a WizardHouse Harry!\nI'm a WHAT?\nA \033[095m{}\033[000m", tile);
                     fourPrivetDrive = new WizardHouse();
-                    desc.board.setTile(row, col, fourPrivetDrive); // Update the board entry to remove placeholder
+//                    desc.board.setTile(row, col, fourPrivetDrive); // Update the board entry to remove placeholder
                     fourPrivetDrive.mana = desc.config.mana.initialManaValue;
                     fourPrivetDrive.manaCap = desc.config.mana.initialManaCap;
                     fourPrivetDrive.manaTrickle = desc.config.mana.initialManaTrickle;
