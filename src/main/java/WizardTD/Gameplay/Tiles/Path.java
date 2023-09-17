@@ -2,6 +2,7 @@ package WizardTD.Gameplay.Tiles;
 
 import WizardTD.Event.*;
 import WizardTD.Gameplay.Game.*;
+import WizardTD.Rendering.*;
 import WizardTD.UI.*;
 import lombok.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -86,6 +87,6 @@ public final class Path extends Tile {
 
     @Override
     public void render(@NonNull final PApplet app, final float centreX, final float centreY) {
-        UiManager.renderSimpleTile(app, pathSidesMap.get(this.connectedPathSides), centreX, centreY);
+        Renderer.renderSimpleTile(app, pathSidesMap.get(this.connectedPathSides), centreX, centreY);
     }
 }

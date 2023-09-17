@@ -1,6 +1,7 @@
 package WizardTD.Gameplay.Tiles;
 
 import WizardTD.Event.*;
+import WizardTD.Rendering.*;
 import WizardTD.UI.*;
 import lombok.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -21,6 +22,6 @@ public final class Shrub extends Tile {
 
     @Override
     public void render(@NonNull final PApplet app, final float centreX, final float centreY) {
-        UiManager.renderSimpleTile(app, tileImage, centreX, centreY);
+        Renderer.renderSimpleTile(app, tileImage, centreX, centreY);
     }
 }

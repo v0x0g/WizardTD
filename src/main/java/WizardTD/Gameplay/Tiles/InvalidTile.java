@@ -1,6 +1,7 @@
 package WizardTD.Gameplay.Tiles;
 
 import WizardTD.Ext.*;
+import WizardTD.Rendering.*;
 import WizardTD.UI.*;
 import lombok.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -22,6 +23,6 @@ public class InvalidTile extends Tile {
 
     @Override
     public void render(@NonNull final PApplet app, final float centreX, final float centreY) {
-        UiManager.renderSimpleTile(app, invalidTileImg, centreX, centreY);
+        Renderer.renderSimpleTile(app, invalidTileImg, centreX, centreY);
     }
 }

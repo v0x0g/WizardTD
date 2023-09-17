@@ -1,6 +1,7 @@
 package WizardTD.Gameplay.Tiles;
 
 import WizardTD.Event.*;
+import WizardTD.Rendering.*;
 import WizardTD.UI.*;
 import lombok.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -30,7 +31,7 @@ public final class WizardHouse extends Tile {
     @Override
     public void render(@NonNull final PApplet app, final float centreX, final float centreY) {
         app.translate(0,0, -1);
-        UiManager.renderSimpleTile(app, tileImage, centreX, centreY);
+        Renderer.renderSimpleTile(app, tileImage, centreX, centreY);
         app.translate(0,0, 1);
     }
 }

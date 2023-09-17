@@ -4,6 +4,7 @@ import WizardTD.Event.Event;
 import WizardTD.Event.*;
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
+import WizardTD.Rendering.*;
 import WizardTD.UI.*;
 import lombok.*;
 import lombok.experimental.*;
@@ -135,7 +136,7 @@ public final class App extends PApplet {
                 this.gameData.board.getTile(i,j).boardDirty(this.gameData.board);
             }
         }
-        UiManager.renderTiles(this, gameData);
+        Renderer.renderTiles(this, gameData);
 //        if (millis() > 5000) {
 //            exit();
 //        }
