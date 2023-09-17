@@ -40,7 +40,7 @@ public abstract class Tile {
      * and the tile should be updated to reflect this
      */
     public void boardDirty(@NonNull final Board board) {}
-
+ 
     /**
      * Gets the image that represents this tile.
      * This will be rendered to display the tile.
