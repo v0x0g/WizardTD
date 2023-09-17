@@ -66,6 +66,7 @@ public class UiManager {
             img = missingTextureImage;
             Loggers.UI.trace("render tile [{00}, {00}]: missing texture", centreX, centreY);
         }
+        app.imageMode(PConstants.CENTER);
         app.image(img, centreX, centreY);
     }
 }
