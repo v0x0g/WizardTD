@@ -1,5 +1,6 @@
 package WizardTD.Event;
 
+import WizardTD.Ext.*;
 import io.github.classgraph.*;
 import lombok.*;
 import lombok.var;
@@ -32,21 +33,21 @@ public class EventManager {
      * @param event The event to invoke
      */
     public void invokeEvent(@NonNull final Event event) {
-        debug("start invoke event: {}", event);
+        Loggers.EVENT.debug("start invoke event: {}", event);
         // Ensure we have the entry for corresponding event type
         final Set<@NonNull EventMethod> subscribers = subscriberList(event.eventType);
         for (final EventMethod sub : subscribers) {
-            trace("invoking event: {} for {}", event, sub);
+            Loggers.EVENT.trace("invoking event: {} for {}", event, sub);
             sub.processEvent(event);
         }
-        debug("done invoke event: {}", event);
+        Loggers.EVENT.debug("done invoke event: {}", event);
     }
 
     /**
      * Adds a subscriber to a given event type
      */
     public void subscribe(final @NonNull EventType type, final @NonNull EventMethod method) {
-        debug("adding subscriber for {}: {}", type, method);
+        Loggers.EVENT.debug("adding subscriber for {}: {}", type, method);
         subscriberList(type).add(method);
     }
 
@@ -54,7 +55,7 @@ public class EventManager {
      * Removes a subscriber from a given event type
      */
     public void unsubscribe(final @NonNull EventType type, final @NonNull EventMethod method) {
-        debug("removing subscriber for {}: {}", type, method);
+        Loggers.EVENT.debug("removing subscriber for {}: {}", type, method);
         subscriberList(type).remove(method);
     }
 

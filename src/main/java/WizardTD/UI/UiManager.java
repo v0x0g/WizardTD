@@ -6,10 +6,8 @@ import WizardTD.Gameplay.Tiles.*;
 import com.google.errorprone.annotations.*;
 import lombok.experimental.*;
 import lombok.*;
-import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.*;
-import org.tinylog.*;
 import processing.core.*;
 
 import static WizardTD.GameConfig.*;
@@ -18,7 +16,6 @@ import static WizardTD.UI.GuiConfig.*;
 @UtilityClass
 public class UiManager {
 
-    private final @NonNull TaggedLogger UiLog = Logger.tag("ui");
     private final @NonNull PImage missingTextureImage = ImageExt.generatePattern(
             GuiConfig.CELL_SIZE_PX, GuiConfig.CELL_SIZE_PX, CELL_SIZE_PX >> 2, 2,
             ImageExt.ImagePattern.CHECKERS,
@@ -36,29 +33,28 @@ public class UiManager {
      * @param path Path to the image file
      */
     public @NonNull PImage loadImage(@NonNull final PApplet app, @NonNull @CompileTimeConstant final String path) {
-        UiLog.debug("loading image at {}", path);
+        Loggers.UI.debug("loading image at {}", path);
         //noinspection LocalCanBeFinal
         val img = app.loadImage(path);
-        UiLog.debug("loaded image at {}: {} (valid={})", path, img, isValidImage(img));
+        Loggers.UI.debug("loaded image at {}: {} (valid={})", path, img, isValidImage(img));
         return img;
     }
 
     @SuppressWarnings("LocalCanBeFinal")
     public void renderTiles(@NonNull final PApplet app, @NonNull final GameData game) {
         // Render the game tiles
-        UiLog.debug("start render tiles");
+        Loggers.UI.debug("start render tiles");
         // Where we start rendering all tiles (global offset)
         final int globalOffsetX = 0, globalOffsetY = TOPBAR_HEIGHT_PX;
-        Vector2 tileStartCoord = new Vector2(0, TOPBAR_HEIGHT_PX);
         for (int r = 0; r < BOARD_SIZE_TILES; r++) {
             for (int c = 0; c < BOARD_SIZE_TILES; c++) {
-                UiLog.trace("render tile [{00}}, {00}]", r, c);
+                Loggers.UI.trace("render tile [{00}}, {00}]", r, c);
                 Tile tile = game.board.getTile(r, c);
                 PImage img = tile.getImage();
-                UiLog.trace("tile [{00}, {00}]: tile {} img {}", r, c, tile, img);
+                Loggers.UI.trace("tile [{00}, {00}]: tile {} img {}", r, c, tile, img);
                 if (!isValidImage(img)) {
                     img = missingTextureImage;
-                    UiLog.trace("tile [{00}, {00}]: missing texture", r, c);
+                    Loggers.UI.trace("tile [{00}, {00}]: missing texture", r, c);
                 }
                 // Offset for this tile (relative to global offset) 
                 final int localOffsetX = r * CELL_SIZE_PX, localOffsetY = c * CELL_SIZE_PX;
@@ -70,7 +66,7 @@ public class UiManager {
                 // It uses a really weird filtering (I think bicubic) on images, which does look kinda wack
                 // So 
                 if (img.width != CELL_SIZE_PX || img.height != CELL_SIZE_PX) {
-                    UiLog.trace(
+                    Loggers.UI.trace(
                             "tile [{00}, {00}]: expected dimensions [{}x{}] but got [{}x{}], expect weird scaling", r,
                             c, CELL_SIZE_PX, CELL_SIZE_PX, img.width, img.height
                     );

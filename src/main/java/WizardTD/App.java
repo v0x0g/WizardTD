@@ -128,7 +128,7 @@ public final class App extends PApplet {
     @SneakyThrows
     @Override
     public void draw() {
-        Logger.trace("enter draw");
+        Loggers.RENDER.trace("enter draw");
         for (int i = 0; i < GameConfig.BOARD_SIZE_TILES; i++) {
             for (int j = 0; j < GameConfig.BOARD_SIZE_TILES; j++) {
                 this.gameData.board.getTile(i,j).boardDirty(this.gameData.board);
@@ -138,7 +138,7 @@ public final class App extends PApplet {
 //        if (millis() > 5000) {
 //            exit();
 //        }
-        Logger.trace("exit draw");
+        Loggers.RENDER.trace("exit draw");
     }
 
     /**

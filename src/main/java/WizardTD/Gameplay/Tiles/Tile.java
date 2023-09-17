@@ -11,13 +11,8 @@ import java.util.*;
 @Getter
 @ToString
 public abstract class Tile {
-    @Setter(AccessLevel.PUBLIC) private int posX, posY;
-    
-    /**
-     * Method to be called whenever something changes on the board, 
-     * and the tile should be updated to reflect this
-     */
-    public void boardDirty(@NonNull final Board board){}
+    @Setter(AccessLevel.PUBLIC)
+    private int posX, posY;
 
     /**
      * Parses a char as a Tile
@@ -39,6 +34,12 @@ public abstract class Tile {
                 return Optional.empty();
         }
     }
+
+    /**
+     * Method to be called whenever something changes on the board,
+     * and the tile should be updated to reflect this
+     */
+    public void boardDirty(@NonNull final Board board) {}
 
     /**
      * Gets the image that represents this tile.
