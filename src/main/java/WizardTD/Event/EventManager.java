@@ -108,7 +108,7 @@ public class EventManager {
                             return false;
                         }
 
-                        trace("method params valid for {}::{}()", meth.getClassName(), meth.getName());
+                        trace("method params valid for {}.{}()", meth.getClassName(), meth.getName());
                         return true;
                     })
                     // Map each method to a Key-Value pair of [the method instance] and [the @OnEvent attribute instance]

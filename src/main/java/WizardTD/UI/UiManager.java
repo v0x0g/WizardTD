@@ -16,7 +16,6 @@ import static WizardTD.GameConfig.*;
 import static WizardTD.UI.GuiConfig.*;
 
 @UtilityClass
-@ExtensionMethod(Util.class)
 public class UiManager {
 
     private final @NonNull TaggedLogger UiLog = Logger.tag("ui");
@@ -27,7 +26,7 @@ public class UiManager {
     );
 
     private boolean isValidImage(@Nullable final PImage img) {
-        return img != null && img.loaded && img.height > 0 && img.width > 0;
+        return img != null && img.height > 0 && img.width > 0;
     }
 
     /**
@@ -40,7 +39,7 @@ public class UiManager {
         UiLog.debug("loading image at {}", path);
         //noinspection LocalCanBeFinal
         val img = app.loadImage(path);
-        UiLog.debug("loaded image at {}: {}", path, img);
+        UiLog.debug("loaded image at {}: {} (valid={})", path, img, isValidImage(img));
         return img;
     }
 
@@ -82,11 +81,4 @@ public class UiManager {
         }
     }
 
-}
-
-@UtilityClass
-class Util {
-//    public Vector2 toProcessingUiCoords(@NonNull final Vector2 coord) {
-//
-//    }
 }

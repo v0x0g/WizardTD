@@ -134,7 +134,6 @@ public final class App extends PApplet {
                 this.gameData.board.getTile(i,j).boardDirty(this.gameData.board);
             }
         }
-        Thread.sleep(1000);
         UiManager.renderTiles(this, gameData);
 //        if (millis() > 5000) {
 //            exit();
