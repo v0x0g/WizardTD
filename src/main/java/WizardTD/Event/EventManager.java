@@ -8,6 +8,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.concurrent.*;
 
 import static org.tinylog.Logger.*;
 
@@ -15,13 +16,14 @@ import static org.tinylog.Logger.*;
 @ExtensionMethod(java.util.Arrays.class)
 public class EventManager {
 
-    private final @NonNull HashMap<@NonNull EventType, @NonNull Set<@NonNull EventMethod>> eventsMap = new HashMap<>();
+    private final @NonNull ConcurrentHashMap<@NonNull EventType, @NonNull Set<@NonNull EventMethod>> eventsMap = new ConcurrentHashMap<>();
 
     /**
      * Gets the subscriber list for the given event type
      */
     private @NonNull Set<@NonNull EventMethod> subscriberList(final @NonNull EventType type) {
-        return eventsMap.computeIfAbsent(type, $_ -> new HashSet<>());
+        // Use a concurrent HashMap's key set to get a concurrent set
+        return eventsMap.computeIfAbsent(type, $_ -> ConcurrentHashMap.newKeySet());
     }
 
     /**

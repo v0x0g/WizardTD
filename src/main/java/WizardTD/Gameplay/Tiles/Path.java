@@ -31,16 +31,16 @@ public final class Path extends Tile {
         final double FLIP = 180;
         final double CCW = 270;
 
-        PImage straight = UiManager.loadImage(app, Resources.Tiles.Path.STRAIGHT);
-        PImage corner = UiManager.loadImage(app, Resources.Tiles.Path.CORNER);
-        PImage threeWay = UiManager.loadImage(app, Resources.Tiles.Path.THREE_WAY);
-        PImage fourWay = UiManager.loadImage(app, Resources.Tiles.Path.FOUR_WAY);
+        final PImage straight = UiManager.loadImage(app, Resources.Tiles.Path.STRAIGHT);
+        final PImage corner = UiManager.loadImage(app, Resources.Tiles.Path.CORNER);
+        final PImage threeWay = UiManager.loadImage(app, Resources.Tiles.Path.THREE_WAY);
+        final PImage fourWay = UiManager.loadImage(app, Resources.Tiles.Path.FOUR_WAY);
         final var map = pathSidesMap; // Shorter lines
 
         // If the sides only match up/down, we can pretend that they continue in that direction
         // But in this case the sidees would be reversed
         // (e.g. connected only at the top -> positioned at the bottom -> vertical path)
-        
+
         // Edges of board
         map.put(EnumSet.of(DOWN), rotate(app, straight, CW));
         map.put(EnumSet.of(UP), rotate(app, straight, CCW));
@@ -70,10 +70,10 @@ public final class Path extends Tile {
     @Override
     public void boardDirty(@NonNull Board board) {
         // Update what sides are connected.
-        val left = board.<Path>maybeGetTileGeneric(this.getPosX() - 1, this.getPosY()).isPresent();
-        val right = board.<Path>maybeGetTileGeneric(this.getPosX() + 1, this.getPosY()).isPresent();
-        val up = board.<Path>maybeGetTileGeneric(this.getPosX(), this.getPosY() - 1).isPresent();
-        val down = board.<Path>maybeGetTileGeneric(this.getPosX(), this.getPosY() + 1).isPresent();
+        val left = board.maybeGetTileGeneric(Path.class, this.getPosX() - 1, this.getPosY()).isPresent();
+        val right = board.maybeGetTileGeneric(Path.class, this.getPosX() + 1, this.getPosY()).isPresent();
+        val up = board.maybeGetTileGeneric(Path.class, this.getPosX(), this.getPosY() - 1).isPresent();
+        val down = board.maybeGetTileGeneric(Path.class, this.getPosX(), this.getPosY() + 1).isPresent();
 
         EnumSet<TileSides> sides = EnumSet.noneOf(TileSides.class);
         if (left) sides.add(LEFT);

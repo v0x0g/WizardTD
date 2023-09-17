@@ -30,18 +30,16 @@ public final class Board {
         return this.tiles[row][col];
     }
 
-    public @NonNull <T extends Tile> Optional<T> maybeGetTileGeneric(final int row, final int col) {
+    public @NonNull <T extends Tile> Optional<T> maybeGetTileGeneric(
+            final @NonNull Class<T> tClass, final int row, final int col) {
         final @NonNull Optional<Tile> tile = maybeGetTile(row, col);
         // Because java is fucking dumb, I can't just do a simple `if instanceof T` check with the generic type
         // Because when type erasure happens, T just vanishes to nothing, and therefore it's always true even when it's wrong
         // See https://stackoverflow.com/a/17072077
         //  if (tile.isPresent() && tile.get() instanceof T) return (T) tile.get();
 
-        // Just try casting it to T and catch if it fails
-        try {
-            if (tile.isPresent()) //noinspection unchecked
-                return Optional.of((T) tile.get());
-        } catch (final ClassCastException ignored) {
+        if (tile.isPresent() && tile.get().getClass() == tClass) {
+            return Optional.of((T) tile.get());
         }
         return Optional.empty();
     }
@@ -51,8 +49,7 @@ public final class Board {
         return Optional.of(getTile(row, col));
     }
 
-    public void setTile(final int row, final int col, @NonNull final Tile tile)
-    {
+    public void setTile(final int row, final int col, @NonNull final Tile tile) {
         this.tiles[row][col] = tile;
         // As a note:
         // This won't work if the tile instances are shared across positions (instanced tiling)
