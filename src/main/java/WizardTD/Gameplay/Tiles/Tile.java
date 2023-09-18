@@ -1,16 +1,19 @@
 package WizardTD.Gameplay.Tiles;
 
 import WizardTD.Gameplay.Game.*;
+import WizardTD.Rendering.*;
 import lombok.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import processing.core.*;
 
 import java.util.*;
 
-@Getter
 @ToString
-public abstract class Tile {
-    @Setter(AccessLevel.PUBLIC)
+public abstract class Tile extends Renderable {
+    /**
+     * The tile coordinates for this tile
+     */
+    @Getter
+    @Setter
     private int posX, posY;
 
     /**
@@ -34,15 +37,14 @@ public abstract class Tile {
         }
     }
 
+    @Override
+    public @NonNull RenderOrder getRenderOrder() {
+        return RenderOrder.TILE;
+    }
+
     /**
      * Method to be called whenever something changes on the board,
      * and the tile should be updated to reflect this
      */
     public void boardDirty(@NonNull final Board board) {}
-
-    /**
-     * Renders the current tile, with the given coordinates `centreX, centreY`
-     * as the centre of the tile (on-screen)
-     */
-    public abstract void render(final @NonNull PApplet app, final float centreX, final float centreY);
 }

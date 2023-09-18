@@ -4,6 +4,7 @@ import WizardTD.Event.*;
 import WizardTD.Rendering.*;
 import WizardTD.UI.*;
 import lombok.*;
+import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.*;
 import processing.core.*;
@@ -24,7 +25,8 @@ public final class Grass extends Tile {
     }
 
     @Override
-    public void render(@NonNull final PApplet app, final float centreX, final float centreY) {
-        Renderer.renderSimpleTile(app, Grass.tileImage, centreX, centreY);
+    public void render(@NonNull final PApplet app) {
+        final Vector2 pos = Renderer.calculateUiCoordsForTile(getPosX(), getPosY());
+        Renderer.renderSimpleTile(app, Grass.tileImage, pos.x, pos.y);
     }
 }

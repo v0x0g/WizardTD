@@ -4,6 +4,7 @@ import WizardTD.Ext.*;
 import WizardTD.Rendering.*;
 import WizardTD.UI.*;
 import lombok.*;
+import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import processing.core.*;
 
@@ -22,7 +23,8 @@ public class InvalidTile extends Tile {
     );
 
     @Override
-    public void render(@NonNull final PApplet app, final float centreX, final float centreY) {
-        Renderer.renderSimpleTile(app, invalidTileImg, centreX, centreY);
+    public void render(@NonNull final PApplet app) {
+        final Vector2 pos = Renderer.calculateUiCoordsForTile(getPosX(), getPosY());
+        Renderer.renderSimpleTile(app, invalidTileImg, pos.x, pos.y);
     }
 }

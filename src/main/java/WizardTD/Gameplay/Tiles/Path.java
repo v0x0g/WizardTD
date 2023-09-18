@@ -5,6 +5,7 @@ import WizardTD.Gameplay.Game.*;
 import WizardTD.Rendering.*;
 import WizardTD.UI.*;
 import lombok.*;
+import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.*;
 import processing.core.*;
@@ -86,7 +87,8 @@ public final class Path extends Tile {
     }
 
     @Override
-    public void render(@NonNull final PApplet app, final float centreX, final float centreY) {
-        Renderer.renderSimpleTile(app, pathSidesMap.get(this.connectedPathSides), centreX, centreY);
+    public void render(@NonNull final PApplet app) {
+        final Vector2 pos = Renderer.calculateUiCoordsForTile(getPosX(), getPosY());
+        Renderer.renderSimpleTile(app, pathSidesMap.get(this.connectedPathSides), pos.x, pos.y);
     }
 }

@@ -85,9 +85,7 @@ public final class App extends PApplet {
         Logger.info("enter setup");
 
         Logger.trace("cap framerate: {} fps", GuiConfig.TARGET_FPS);
-        frameRate(GuiConfig.TARGET_FPS);
-        hint(PConstants.ENABLE_DEPTH_SORT);
-        // TODO: render Depth sorting
+        frameRate((float) GuiConfig.TARGET_FPS);
         EventManager.invokeEvent(new Event(EventType.AppSetup, this));
 
         Logger.info("done setup");
@@ -131,18 +129,18 @@ public final class App extends PApplet {
     @SneakyThrows
     @Override
     public void draw() {
-        Loggers.RENDER.trace("enter draw");
+        Loggers.RENDER.debug("enter draw");
+        Loggers.RENDER.trace("background");
         background(Colours.CYAN.code);
+        Loggers.RENDER.trace("dirty");
         for (int i = 0; i < GameConfig.BOARD_SIZE_TILES; i++) {
             for (int j = 0; j < GameConfig.BOARD_SIZE_TILES; j++) {
                 this.gameData.board.getTile(i,j).boardDirty(this.gameData.board);
             }
         }
-        Renderer.renderTiles(this, gameData);
-//        if (millis() > 5000) {
-//            exit();
-//        }
-        Loggers.RENDER.trace("exit draw");
+        Loggers.RENDER.trace("render gameData");
+        Renderer.renderGameData(this, gameData);
+        Loggers.RENDER.debug("exit draw");
     }
 
     /**
