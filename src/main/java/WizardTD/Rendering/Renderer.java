@@ -36,22 +36,25 @@ public class Renderer {
                                 renderOrderMap.computeIfAbsent(
                                         obj.getRenderOrder(),
                                         $_ -> ConcurrentHashMap.newKeySet()
-                                ).add(obj) // Add the object to that set
+                                ).add(obj)// Add the object to that set
                );
 
         renderOrders.stream()
-                    .map(key -> new AbstractMap.SimpleEntry<>(key,  renderOrderMap.get(key)))
-                    .forEach(entry -> {
-                        Loggers.RENDER.debug("render group {}", entry.getKey());
-                        entry.getValue().forEach(obj -> obj.render(app));
+                    // map.get() CAN RETURN NULL, CARE
+                    .map(key -> new AbstractMap.SimpleEntry<>(key, renderOrderMap.get(key)))
+                    .forEach((final AbstractMap.SimpleEntry<RenderOrder, @Nullable Set<Renderable>> entry) -> {
+                        final RenderOrder order = entry.getKey();
+                        final @Nullable Set<Renderable> objs = entry.getValue();
+                        Loggers.RENDER.debug("render group {}", order);
+                        if (objs != null) objs.forEach(obj -> obj.render(app));
+                        else Loggers.RENDER.debug("render group {} empty", objs);
                     });
 
         Loggers.RENDER.debug("end render");
     }
 
     public void renderSimpleTile(
-            @NonNull final PApplet app, @Nullable PImage img,
-            final double centreX, final double centreY) {
+            @NonNull final PApplet app, @Nullable PImage img, final double centreX, final double centreY) {
         Loggers.RENDER.trace("tile [{00}}, {00}]: render img {}", centreX, centreY, img);
         if (!UiManager.isValidImage(img)) {
             img = UiManager.missingTextureImage;
