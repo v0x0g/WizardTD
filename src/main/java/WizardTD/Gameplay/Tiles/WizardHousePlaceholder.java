@@ -6,7 +6,7 @@ import lombok.*;
  * Placeholder tile that represents a spot where a wizard should go
  */
 @ToString
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public final class WizardHousePlaceholder extends InvalidTile {
 //    @Override
 //    public void render(@NonNull final PApplet app, final float centreX, final float centreY) {

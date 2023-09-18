@@ -10,7 +10,7 @@ import org.checkerframework.checker.nullness.qual.*;
 import processing.core.*;
 
 @ToString
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public final class Tower extends Tile {
 
     public static @Nullable PImage tileLevel0 = null;

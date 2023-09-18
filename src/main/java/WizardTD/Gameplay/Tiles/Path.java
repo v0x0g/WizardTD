@@ -7,7 +7,6 @@ import WizardTD.UI.*;
 import lombok.*;
 import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.*;
 import processing.core.*;
 
 import java.util.*;
@@ -16,13 +15,13 @@ import static WizardTD.Ext.ImageExt.*;
 import static WizardTD.Gameplay.Tiles.TileSides.*;
 
 @ToString
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public final class Path extends Tile {
-    public static @Nullable PImage tileImage = null;
-    private static @NonNull Hashtable<EnumSet<TileSides>, PImage> pathSidesMap = new Hashtable<>();
+    private static final @NonNull Hashtable<EnumSet<TileSides>, PImage> pathSidesMap = new Hashtable<>();
     private transient @NonNull EnumSet<TileSides> connectedPathSides = EnumSet.noneOf(TileSides.class);
 
     @OnEvent(eventTypes = EventType.AppSetup)
+    @SuppressWarnings("unused")
     private static void loadImages(@NonNull final Event evt) {
         assert evt.dataObject != null;
         @NonNull final PApplet app = (PApplet) evt.dataObject;

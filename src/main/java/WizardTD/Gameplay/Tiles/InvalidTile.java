@@ -13,7 +13,7 @@ import processing.core.*;
  * This do be bad
  */
 @ToString
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class InvalidTile extends Tile {
 
     private static final @NonNull PImage invalidTileImg = ImageExt.generatePattern(

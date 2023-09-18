@@ -8,6 +8,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.util.*;
 
 @ToString
+@EqualsAndHashCode(callSuper = true)
 public abstract class Tile extends Renderable {
     /**
      * The tile coordinates for this tile
