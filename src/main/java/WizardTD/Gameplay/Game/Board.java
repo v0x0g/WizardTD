@@ -40,7 +40,9 @@ public final class Board {
         // See https://stackoverflow.com/a/17072077
         //  if (tile.isPresent() && tile.get() instanceof T) return (T) tile.get();
 
-        if (tile.isPresent() && tile.get().getClass() == tClass) {
+        if (tile.isPresent() && tClass.isAssignableFrom(tile.get().getClass())) {
+            // Cast is safe because we asserted types match above
+            // noinspection unchecked
             return Optional.of((T) tile.get());
         }
         return Optional.empty();

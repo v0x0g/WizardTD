@@ -87,7 +87,7 @@ public final class Path extends Tile {
 
     @Override
     public void render(@NonNull final PApplet app) {
-        final Vector2 pos = Renderer.calculateUiCoordsForTile(getPosX(), getPosY());
+        final Vector2 pos = UiManager.calculateUiCoordsForTile(getPosX(), getPosY());
         Renderer.renderSimpleTile(app, pathSidesMap.get(this.connectedPathSides), pos.x, pos.y);
     }
 }

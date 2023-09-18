@@ -67,6 +67,7 @@ public class ImageExt {
         return img;
     }
 
+    @SuppressWarnings("unused") // Public API
     public enum ImagePattern {
         CHECKERS {
             @Override

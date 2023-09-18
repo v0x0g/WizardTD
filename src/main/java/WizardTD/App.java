@@ -58,7 +58,8 @@ public final class App extends PApplet {
         try {
             PApplet.main(APP_CLASS_NAME);
         } catch (final Exception e) {
-            if (e.getCause() instanceof InvocationTargetException && e.getCause().getCause() instanceof AppInitException)
+            if (e.getCause() instanceof InvocationTargetException && e.getCause()
+                                                                      .getCause() instanceof AppInitException)
                 Logger.error("couldn't init game: {}", e.getLocalizedMessage());
             else Logger.error(e, "error running game");
         } finally {
@@ -73,7 +74,7 @@ public final class App extends PApplet {
     public void settings() {
         Logger.info("enter init settings");
         smooth(8); // MSAA?
-        size(GuiConfig.WINDOW_WIDTH_PX, GuiConfig.WINDOW_HEIGHT_PX, P3D);
+        size(GuiConfig.Window.WINDOW_WIDTH_PX, GuiConfig.Window.WINDOW_HEIGHT_PX, PConstants.P2D);
         Logger.info("done init settings");
     }
 
@@ -84,8 +85,8 @@ public final class App extends PApplet {
     public void setup() {
         Logger.info("enter setup");
 
-        Logger.trace("cap framerate: {} fps", GuiConfig.TARGET_FPS);
-        frameRate((float) GuiConfig.TARGET_FPS);
+        Logger.trace("cap framerate: {} fps", GuiConfig.Window.TARGET_FPS);
+        frameRate((float) GuiConfig.Window.TARGET_FPS);
         EventManager.invokeEvent(new Event(EventType.AppSetup, this));
 
         Logger.info("done setup");
@@ -110,17 +111,26 @@ public final class App extends PApplet {
     @Override
     public void mousePressed(final MouseEvent evt) {
 
-        Logger.debug("mouse pressed: {} @ ({},{}) count={}", MouseCode.fromInt(evt.getButton()), evt.getX(), evt.getY(), evt.getCount());
+        Logger.debug(
+                "mouse pressed: {} @ ({},{}) count={}", MouseCode.fromInt(evt.getButton()), evt.getX(), evt.getY(),
+                evt.getCount()
+        );
     }
 
     @Override
     public void mouseReleased(final MouseEvent evt) {
-        Logger.debug("mouse released: {} @ ({},{}) count={}", MouseCode.fromInt(evt.getButton()), evt.getX(), evt.getY(), evt.getCount());
+        Logger.debug(
+                "mouse released: {} @ ({},{}) count={}", MouseCode.fromInt(evt.getButton()), evt.getX(), evt.getY(),
+                evt.getCount()
+        );
     }
 
     @Override
     public void mouseDragged(final MouseEvent evt) {
-        Logger.debug("mouse drag: {} @ ({},{}) count={}", MouseCode.fromInt(evt.getButton()), evt.getX(), evt.getY(), evt.getCount());
+        Logger.debug(
+                "mouse drag: {} @ ({},{}) count={}", MouseCode.fromInt(evt.getButton()), evt.getX(), evt.getY(),
+                evt.getCount()
+        );
     }
 
     /**
@@ -135,12 +145,14 @@ public final class App extends PApplet {
         Loggers.RENDER.trace("dirty");
         for (int i = 0; i < GameConfig.BOARD_SIZE_TILES; i++) {
             for (int j = 0; j < GameConfig.BOARD_SIZE_TILES; j++) {
-                this.gameData.board.getTile(i,j).boardDirty(this.gameData.board);
+                this.gameData.board.getTile(i, j).boardDirty(this.gameData.board);
             }
         }
         Loggers.RENDER.trace("render gameData");
         Renderer.renderGameData(this, gameData);
         Loggers.RENDER.debug("exit draw");
+        
+        UiManager.getTileFromMouseCoords(mouseX, mouseY, gameData);
     }
 
     /**

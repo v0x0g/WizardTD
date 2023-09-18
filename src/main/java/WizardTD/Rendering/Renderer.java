@@ -5,15 +5,12 @@ import WizardTD.Gameplay.Game.*;
 import WizardTD.UI.*;
 import com.google.common.collect.*;
 import lombok.experimental.*;
-import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.*;
 import processing.core.*;
 
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
-
-import static WizardTD.UI.GuiConfig.*;
 
 @UtilityClass
 @ExtensionMethod(Arrays.class)
@@ -70,12 +67,4 @@ public class Renderer {
         app.image(img, (float) centreX, (float) centreY);
     }
 
-    public @NonNull Vector2 calculateUiCoordsForTile(final int tileX, final int tileY) {
-        //noinspection UnnecessaryLocalVariable
-        final int globalOffsetX = 0, globalOffsetY = TOP_BAR_HEIGHT_PX;
-        // Offset by the tile's coordinates, and then half a tile extra to move to the centre 
-        final int middlePosX = globalOffsetX + (tileX * CELL_SIZE_PX) + (CELL_SIZE_PX / 2);
-        final int middlePosY = globalOffsetY + (tileY * CELL_SIZE_PX) + (CELL_SIZE_PX / 2);
-        return new Vector2(middlePosX, middlePosY);
-    }
 }
