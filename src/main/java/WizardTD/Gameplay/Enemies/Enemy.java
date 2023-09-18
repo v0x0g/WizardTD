@@ -1,13 +1,16 @@
 package WizardTD.Gameplay.Enemies;
 
+import WizardTD.Rendering.*;
 import lombok.*;
 import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import processing.core.*;
+import sun.reflect.generics.reflectiveObjects.*;
 
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class Enemy {
+public abstract class Enemy extends Renderable {
 
     /**
      * How much health the enemy has remaining
@@ -34,4 +37,13 @@ public abstract class Enemy {
      */
     public long manaGainedOnKill;
 
+    @Override
+    public @NonNull RenderOrder getRenderOrder() {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void render(@NonNull final PApplet app) {
+        throw new NotImplementedException();
+    }
 }

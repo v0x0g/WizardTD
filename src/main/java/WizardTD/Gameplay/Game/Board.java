@@ -2,6 +2,7 @@ package WizardTD.Gameplay.Game;
 
 import WizardTD.Gameplay.Tiles.*;
 import lombok.*;
+import lombok.experimental.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.text.*;
@@ -11,6 +12,7 @@ import java.util.stream.*;
 import static WizardTD.GameConfig.*;
 
 @EqualsAndHashCode
+@ExtensionMethod(Arrays.class)
 public final class Board {
 
     /**
@@ -67,9 +69,16 @@ public final class Board {
         // It maps each tile, translating via ToString and then getting the first char
         // And then prints the tiles in a grid
         return MessageFormat.format("Board'{'tiles={0}'}'", String.join(
-                "\n", (Iterable<String>) Arrays.stream(tiles).map((row) -> String.join(
+                "\n", (Iterable<String>) this.tiles.stream().map(row -> String.join(
                         " ",
-                        (Iterable<String>) Arrays.stream(row).map((tile) -> tile.toString().substring(0, 1))::iterator
+                        (Iterable<String>) row.stream().map(tile -> tile.toString().substring(0, 1))::iterator
                 ))::iterator));
+    }
+
+    /**
+     * Returns a stream over all the tiles in this board
+     */
+    public @NonNull Stream<Tile> stream() {
+        return this.tiles.stream().flatMap(row -> row.stream());
     }
 }

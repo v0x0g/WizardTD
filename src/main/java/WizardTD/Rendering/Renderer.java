@@ -2,38 +2,60 @@ package WizardTD.Rendering;
 
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
-import WizardTD.Gameplay.Tiles.*;
 import WizardTD.UI.*;
+import com.google.common.collect.*;
 import lombok.experimental.*;
 import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.*;
 import processing.core.*;
 
-import static WizardTD.GameConfig.*;
+import java.util.*;
+import java.util.concurrent.*;
+
 import static WizardTD.UI.GuiConfig.*;
 
 @UtilityClass
+@ExtensionMethod(Arrays.class)
 public class Renderer {
+    private static final @NonNull ThreadLocal<ConcurrentHashMap<RenderOrder, Set<Renderable>>> renderOrderMaps =
+            ThreadLocal.withInitial(ConcurrentHashMap::new);
+    private static final @NonNull RenderOrder @NonNull [] renderOrders =
+            RenderOrder.values().stream().sorted().toArray(RenderOrder[]::new);
+
     public void renderGameData(@NonNull final PApplet app, @NonNull final GameData game) {
-        // Render the game tiles
-        Loggers.UI.debug("start render tiles");
-        // Where we start rendering all tiles (global offset)
-        for (int r = 0; r < BOARD_SIZE_TILES; r++) {
-            for (int c = 0; c < BOARD_SIZE_TILES; c++) {
-                final Tile tile = game.board.getTile(r, c);
-                Loggers.UI.trace("render tile [{00}}, {00}]", r, c);
-                tile.render(app);
-            }
-        }
+        Loggers.RENDER.debug("start render");
+        // When we render, we aggregate all the `Renderables`, and sort them into our map
+        // Then iterate through the map in the correct order, and happy days
+        final ConcurrentHashMap<RenderOrder, Set<Renderable>> renderOrderMap = renderOrderMaps.get();
+
+        renderOrderMap.clear(); // Reset the mapping
+        Streams.concat(game.enemies.stream(), game.projectiles.stream(), game.board.stream())
+               .parallel() // Should speed up sorting with MOAR THREADS since we have lots of things to sort
+               .forEach(obj ->
+                                // Get the set for this render order, or create if missing
+                                renderOrderMap.computeIfAbsent(
+                                        obj.getRenderOrder(),
+                                        $_ -> ConcurrentHashMap.newKeySet()
+                                ).add(obj) // Add the object to that set
+               );
+
+        renderOrders.stream()
+                    .map(key -> new AbstractMap.SimpleEntry<>(key,  renderOrderMap.get(key)))
+                    .forEach(entry -> {
+                        Loggers.RENDER.debug("render group {}", entry.getKey());
+                        entry.getValue().forEach(obj -> obj.render(app));
+                    });
+
+        Loggers.RENDER.debug("end render");
     }
 
     public void renderSimpleTile(
             @NonNull final PApplet app, @Nullable PImage img,
             final double centreX, final double centreY) {
-        Loggers.UI.trace("tile [{00}}, {00}]: render img {}", centreX, centreY, img);
+        Loggers.RENDER.trace("tile [{00}}, {00}]: render img {}", centreX, centreY, img);
         if (!UiManager.isValidImage(img)) {
             img = UiManager.missingTextureImage;
-            Loggers.UI.trace("render tile [{00}, {00}]: missing texture", centreX, centreY);
+            Loggers.RENDER.trace("render tile [{00}, {00}]: missing texture", centreX, centreY);
         }
         app.imageMode(PConstants.CENTER);
         app.colorMode(PConstants.ARGB);

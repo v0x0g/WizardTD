@@ -1,8 +1,10 @@
 package WizardTD.Gameplay.Projectiles;
 
+import WizardTD.Rendering.*;
 import lombok.*;
 import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import processing.core.*;
 
 @ToString
 @EqualsAndHashCode(callSuper = false)
@@ -24,4 +26,13 @@ public class Fireball extends Projectile {
         this.baseDamage = baseDamage;
     }
 
+    @Override
+    public @NonNull RenderOrder getRenderOrder() {
+        return RenderOrder.PROJECTILE;
+    }
+
+    @Override
+    public void render(final @NonNull PApplet app) {
+        throw null;
+    }
 }

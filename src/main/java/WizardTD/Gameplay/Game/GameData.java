@@ -1,6 +1,7 @@
 package WizardTD.Gameplay.Game;
 
 import WizardTD.Gameplay.Enemies.*;
+import WizardTD.Gameplay.Projectiles.*;
 import WizardTD.Gameplay.Spawners.*;
 import WizardTD.Gameplay.Tiles.*;
 import lombok.*;
@@ -13,13 +14,13 @@ import static org.tinylog.Logger.*;
 
 @ToString
 @EqualsAndHashCode
+@AllArgsConstructor
 public final class GameData {
 
     public @NonNull Board board;
 
     public @NonNull List<@NonNull Enemy> enemies;
-
-    public @NonNull List<@NonNull Tower> towers;
+    public @NonNull List<@NonNull Projectile> projectiles;
 
     public @NonNull List<@NonNull Wave> waves;
 
@@ -27,20 +28,10 @@ public final class GameData {
 
     public @NonNull GameDataConfig config;
 
-    private GameData(@NonNull final Board board, @NonNull final List<@NonNull Enemy> enemies, @NonNull final List<@NonNull Tower> towers, @NonNull final List<@NonNull Wave> waves, @NonNull final WizardHouse wizardHouse, @NonNull final GameDataConfig config) {
-        this.board = board;
-        this.enemies = enemies;
-        this.towers = towers;
-        this.waves = waves;
-        this.wizardHouse = wizardHouse;
-        this.config = config;
-    }
-
     public static @NonNull Optional<GameData> fromGameDescriptor(@NonNull final GameDescriptor desc) {
         trace("creating game from level desc: {}", desc);
 
         final Board board = desc.board;
-        final List<Tower> towers = new ArrayList<>();
         final List<Enemy> enemies = new ArrayList<>();
         final List<Wave> waves = new ArrayList<>();
 
@@ -66,7 +57,7 @@ public final class GameData {
         }
 
         error("TODO: Waves");
-        return Optional.of(new GameData(board, enemies, towers, waves, fourPrivetDrive, desc.config));
+        return Optional.of(new GameData(board, enemies, new ArrayList<>(), waves, fourPrivetDrive, desc.config));
     }
 
 }
