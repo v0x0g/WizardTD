@@ -1,4 +1,4 @@
-package WizardTD.UI;
+package WizardTD.UI.Elements;
 
 import lombok.*;
 import org.checkerframework.checker.nullness.qual.NonNull;

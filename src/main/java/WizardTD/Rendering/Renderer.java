@@ -3,6 +3,7 @@ package WizardTD.Rendering;
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.UI.*;
+import WizardTD.UI.Elements.*;
 import com.google.common.collect.*;
 import lombok.experimental.*;
 import org.checkerframework.checker.nullness.qual.*;
@@ -53,7 +54,7 @@ public class Renderer {
                         final @Nullable List<Renderable> objs = entry.getValue();
                         Loggers.RENDER.debug("render group {}", order);
                         if (objs != null) objs.forEach(obj -> obj.render(app, game));
-                        else Loggers.RENDER.debug("render group {} empty", objs);
+                        else Loggers.RENDER.debug("render group {} empty", order);
                     });
 
         final Instant endInstant = Instant.now();

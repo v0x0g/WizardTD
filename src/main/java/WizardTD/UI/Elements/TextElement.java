@@ -1,6 +1,7 @@
-package WizardTD.UI;
+package WizardTD.UI.Elements;
 
 import WizardTD.Gameplay.Game.*;
+import WizardTD.UI.*;
 import lombok.*;
 import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.NonNull;

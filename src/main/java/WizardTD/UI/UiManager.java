@@ -3,6 +3,7 @@ package WizardTD.UI;
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Gameplay.Tiles.*;
+import WizardTD.UI.Elements.*;
 import com.google.errorprone.annotations.*;
 import lombok.experimental.*;
 import lombok.*;
@@ -16,7 +17,6 @@ import java.util.*;
 import static WizardTD.GameConfig.*;
 import static WizardTD.UI.GuiConfig.*;
 import static WizardTD.UI.GuiConfig.UiPositions.*;
-import static WizardTD.UI.GuiConfig.Window.*;
 
 @UtilityClass
 public class UiManager {
@@ -116,42 +116,42 @@ public class UiManager {
                 )
         ));
     }
-
-    public void renderUi(final @NonNull PApplet app, final @NonNull GameData gameData, final @NonNull UiState uiState) {
-        // 
-        final Vector2 mousePos = new Vector2(app.mouseX, app.mouseY);
-        @NonNull final Optional<Tile> hoveredTile =
-                UiManager.pixelCoordsToTile(mousePos, gameData);
-
-        // Change cursor if we are hovering a tile
-        app.cursor(hoveredTile.isPresent() ? PConstants.CROSS : PConstants.ARROW);
-
-        // Highlight hovered tile
-        hoveredTile.ifPresent(value -> centeredRect(
-                app,
-                tileToPixelCoords(value), new Vector2(CELL_SIZE_PX, CELL_SIZE_PX),
-                Theme.SELECTION_OUTLINE.code, Theme.SELECTION_FILL.code
-        ));
-
-        // Render the top bar
-        final Vector2 topBarPos1 = new Vector2(0, 0);
-        final Vector2 topBarPos2 = new Vector2(WINDOW_WIDTH_PX, TOP_BAR_HEIGHT_PX);
-        corneredRect(app,
-                     topBarPos1,
-                     topBarPos2,
-                     Colour.NONE.code, Theme.APP_BACKGROUND.code
-        );
-
-
-        // Render the sidebar
-        final Vector2 sideBarPos1 = new Vector2(WINDOW_WIDTH_PX - SIDEBAR_WIDTH_PX, TOP_BAR_HEIGHT_PX);
-        final Vector2 sideBarPos2 = new Vector2(WINDOW_WIDTH_PX, WINDOW_HEIGHT_PX);
-        corneredRect(app,
-                     sideBarPos1,
-                     sideBarPos2,
-                     Colour.NONE.code, Theme.APP_BACKGROUND.code
-        );
-    }
+//
+//    public void renderUi(final @NonNull PApplet app, final @NonNull GameData gameData, final @NonNull UiState uiState) {
+//        // 
+//        final Vector2 mousePos = new Vector2(app.mouseX, app.mouseY);
+//        @NonNull final Optional<Tile> hoveredTile =
+//                UiManager.pixelCoordsToTile(mousePos, gameData);
+//
+//        // Change cursor if we are hovering a tile
+//        app.cursor(hoveredTile.isPresent() ? PConstants.CROSS : PConstants.ARROW);
+//
+//        // Highlight hovered tile
+//        hoveredTile.ifPresent(value -> centeredRect(
+//                app,
+//                tileToPixelCoords(value), new Vector2(CELL_SIZE_PX, CELL_SIZE_PX),
+//                Theme.SELECTION_OUTLINE.code, Theme.SELECTION_FILL.code
+//        ));
+//
+//        // Render the top bar
+//        final Vector2 topBarPos1 = new Vector2(0, 0);
+//        final Vector2 topBarPos2 = new Vector2(WINDOW_WIDTH_PX, TOP_BAR_HEIGHT_PX);
+//        corneredRect(app,
+//                     topBarPos1,
+//                     topBarPos2,
+//                     Colour.NONE.code, Theme.APP_BACKGROUND.code
+//        );
+//
+//
+//        // Render the sidebar
+//        final Vector2 sideBarPos1 = new Vector2(WINDOW_WIDTH_PX - SIDEBAR_WIDTH_PX, TOP_BAR_HEIGHT_PX);
+//        final Vector2 sideBarPos2 = new Vector2(WINDOW_WIDTH_PX, WINDOW_HEIGHT_PX);
+//        corneredRect(app,
+//                     sideBarPos1,
+//                     sideBarPos2,
+//                     Colour.NONE.code, Theme.APP_BACKGROUND.code
+//        );
+//    }
 
     // ========== GENERIC RENDERING FUNCTIONS =====
     //region

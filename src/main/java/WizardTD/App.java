@@ -6,6 +6,7 @@ import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Rendering.*;
 import WizardTD.UI.*;
+import WizardTD.UI.Elements.*;
 import lombok.*;
 import lombok.experimental.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -154,7 +155,7 @@ public final class App extends PApplet {
         Loggers.RENDER.trace("render gameData");
         Renderer.render(this, gameData, uiState);
         Loggers.RENDER.trace("render ui");
-        UiManager.renderUi(this, gameData, uiState);
+//        UiManager.renderUi(this, gameData, uiState);
 
         Loggers.RENDER.debug("exit draw");
     }
