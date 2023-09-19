@@ -12,22 +12,23 @@ import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import static WizardTD.UI.GuiConfig.CELL_SIZE_PX;
+import static WizardTD.UI.GuiConfig.*;
 
 @UtilityClass
 @ExtensionMethod(Arrays.class)
 public class Renderer {
+    public final @NonNull         PImage                                                        missingTextureImage =
+            ImageExt.generatePattern(
+                    GuiConfig.CELL_SIZE_PX, GuiConfig.CELL_SIZE_PX, CELL_SIZE_PX >> 2, 2,
+                    ImageExt.ImagePattern.CHECKERS,
+                    Colour.BRIGHT_PURPLE.code, Colour.BLACK.code
+            );
     private static final @NonNull ThreadLocal<ConcurrentHashMap<RenderOrder, List<Renderable>>> renderOrderMaps =
             ThreadLocal.withInitial(ConcurrentHashMap::new);
-    private static final @NonNull RenderOrder @NonNull [] renderOrders =
+    private static final @NonNull RenderOrder @NonNull []                                       renderOrders =
             RenderOrder.values().stream().sorted().toArray(RenderOrder[]::new);
-    public final @NonNull PImage missingTextureImage = ImageExt.generatePattern(
-            GuiConfig.CELL_SIZE_PX, GuiConfig.CELL_SIZE_PX, CELL_SIZE_PX >> 2, 2,
-            ImageExt.ImagePattern.CHECKERS,
-            Colour.BRIGHT_PURPLE.code, Colour.BLACK.code
-    );
 
-    public void renderGameData(@NonNull final PApplet app, @NonNull final GameData game) {
+    public void render(@NonNull final PApplet app, @NonNull final GameData game, @NonNull final UiState ui) {
         Loggers.RENDER.debug("start render");
         final Instant startInstant = Instant.now();
         // When we render, we aggregate all the `Renderables`, and sort them into our map
@@ -35,7 +36,7 @@ public class Renderer {
         final ConcurrentHashMap<RenderOrder, List<Renderable>> renderOrderMap = renderOrderMaps.get();
 
         renderOrderMap.clear(); // Reset the mapping
-        Streams.concat(game.enemies.stream(), game.projectiles.stream(), game.board.stream())
+        Streams.concat(game.enemies.stream(), game.projectiles.stream(), game.board.stream(), ui.uiElements.stream())
                .forEach(obj ->
                                 // Get the set for this render order, or create if missing
                                 renderOrderMap.computeIfAbsent(
@@ -51,7 +52,7 @@ public class Renderer {
                         final RenderOrder order = entry.getKey();
                         final @Nullable List<Renderable> objs = entry.getValue();
                         Loggers.RENDER.debug("render group {}", order);
-                        if (objs != null) objs.forEach(obj -> obj.render(app));
+                        if (objs != null) objs.forEach(obj -> obj.render(app, game));
                         else Loggers.RENDER.debug("render group {} empty", objs);
                     });
 

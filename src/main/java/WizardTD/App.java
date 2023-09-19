@@ -19,7 +19,7 @@ import java.util.*;
 public final class App extends PApplet {
 
     public final @NonNull GameData gameData;
-    public final @NonNull UiState uiState;
+    public final @NonNull UiState  uiState;
 
     public App() throws AppInitException {
         Logger.info("app ctor");
@@ -46,6 +46,7 @@ public final class App extends PApplet {
 
         Logger.debug("init uiState");
         this.uiState = new UiState();
+        UiManager.initUi(this.uiState);
 
         Logger.debug("done");
     }
@@ -151,7 +152,7 @@ public final class App extends PApplet {
         Loggers.RENDER.trace("dirty");
         this.gameData.board.stream().forEach(t -> t.boardDirty(this.gameData.board));
         Loggers.RENDER.trace("render gameData");
-        Renderer.renderGameData(this, gameData);
+        Renderer.render(this, gameData, uiState);
         Loggers.RENDER.trace("render ui");
         UiManager.renderUi(this, gameData, uiState);
 

@@ -1,6 +1,7 @@
 package WizardTD.Gameplay.Tiles;
 
 import WizardTD.Ext.*;
+import WizardTD.Gameplay.Game.*;
 import WizardTD.Rendering.*;
 import WizardTD.UI.*;
 import lombok.*;
@@ -23,7 +24,7 @@ public class InvalidTile extends Tile {
     );
 
     @Override
-    public void render(@NonNull final PApplet app) {
+    public void render(@NonNull final PApplet app, @NonNull GameData gameData) {
         final Vector2 pos = UiManager.tileToPixelCoords(this);
         Renderer.renderSimpleTile(app, invalidTileImg, pos.x, pos.y);
     }

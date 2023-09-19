@@ -1,5 +1,6 @@
 package WizardTD.Gameplay.Enemies;
 
+import WizardTD.Gameplay.Game.*;
 import WizardTD.Rendering.*;
 import lombok.*;
 import mikera.vectorz.*;
@@ -43,7 +44,7 @@ public abstract class Enemy extends Renderable {
     }
 
     @Override
-    public void render(@NonNull final PApplet app) {
+    public void render(@NonNull final PApplet app, @NonNull GameData gameData) {
         throw new NotImplementedException();
     }
 }

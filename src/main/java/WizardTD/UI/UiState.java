@@ -1,6 +1,9 @@
 package WizardTD.UI;
 
 import lombok.*;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+import java.util.*;
 
 @ToString
 @NoArgsConstructor
@@ -24,4 +27,6 @@ public final class UiState {
 
     public boolean buildTower = false;
     public boolean manaPool = false;
+    
+    public final @NonNull List<UiElement> uiElements = new ArrayList<>();
 }

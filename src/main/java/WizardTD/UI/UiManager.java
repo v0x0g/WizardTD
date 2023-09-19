@@ -72,6 +72,50 @@ public class UiManager {
         Loggers.UI.debug(
                 "mouse click: x={0.000} ({})\ty={0.000} ({}) tile {}", app.mouseX, tileX, app.mouseY, tileY, tile);
     }
+    
+    public void initUi(@NonNull final UiState uiState){
+        // Corners
+        final Vector2 manaBarPos1 = new Vector2(320, 10);
+        final Vector2 manaBarPos2 = new Vector2(640, 30);
+//        corneredRect(
+//                app,
+//                manaBarPos1,
+//                manaBarPos2,
+//                Theme.SELECTION_OUTLINE.code,
+//                Theme.WIDGET_BACKGROUND.code
+//        );
+//        final Vector2 filledManaBarPos2 = new Vector2(
+//                Numerics.lerp(manaBarPos1.x, manaBarPos2.x, gameData.wizardHouse.mana / gameData.wizardHouse.manaCap),
+//                manaBarPos2.y
+//        );
+//        corneredRect(
+//                app,
+//                manaBarPos1,
+//                filledManaBarPos2,
+//                Theme.SELECTION_OUTLINE.code,
+//                Theme.MANA.code
+//        );
+        uiState.uiElements.add(new TextElement(
+                manaBarPos1, manaBarPos2,
+                (data) -> MessageFormat.format(
+                        "Mana: {0}/{1}",
+                        data.wizardHouse.mana,
+                        data.wizardHouse.manaCap
+                )
+        ));
+
+        // Next wave indicator
+        final Vector2 waveIndicatorPos1 = new Vector2(0, 10);
+        final Vector2 waveIndicatorPos2 = new Vector2(320, 30);
+        uiState.uiElements.add(new TextElement(
+                waveIndicatorPos1, waveIndicatorPos2,
+                (data) -> MessageFormat.format(
+                        "Wave {0,number,##} starts: {1,number,00.00} seconds",
+                        59 - PApplet.second(),
+                        PApplet.second() *26 / (float) 1000
+                )
+        ));
+    }
 
     public void renderUi(final @NonNull PApplet app, final @NonNull GameData gameData, final @NonNull UiState uiState) {
         // 
@@ -96,46 +140,6 @@ public class UiManager {
                      topBarPos1,
                      topBarPos2,
                      Colour.NONE.code, Theme.APP_BACKGROUND.code
-        );
-
-        // Corners
-        final Vector2 manaBarPos1 = new Vector2(320, 10);
-        final Vector2 manaBarPos2 = new Vector2(640, 30);
-        corneredRect(
-                app,
-                manaBarPos1,
-                manaBarPos2,
-                Theme.SELECTION_OUTLINE.code,
-                Theme.WIDGET_BACKGROUND.code
-        );
-        final Vector2 filledManaBarPos2 = new Vector2(
-                Numerics.lerp(manaBarPos1.x, manaBarPos2.x, gameData.wizardHouse.mana / gameData.wizardHouse.manaCap),
-                manaBarPos2.y
-        );
-        corneredRect(
-                app,
-                manaBarPos1,
-                filledManaBarPos2,
-                Theme.SELECTION_OUTLINE.code,
-                Theme.MANA.code
-        );
-        text(
-                app,
-                MessageFormat.format("Mana: {0}/{1}", gameData.wizardHouse.mana, gameData.wizardHouse.manaCap),
-                manaBarPos1, manaBarPos2
-        );
-
-        // Next wave indicator
-        final Vector2 waveIndicatorPos1 = new Vector2(0, 10);
-        final Vector2 waveIndicatorPos2 = new Vector2(320, 30);
-        text(
-                app,
-                MessageFormat.format(
-                        "Wave {0,number,##} starts: {1,number,00.00} seconds",
-                        59 - PApplet.second(),
-                        app.millis() % 10000 / (float) 1000
-                ),
-                waveIndicatorPos1, waveIndicatorPos2
         );
 
 
@@ -176,22 +180,6 @@ public class UiManager {
         shapeSetup(app, outline, fill);
         app.rectMode(PConstants.CORNERS);
         app.rect((float) cornerTopLeft.x, (float) cornerTopLeft.y, (float) cornerBotRight.x, (float) cornerBotRight.y);
-    }
-
-    public void text(
-            final @NonNull PApplet app,
-            final @NonNull String text,
-            final @NonNull Vector2 cornerTopLeft, final @NonNull Vector2 cornerBotRight) {
-        app.fill(Theme.TEXT.code);
-        app.rectMode(PConstants.CORNERS);
-        app.textAlign(PConstants.CENTER);
-        app.textSize(Theme.TEXT_SIZE_NORMAL);
-        app.text(
-                text,
-                // For some reason text coords are backwards????
-                (float) cornerBotRight.x, (float) cornerBotRight.y,
-                (float) cornerTopLeft.x, (float) cornerTopLeft.y
-        );
     }
 
     private void shapeSetup(

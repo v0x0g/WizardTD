@@ -1,6 +1,7 @@
 package WizardTD.Gameplay.Tiles;
 
 import WizardTD.Event.*;
+import WizardTD.Gameplay.Game.*;
 import WizardTD.Rendering.*;
 import WizardTD.UI.*;
 import lombok.*;
@@ -25,7 +26,7 @@ public final class Grass extends Tile {
     }
 
     @Override
-    public void render(@NonNull final PApplet app) {
+    public void render(@NonNull final PApplet app, @NonNull GameData gameData) {
         final Vector2 pos = UiManager.tileToPixelCoords(this);
         Renderer.renderSimpleTile(app, Grass.tileImage, pos.x, pos.y);
     }

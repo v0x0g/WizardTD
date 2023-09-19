@@ -1,5 +1,6 @@
 package WizardTD.Gameplay.Projectiles;
 
+import WizardTD.Gameplay.Game.*;
 import WizardTD.Rendering.*;
 import lombok.*;
 import mikera.vectorz.*;
@@ -32,7 +33,7 @@ public class Fireball extends Projectile {
     }
 
     @Override
-    public void render(final @NonNull PApplet app) {
+    public void render(final @NonNull PApplet app, @NonNull GameData gameData) {
         throw null;
     }
 }
