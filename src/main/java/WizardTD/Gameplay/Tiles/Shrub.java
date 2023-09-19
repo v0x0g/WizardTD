@@ -23,7 +23,7 @@ public final class Shrub extends Tile {
 
     @Override
     public void render(@NonNull final PApplet app) {
-        final Vector2 pos = UiManager.calculateUiCoordsForTile(getPosX(), getPosY());
+        final Vector2 pos = UiManager.tileToPixelCoords(this);
         Renderer.renderSimpleTile(app, tileImage, pos.x, pos.y);
     }
 }

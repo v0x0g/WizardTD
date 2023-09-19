@@ -26,7 +26,7 @@ public final class Grass extends Tile {
 
     @Override
     public void render(@NonNull final PApplet app) {
-        final Vector2 pos = UiManager.calculateUiCoordsForTile(getPosX(), getPosY());
+        final Vector2 pos = UiManager.tileToPixelCoords(this);
         Renderer.renderSimpleTile(app, Grass.tileImage, pos.x, pos.y);
     }
 }

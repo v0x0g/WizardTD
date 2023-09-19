@@ -19,12 +19,12 @@ public class InvalidTile extends Tile {
     private static final @NonNull PImage invalidTileImg = ImageExt.generatePattern(
             GuiConfig.CELL_SIZE_PX, GuiConfig.CELL_SIZE_PX, GuiConfig.CELL_SIZE_PX/2, 2,
             ImageExt.ImagePattern.CHECKERS,
-            Colours.BRIGHT_PURPLE.code, Colours.RED.code
+            Colour.BRIGHT_PURPLE.code, Colour.RED.code
     );
 
     @Override
     public void render(@NonNull final PApplet app) {
-        final Vector2 pos = UiManager.calculateUiCoordsForTile(getPosX(), getPosY());
+        final Vector2 pos = UiManager.tileToPixelCoords(this);
         Renderer.renderSimpleTile(app, invalidTileImg, pos.x, pos.y);
     }
 }

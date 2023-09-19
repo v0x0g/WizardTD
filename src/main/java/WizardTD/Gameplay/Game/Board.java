@@ -32,6 +32,11 @@ public final class Board {
         return this.tiles[row][col];
     }
 
+    public @NonNull Optional<Tile> maybeGetTile(final int row, final int col) {
+        if (row < 0 || col < 0 || row >= BOARD_SIZE_TILES || col >= BOARD_SIZE_TILES) return Optional.empty();
+        return Optional.of(getTile(row, col));
+    }
+
     public @NonNull <T extends Tile> Optional<T> maybeGetTileGeneric(
             final @NonNull Class<T> tClass, final int row, final int col) {
         final @NonNull Optional<Tile> tile = maybeGetTile(row, col);
@@ -46,11 +51,6 @@ public final class Board {
             return Optional.of((T) tile.get());
         }
         return Optional.empty();
-    }
-
-    public @NonNull Optional<Tile> maybeGetTile(final int row, final int col) {
-        if (row < 0 || col < 0 || row >= BOARD_SIZE_TILES || col >= BOARD_SIZE_TILES) return Optional.empty();
-        return Optional.of(getTile(row, col));
     }
 
     public void setTile(final int row, final int col, @NonNull final Tile tile) {

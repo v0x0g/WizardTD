@@ -18,7 +18,8 @@ import java.util.*;
 
 public final class App extends PApplet {
 
-    private final @NonNull GameData gameData;
+    public final @NonNull GameData gameData;
+    public final @NonNull UiState uiState;
 
     public App() throws AppInitException {
         Logger.info("app ctor");
@@ -42,6 +43,9 @@ public final class App extends PApplet {
         this.gameData = maybeGameData.get();
         Logger.debug("got gameData");
         Logger.debug("gameData={}", gameData);
+
+        Logger.debug("init uiState");
+        this.uiState = new UiState();
 
         Logger.debug("done");
     }
@@ -74,7 +78,7 @@ public final class App extends PApplet {
     public void settings() {
         Logger.info("enter init settings");
         smooth(8); // MSAA?
-        size(GuiConfig.Window.WINDOW_WIDTH_PX, GuiConfig.Window.WINDOW_HEIGHT_PX, PConstants.P2D);
+        size(GuiConfig.Window.WINDOW_WIDTH_PX, GuiConfig.Window.WINDOW_HEIGHT_PX);
         Logger.info("done init settings");
     }
 
@@ -140,19 +144,18 @@ public final class App extends PApplet {
     @Override
     public void draw() {
         Loggers.RENDER.debug("enter draw");
+
         Loggers.RENDER.trace("background");
-        background(Colours.CYAN.code);
+        background(Colour.DEEP_PURPLE.code);
+        // TODO: Dirtying logic
         Loggers.RENDER.trace("dirty");
-        for (int i = 0; i < GameConfig.BOARD_SIZE_TILES; i++) {
-            for (int j = 0; j < GameConfig.BOARD_SIZE_TILES; j++) {
-                this.gameData.board.getTile(i, j).boardDirty(this.gameData.board);
-            }
-        }
+        this.gameData.board.stream().forEach(t -> t.boardDirty(this.gameData.board));
         Loggers.RENDER.trace("render gameData");
         Renderer.renderGameData(this, gameData);
+        Loggers.RENDER.trace("render ui");
+        UiManager.renderUi(this, gameData, uiState);
+
         Loggers.RENDER.debug("exit draw");
-        
-        UiManager.getTileFromMouseCoords(mouseX, mouseY, gameData);
     }
 
     /**

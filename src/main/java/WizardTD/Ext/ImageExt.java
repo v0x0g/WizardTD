@@ -67,6 +67,10 @@ public class ImageExt {
         return img;
     }
 
+    public boolean isValidImage(@Nullable final PImage img) {
+        return img != null && img.height > 0 && img.width > 0;
+    }
+
     @SuppressWarnings("unused") // Public API
     public enum ImagePattern {
         CHECKERS {

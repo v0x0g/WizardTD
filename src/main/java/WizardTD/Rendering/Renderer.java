@@ -12,6 +12,8 @@ import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import static WizardTD.UI.GuiConfig.CELL_SIZE_PX;
+
 @UtilityClass
 @ExtensionMethod(Arrays.class)
 public class Renderer {
@@ -19,6 +21,11 @@ public class Renderer {
             ThreadLocal.withInitial(ConcurrentHashMap::new);
     private static final @NonNull RenderOrder @NonNull [] renderOrders =
             RenderOrder.values().stream().sorted().toArray(RenderOrder[]::new);
+    public final @NonNull PImage missingTextureImage = ImageExt.generatePattern(
+            GuiConfig.CELL_SIZE_PX, GuiConfig.CELL_SIZE_PX, CELL_SIZE_PX >> 2, 2,
+            ImageExt.ImagePattern.CHECKERS,
+            Colour.BRIGHT_PURPLE.code, Colour.BLACK.code
+    );
 
     public void renderGameData(@NonNull final PApplet app, @NonNull final GameData game) {
         Loggers.RENDER.debug("start render");
@@ -58,8 +65,8 @@ public class Renderer {
     public void renderSimpleTile(
             @NonNull final PApplet app, @Nullable PImage img, final double centreX, final double centreY) {
         Loggers.RENDER.trace("tile [{00}}, {00}]: render img {}", centreX, centreY, img);
-        if (!UiManager.isValidImage(img)) {
-            img = UiManager.missingTextureImage;
+        if (!ImageExt.isValidImage(img)) {
+            img = missingTextureImage;
             Loggers.RENDER.trace("render tile [{00}, {00}]: missing texture", centreX, centreY);
         }
         app.imageMode(PConstants.CENTER);
