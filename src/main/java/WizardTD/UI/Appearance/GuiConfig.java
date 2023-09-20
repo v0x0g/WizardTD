@@ -1,4 +1,4 @@
-package WizardTD.UI;
+package WizardTD.UI.Appearance;
 
 import WizardTD.*;
 import lombok.experimental.*;

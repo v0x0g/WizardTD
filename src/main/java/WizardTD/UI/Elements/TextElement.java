@@ -1,31 +1,29 @@
 package WizardTD.UI.Elements;
 
 import WizardTD.Gameplay.Game.*;
-import WizardTD.UI.*;
+import WizardTD.UI.Appearance.*;
 import lombok.*;
 import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import processing.core.*;
 
-import java.util.function.*;
-
 @RequiredArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper = true)
-public final class TextElement extends UiElement {
+public class TextElement extends UiElement {
 
-    public final @NonNull Vector2          pos1;
-    public final @NonNull Vector2          pos2;
+    public @NonNull Vector2 pos1;
+    public @NonNull Vector2 pos2;
     /**
      * See {@link PApplet#rectMode(int)}
      */
-    public final          int              rectPosMode = PConstants.CORNERS;
+    public          int     rectPosMode = PConstants.CORNERS;
     /**
      * See {@link PApplet#textAlign(int)}
      */
-    public final          int              textAlignMode = PConstants.CENTER;
-    public final          float            fontSize = Theme.TEXT_SIZE_NORMAL;
-    public final @NonNull Function<GameData, String> textFunc;
+    public          int     textAlignMode = PConstants.CENTER;
+    public          float   fontSize = Theme.TEXT_SIZE_NORMAL;
+    public @NonNull String  text;
 
     @Override
     public void render(@NonNull final PApplet app, @NonNull final GameData gameData) {
@@ -34,7 +32,7 @@ public final class TextElement extends UiElement {
         app.textAlign(this.textAlignMode);
         app.textSize(this.fontSize);
         app.text(
-                this.textFunc.apply(gameData),
+                this.text,
                 // For some reason text coords are backwards????
                 (float) pos2.x, (float) pos2.y,
                 (float) pos1.x, (float) pos1.y

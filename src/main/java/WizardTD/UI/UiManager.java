@@ -3,20 +3,25 @@ package WizardTD.UI;
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Gameplay.Tiles.*;
+import WizardTD.Rendering.*;
+import WizardTD.UI.Appearance.*;
+import WizardTD.UI.ClickableElements.*;
 import WizardTD.UI.Elements.*;
 import com.google.errorprone.annotations.*;
 import lombok.experimental.*;
 import lombok.*;
 import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.tinylog.*;
 import processing.core.*;
 
 import java.text.*;
 import java.util.*;
+import java.util.function.*;
 
 import static WizardTD.GameConfig.*;
-import static WizardTD.UI.GuiConfig.*;
-import static WizardTD.UI.GuiConfig.UiPositions.*;
+import static WizardTD.UI.Appearance.GuiConfig.*;
+import static WizardTD.UI.Appearance.GuiConfig.UiPositions.*;
 
 @UtilityClass
 public class UiManager {
@@ -63,8 +68,120 @@ public class UiManager {
         return new Vector2(middlePosX, middlePosY);
     }
 
-    public void mouseClick(
-            final @NonNull PApplet app, final @NonNull GameData gameData, final @NonNull UiState uiState) {
+    public void initUi(@NonNull final UiState uiState) {
+        //Background
+        {
+            uiState.uiElements.add(
+                    new RectElement(
+                     new Vector2(0, 0),
+                     new Vector2(Window.WINDOW_WIDTH_PX, Window.WINDOW_HEIGHT_PX),
+                     Theme.APP_BACKGROUND.code, Colour.NONE.code) {
+                        @Override
+                        public @NonNull RenderOrder getRenderOrder() {
+                            return RenderOrder.BACKGROUND;
+                        }
+                    }
+            );
+        }
+
+        // Mana bar
+        {
+            final Vector2 manaBarPos1 = new Vector2(320, 10);
+            final Vector2 manaBarPos2 = new Vector2(640, 30);
+            uiState.uiElements.add(
+                    new RectElement(
+                            manaBarPos1,
+                            manaBarPos2,
+                            Theme.WIDGET_BACKGROUND.code,
+                            Theme.OUTLINE.code
+                    )
+            );
+
+
+            uiState.uiElements.add(
+                    new DynamicWrapperElement<>(
+                            new RectElement(
+                                    manaBarPos1,
+                                    new Vector2(0, 0), // Will be overwritten
+                                    Theme.MANA.code,
+                                    Theme.OUTLINE.code
+                            ),
+                            (rectElement, gameData) -> {
+                                rectElement.pos2.x = Numerics.lerp(
+                                        manaBarPos1.x, manaBarPos2.x,
+                                        gameData.wizardHouse.mana / gameData.wizardHouse.manaCap
+                                );
+                                rectElement.pos2.y = manaBarPos2.y;
+                            }
+                    )
+            );
+            uiState.uiElements.add(
+                    new DynamicWrapperElement<>(
+                            new TextElement(manaBarPos1, manaBarPos2, ""),
+                            (text, data) -> text.text =
+                                    MessageFormat.format(
+                                            "Mana: {0}/{1}",
+                                            data.wizardHouse.mana,
+                                            data.wizardHouse.manaCap
+                                    )
+                    ));
+        }
+        // Next wave indicator
+        {
+            final Vector2 waveIndicatorPos1 = new Vector2(0, 10);
+            final Vector2 waveIndicatorPos2 = new Vector2(320, 30);
+            uiState.uiElements.add(
+                    new DynamicWrapperElement<>(
+                            new TextElement(waveIndicatorPos1, waveIndicatorPos2, ""),
+                            (text, game) -> text.text = MessageFormat.format(
+                                    "TODO: Wave {0,number,##} starts: {1,number,00.00} seconds",
+                                    59 - PApplet.second(),
+                                    PApplet.second() * 26 / (float) 1000
+                            )
+                    ));
+        }
+
+
+        {
+            final Vector2 buttonSize = new Vector2(48, 48);
+            final Vector2 buttonPos = new Vector2(640 + 16, 40 + 16);
+
+            @SuppressWarnings("unused")
+            @lombok.experimental.Helper
+            class Helper {
+                public void addButton(final @NonNull String text, final @NonNull BiConsumer<GameData, UiState> click) {
+                    final Vector2 pos1 = buttonPos.clone();
+                    final Vector2 pos2 = buttonPos.clone();
+                    pos2.add(buttonSize);
+
+                    buttonPos.y += buttonSize.y;
+
+                    uiState.uiElements.add(
+                            new ButtonElement(
+                                    pos1, pos2,
+                                    text,
+                                    Theme.TEXT_SIZE_LARGE,
+                                    Theme.BUTTON_DISABLED.code,
+                                    Theme.OUTLINE.code,
+                                    KeyCode.F,
+                                    click
+                            )
+                    );
+                }
+            }
+            
+//            addButton(
+//                    "FF",
+//                    ($_, $__) -> Logger.info("press test button")
+//            );
+
+        }
+    }
+
+    // ========== INPUT ========== 
+    // region
+
+    public void mouseClick(final @NonNull PApplet app, final @NonNull GameData gameData, final @NonNull UiState uiState) {
         final Ref<Integer> tileX = new Ref<>(0);
         final Ref<Integer> tileY = new Ref<>(0);
         @NonNull final Optional<Tile> tile =
@@ -73,124 +190,19 @@ public class UiManager {
                 "mouse click: x={0.000} ({})\ty={0.000} ({}) tile {}", app.mouseX, tileX, app.mouseY, tileY, tile);
     }
     
-    public void initUi(@NonNull final UiState uiState){
-        // Corners
-        final Vector2 manaBarPos1 = new Vector2(320, 10);
-        final Vector2 manaBarPos2 = new Vector2(640, 30);
-//        corneredRect(
-//                app,
-//                manaBarPos1,
-//                manaBarPos2,
-//                Theme.SELECTION_OUTLINE.code,
-//                Theme.WIDGET_BACKGROUND.code
-//        );
-//        final Vector2 filledManaBarPos2 = new Vector2(
-//                Numerics.lerp(manaBarPos1.x, manaBarPos2.x, gameData.wizardHouse.mana / gameData.wizardHouse.manaCap),
-//                manaBarPos2.y
-//        );
-//        corneredRect(
-//                app,
-//                manaBarPos1,
-//                filledManaBarPos2,
-//                Theme.SELECTION_OUTLINE.code,
-//                Theme.MANA.code
-//        );
-        uiState.uiElements.add(new TextElement(
-                manaBarPos1, manaBarPos2,
-                (data) -> MessageFormat.format(
-                        "Mana: {0}/{1}",
-                        data.wizardHouse.mana,
-                        data.wizardHouse.manaCap
-                )
-        ));
-
-        // Next wave indicator
-        final Vector2 waveIndicatorPos1 = new Vector2(0, 10);
-        final Vector2 waveIndicatorPos2 = new Vector2(320, 30);
-        uiState.uiElements.add(new TextElement(
-                waveIndicatorPos1, waveIndicatorPos2,
-                (data) -> MessageFormat.format(
-                        "Wave {0,number,##} starts: {1,number,00.00} seconds",
-                        59 - PApplet.second(),
-                        PApplet.second() *26 / (float) 1000
-                )
-        ));
-    }
-//
-//    public void renderUi(final @NonNull PApplet app, final @NonNull GameData gameData, final @NonNull UiState uiState) {
-//        // 
-//        final Vector2 mousePos = new Vector2(app.mouseX, app.mouseY);
-//        @NonNull final Optional<Tile> hoveredTile =
-//                UiManager.pixelCoordsToTile(mousePos, gameData);
-//
-//        // Change cursor if we are hovering a tile
-//        app.cursor(hoveredTile.isPresent() ? PConstants.CROSS : PConstants.ARROW);
-//
-//        // Highlight hovered tile
-//        hoveredTile.ifPresent(value -> centeredRect(
-//                app,
-//                tileToPixelCoords(value), new Vector2(CELL_SIZE_PX, CELL_SIZE_PX),
-//                Theme.SELECTION_OUTLINE.code, Theme.SELECTION_FILL.code
-//        ));
-//
-//        // Render the top bar
-//        final Vector2 topBarPos1 = new Vector2(0, 0);
-//        final Vector2 topBarPos2 = new Vector2(WINDOW_WIDTH_PX, TOP_BAR_HEIGHT_PX);
-//        corneredRect(app,
-//                     topBarPos1,
-//                     topBarPos2,
-//                     Colour.NONE.code, Theme.APP_BACKGROUND.code
-//        );
-//
-//
-//        // Render the sidebar
-//        final Vector2 sideBarPos1 = new Vector2(WINDOW_WIDTH_PX - SIDEBAR_WIDTH_PX, TOP_BAR_HEIGHT_PX);
-//        final Vector2 sideBarPos2 = new Vector2(WINDOW_WIDTH_PX, WINDOW_HEIGHT_PX);
-//        corneredRect(app,
-//                     sideBarPos1,
-//                     sideBarPos2,
-//                     Colour.NONE.code, Theme.APP_BACKGROUND.code
-//        );
-//    }
-
-    // ========== GENERIC RENDERING FUNCTIONS =====
-    //region
-
-    public void ellipse(
-            final @NonNull PApplet app, final @NonNull Vector2 centre, final @NonNull Vector2 size,
-            final int outline, final int fill) {
-        shapeSetup(app, outline, fill);
-        app.ellipseMode(PConstants.CENTER);
-        app.ellipse((float) centre.x, (float) centre.y, (float) size.x, (float) size.y);
-    }
-
-    public void centeredRect(
-            final @NonNull PApplet app, final @NonNull Vector2 centre, final @NonNull Vector2 size,
-            final int outline, final int fill) {
-        shapeSetup(app, outline, fill);
-        app.rectMode(PConstants.CENTER);
-        app.rect((float) centre.x, (float) centre.y, (float) size.x, (float) size.y);
-    }
-
-    public void corneredRect(
-            final @NonNull PApplet app,
-            final @NonNull Vector2 cornerTopLeft, final @NonNull Vector2 cornerBotRight,
-            final int outline, final int fill) {
-
-        shapeSetup(app, outline, fill);
-        app.rectMode(PConstants.CORNERS);
-        app.rect((float) cornerTopLeft.x, (float) cornerTopLeft.y, (float) cornerBotRight.x, (float) cornerBotRight.y);
-    }
-
-    private void shapeSetup(
-            final @NonNull PApplet app,
-            final int outline, final int fill) {
-        if (fill == Colour.NONE.code) app.noFill();
-        else app.fill(fill);
-        if (outline == Colour.NONE.code) app.noStroke();
-        else app.stroke(outline);
+    public void updateUi(final @NonNull PApplet app, final @NonNull GameData game, final @NonNull UiState state) {
+        // Pass on any key-presses to the UI elements
+        // 
+        KeyPress keyPress = app.key;
+        //noinspection ReturnOfNull
+        state.uiElements.stream()
+                        .map(e -> e instanceof ClickableElement ? (ClickableElement) e : null)
+                        .filter(Objects::nonNull)
+                        .forEach(elem -> {
+                            if(elem.activationKey.equals())
+                        });
+        // Try to interact with any elements
     }
 
     //endregion
-
 }

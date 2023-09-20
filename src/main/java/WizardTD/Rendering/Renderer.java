@@ -3,7 +3,7 @@ package WizardTD.Rendering;
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.UI.*;
-import WizardTD.UI.Elements.*;
+import WizardTD.UI.Appearance.*;
 import com.google.common.collect.*;
 import lombok.experimental.*;
 import org.checkerframework.checker.nullness.qual.*;
@@ -13,7 +13,7 @@ import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import static WizardTD.UI.GuiConfig.*;
+import static WizardTD.UI.Appearance.GuiConfig.*;
 
 @UtilityClass
 @ExtensionMethod(Arrays.class)
@@ -24,9 +24,9 @@ public class Renderer {
                     ImageExt.ImagePattern.CHECKERS,
                     Colour.BRIGHT_PURPLE.code, Colour.BLACK.code
             );
-    private static final @NonNull ThreadLocal<ConcurrentHashMap<RenderOrder, List<Renderable>>> renderOrderMaps =
+    private static final @NonNull ThreadLocal<ConcurrentHashMap<RenderOrder, List<Renderable>>> renderOrderMaps     =
             ThreadLocal.withInitial(ConcurrentHashMap::new);
-    private static final @NonNull RenderOrder @NonNull []                                       renderOrders =
+    private static final @NonNull RenderOrder @NonNull []                                       renderOrders        =
             RenderOrder.values().stream().sorted().toArray(RenderOrder[]::new);
 
     public void render(@NonNull final PApplet app, @NonNull final GameData game, @NonNull final UiState ui) {

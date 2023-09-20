@@ -5,6 +5,7 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public enum RenderOrder implements Comparable<RenderOrder> {
+    BACKGROUND(-100),
     TILE(0),
     TILE_PRIORITY(1),
     PROJECTILE(2),

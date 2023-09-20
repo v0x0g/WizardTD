@@ -9,6 +9,6 @@ public class Numerics {
     }
 
     public double lerp(final double a, final double b, final double t) {
-        return (a * t) + (b * (1.0 - t));
+        return (b * t) + (a * (1.0 - t));
     }
 }

@@ -6,7 +6,7 @@ import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Rendering.*;
 import WizardTD.UI.*;
-import WizardTD.UI.Elements.*;
+import WizardTD.UI.Appearance.*;
 import lombok.*;
 import lombok.experimental.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -19,8 +19,8 @@ import java.util.*;
 
 public final class App extends PApplet {
 
-    public final @NonNull GameData gameData;
-    public final @NonNull UiState  uiState;
+    public final @NonNull GameData              gameData;
+    public final @NonNull UiState               uiState;
 
     public App() throws AppInitException {
         Logger.info("app ctor");
@@ -64,12 +64,10 @@ public final class App extends PApplet {
         try {
             PApplet.main(APP_CLASS_NAME);
         } catch (final Exception e) {
-            if (e.getCause() instanceof InvocationTargetException && e.getCause()
-                                                                      .getCause() instanceof AppInitException)
+            if (e.getCause() instanceof InvocationTargetException
+                    && e.getCause().getCause() instanceof AppInitException)
                 Logger.error("couldn't init game: {}", e.getLocalizedMessage());
             else Logger.error(e, "error running game");
-        } finally {
-            Logger.info("farewell");
         }
     }
 
@@ -116,7 +114,6 @@ public final class App extends PApplet {
 
     @Override
     public void mousePressed(final MouseEvent evt) {
-
         Logger.debug(
                 "mouse pressed: {} @ ({},{}) count={}", MouseCode.fromInt(evt.getButton()), evt.getX(), evt.getY(),
                 evt.getCount()
@@ -152,10 +149,10 @@ public final class App extends PApplet {
         // TODO: Dirtying logic
         Loggers.RENDER.trace("dirty");
         this.gameData.board.stream().forEach(t -> t.boardDirty(this.gameData.board));
+        Loggers.RENDER.trace("update ui");
+        UiManager.updateUi(this, gameData, uiState);
         Loggers.RENDER.trace("render gameData");
         Renderer.render(this, gameData, uiState);
-        Loggers.RENDER.trace("render ui");
-//        UiManager.renderUi(this, gameData, uiState);
 
         Loggers.RENDER.debug("exit draw");
     }
