@@ -193,13 +193,15 @@ public class UiManager {
     public void updateUi(final @NonNull PApplet app, final @NonNull GameData game, final @NonNull UiState state) {
         // Pass on any key-presses to the UI elements
         // 
-        KeyPress keyPress = app.key;
+        final KeyPress keyPress = new KeyPress(KeyCode.L);
         //noinspection ReturnOfNull
         state.uiElements.stream()
                         .map(e -> e instanceof ClickableElement ? (ClickableElement) e : null)
                         .filter(Objects::nonNull)
                         .forEach(elem -> {
-                            if(elem.activationKey.equals())
+                            if(keyPress.keyCode.equals(elem.activationKey)){
+                                Logger.warn("press: todo");
+                            }
                         });
         // Try to interact with any elements
     }
