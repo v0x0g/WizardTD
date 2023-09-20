@@ -5,8 +5,8 @@ import WizardTD.Event.*;
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Rendering.*;
-import WizardTD.UI.*;
 import WizardTD.UI.Appearance.*;
+import WizardTD.UI.*;
 import lombok.*;
 import lombok.experimental.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -19,8 +19,8 @@ import java.util.*;
 
 public final class App extends PApplet {
 
-    public final @NonNull GameData              gameData;
-    public final @NonNull UiState               uiState;
+    public final @NonNull GameData gameData;
+    public final @NonNull UiState  uiState;
 
     public App() throws AppInitException {
         Logger.info("app ctor");
@@ -65,7 +65,9 @@ public final class App extends PApplet {
             PApplet.main(APP_CLASS_NAME);
         } catch (final Exception e) {
             if (e.getCause() instanceof InvocationTargetException
-                    && e.getCause().getCause() instanceof AppInitException)
+                    && e
+                    .getCause()
+                    .getCause() instanceof AppInitException)
                 Logger.error("couldn't init game: {}", e.getLocalizedMessage());
             else Logger.error(e, "error running game");
         }
@@ -101,7 +103,13 @@ public final class App extends PApplet {
      */
     @Override
     public void keyPressed(final KeyEvent evt) {
-        Logger.debug("key pressed: '{}' ({})", evt.getKey(), evt.getKeyCode());
+        Loggers.INPUT.debug("key pressed: key='{}' code={}, repeat={}, action={}, flavour={}, millis={}, modifiers={}", evt.getKey(), evt.getKeyCode(), evt.isAutoRepeat(), evt.getAction(), evt.getFlavor(), evt.getMillis(), evt.getModifiers());
+        final KeyCode code = KeyCode.tryFromInt(evt.getKeyCode());
+        if (code == null) {
+            Loggers.INPUT.warn("didn't recognise input {} '{}'", evt.getKeyCode(), evt.getKey());
+            return;
+        }
+        UiManager.keyPressed(this, gameData, uiState, new KeyPress(code, evt.isAutoRepeat(), true));
     }
 
     /**
@@ -109,12 +117,18 @@ public final class App extends PApplet {
      */
     @Override
     public void keyReleased(final KeyEvent evt) {
-        Logger.debug("key released: '{}' ({})", evt.getKey(), evt.getKeyCode());
+        Loggers.INPUT.debug("key released: key='{}' code={}, repeat={}, action={}, flavour={}, millis={}, modifiers={}", evt.getKey(), evt.getKeyCode(), evt.isAutoRepeat(), evt.getAction(), evt.getFlavor(), evt.getMillis(), evt.getModifiers());
+        final KeyCode code = KeyCode.tryFromInt(evt.getKeyCode());
+        if (code == null) {
+            Loggers.INPUT.warn("didn't recognise input {} '{}'", evt.getKeyCode(), evt.getKey());
+            return;
+        }
+        UiManager.keyPressed(this, gameData, uiState, new KeyPress(code, evt.isAutoRepeat(), false));
     }
 
     @Override
     public void mousePressed(final MouseEvent evt) {
-        Logger.debug(
+        Loggers.INPUT.debug(
                 "mouse pressed: {} @ ({},{}) count={}", MouseCode.fromInt(evt.getButton()), evt.getX(), evt.getY(),
                 evt.getCount()
         );
@@ -122,7 +136,7 @@ public final class App extends PApplet {
 
     @Override
     public void mouseReleased(final MouseEvent evt) {
-        Logger.debug(
+        Loggers.INPUT.debug(
                 "mouse released: {} @ ({},{}) count={}", MouseCode.fromInt(evt.getButton()), evt.getX(), evt.getY(),
                 evt.getCount()
         );
@@ -148,7 +162,9 @@ public final class App extends PApplet {
         background(Colour.DEEP_PURPLE.code);
         // TODO: Dirtying logic
         Loggers.RENDER.trace("dirty");
-        this.gameData.board.stream().forEach(t -> t.boardDirty(this.gameData.board));
+        this.gameData.board
+                .stream()
+                .forEach(t -> t.boardDirty(this.gameData.board));
         Loggers.RENDER.trace("update ui");
         UiManager.updateUi(this, gameData, uiState);
         Loggers.RENDER.trace("render gameData");

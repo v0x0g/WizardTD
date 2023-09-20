@@ -12,6 +12,7 @@ import lombok.experimental.*;
 import lombok.*;
 import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.javatuples.*;
 import org.tinylog.*;
 import processing.core.*;
 
@@ -72,16 +73,14 @@ public class UiManager {
         //Background
         {
             uiState.uiElements.add(
-                    new RectElement(
-                     new Vector2(0, 0),
-                     new Vector2(Window.WINDOW_WIDTH_PX, Window.WINDOW_HEIGHT_PX),
-                     Theme.APP_BACKGROUND.code, Colour.NONE.code) {
+                    new RectElement(new Vector2(0, 0), new Vector2(Window.WINDOW_WIDTH_PX, Window.WINDOW_HEIGHT_PX),
+                                    Theme.APP_BACKGROUND.code, Colour.NONE.code
+                    ) {
                         @Override
                         public @NonNull RenderOrder getRenderOrder() {
                             return RenderOrder.BACKGROUND;
                         }
-                    }
-            );
+                    });
         }
 
         // Mana bar
@@ -89,42 +88,25 @@ public class UiManager {
             final Vector2 manaBarPos1 = new Vector2(320, 10);
             final Vector2 manaBarPos2 = new Vector2(640, 30);
             uiState.uiElements.add(
-                    new RectElement(
-                            manaBarPos1,
-                            manaBarPos2,
-                            Theme.WIDGET_BACKGROUND.code,
-                            Theme.OUTLINE.code
-                    )
-            );
+                    new RectElement(manaBarPos1, manaBarPos2, Theme.WIDGET_BACKGROUND.code, Theme.OUTLINE.code));
 
 
             uiState.uiElements.add(
-                    new DynamicWrapperElement<>(
-                            new RectElement(
-                                    manaBarPos1,
-                                    new Vector2(0, 0), // Will be overwritten
-                                    Theme.MANA.code,
-                                    Theme.OUTLINE.code
-                            ),
-                            (rectElement, gameData) -> {
-                                rectElement.pos2.x = Numerics.lerp(
-                                        manaBarPos1.x, manaBarPos2.x,
-                                        gameData.wizardHouse.mana / gameData.wizardHouse.manaCap
-                                );
-                                rectElement.pos2.y = manaBarPos2.y;
-                            }
+                    new DynamicWrapperElement<>(new RectElement(manaBarPos1, new Vector2(0, 0), // Will be overwritten
+                                                                Theme.MANA.code, Theme.OUTLINE.code
+                    ), (rectElement, gameData) -> {
+                        rectElement.pos2.x = Numerics.lerp(manaBarPos1.x, manaBarPos2.x,
+                                                           gameData.wizardHouse.mana / gameData.wizardHouse.manaCap
+                        );
+                        rectElement.pos2.y = manaBarPos2.y;
+                    }));
+            uiState.uiElements.add(new DynamicWrapperElement<>(
+                    new TextElement(manaBarPos1, manaBarPos2, ""),
+                    (text, data) -> text.text = MessageFormat.format(
+                            "Mana: {0,number}/{1,number}",
+                            data.wizardHouse.mana, data.wizardHouse.manaCap
                     )
-            );
-            uiState.uiElements.add(
-                    new DynamicWrapperElement<>(
-                            new TextElement(manaBarPos1, manaBarPos2, ""),
-                            (text, data) -> text.text =
-                                    MessageFormat.format(
-                                            "Mana: {0}/{1}",
-                                            data.wizardHouse.mana,
-                                            data.wizardHouse.manaCap
-                                    )
-                    ));
+            ));
         }
         // Next wave indicator
         {
@@ -135,8 +117,7 @@ public class UiManager {
                             new TextElement(waveIndicatorPos1, waveIndicatorPos2, ""),
                             (text, game) -> text.text = MessageFormat.format(
                                     "TODO: Wave {0,number,##} starts: {1,number,00.00} seconds",
-                                    59 - PApplet.second(),
-                                    PApplet.second() * 26 / (float) 1000
+                                    59 - PApplet.second(), PApplet.second() * 26 / (float) 1000
                             )
                     ));
         }
@@ -146,42 +127,38 @@ public class UiManager {
             final Vector2 buttonSize = new Vector2(48, 48);
             final Vector2 buttonPos = new Vector2(640 + 16, 40 + 16);
 
-            @SuppressWarnings("unused")
-            @lombok.experimental.Helper
-            class Helper {
-                public void addButton(final @NonNull String text, final @NonNull BiConsumer<GameData, UiState> click) {
-                    final Vector2 pos1 = buttonPos.clone();
-                    final Vector2 pos2 = buttonPos.clone();
-                    pos2.add(buttonSize);
 
-                    buttonPos.y += buttonSize.y;
+            final Consumer<@NonNull Triplet<@NonNull String, @NonNull KeyCode, @NonNull BiConsumer<GameData, UiState>>>
+                    addButton = (triplet) -> {
+                final String text = triplet.getValue0();
+                final KeyCode activationKey = triplet.getValue1();
+                final BiConsumer<GameData, UiState> click = triplet.getValue2();
 
-                    uiState.uiElements.add(
-                            new ButtonElement(
-                                    pos1, pos2,
-                                    text,
-                                    Theme.TEXT_SIZE_LARGE,
-                                    Theme.BUTTON_DISABLED.code,
-                                    Theme.OUTLINE.code,
-                                    KeyCode.F,
-                                    click
-                            )
-                    );
-                }
-            }
-            
-//            addButton(
-//                    "FF",
-//                    ($_, $__) -> Logger.info("press test button")
-//            );
+                final Vector2 pos1 = buttonPos.clone();
+                final Vector2 pos2 = buttonPos.clone();
+                pos2.add(buttonSize);
 
+                buttonPos.y += buttonSize.y;
+
+                uiState.uiElements.add(
+                        new ButtonElement(
+                                pos1, pos2, 
+                                text, Theme.TEXT_SIZE_LARGE, 
+                                Theme.BUTTON_DISABLED.code, Theme.OUTLINE.code,
+                                new KeyPress(activationKey, false, true),
+                                click
+                        ));
+            };
+
+            addButton.accept(Triplet.with("FF", KeyCode.F, (game, ui) -> Logger.warn("PRESS")));
         }
     }
 
     // ========== INPUT ========== 
     // region
 
-    public void mouseClick(final @NonNull PApplet app, final @NonNull GameData gameData, final @NonNull UiState uiState) {
+    public void mouseClick(
+            final @NonNull PApplet app, final @NonNull GameData gameData, final @NonNull UiState uiState) {
         final Ref<Integer> tileX = new Ref<>(0);
         final Ref<Integer> tileY = new Ref<>(0);
         @NonNull final Optional<Tile> tile =
@@ -189,20 +166,24 @@ public class UiManager {
         Loggers.UI.debug(
                 "mouse click: x={0.000} ({})\ty={0.000} ({}) tile {}", app.mouseX, tileX, app.mouseY, tileY, tile);
     }
-    
-    public void updateUi(final @NonNull PApplet app, final @NonNull GameData game, final @NonNull UiState state) {
+
+    public void keyPressed(
+            final @NonNull PApplet app, final @NonNull GameData game, final @NonNull UiState state,
+            final @NonNull KeyPress press) {
         // Pass on any key-presses to the UI elements
-        // 
-        final KeyPress keyPress = new KeyPress(KeyCode.L);
         //noinspection ReturnOfNull
-        state.uiElements.stream()
-                        .map(e -> e instanceof ClickableElement ? (ClickableElement) e : null)
-                        .filter(Objects::nonNull)
-                        .forEach(elem -> {
-                            if(keyPress.keyCode.equals(elem.activationKey)){
-                                Logger.warn("press: todo");
-                            }
-                        });
+        state.uiElements
+                .stream()
+                .map(e -> e instanceof ClickableElement ? (ClickableElement) e : null)
+                .filter(Objects::nonNull)
+                .forEach(elem -> {
+                    if (press.equals(elem.activationKey)) {
+                        Logger.warn("press: todo");
+                    }
+                });
+    }
+
+    public void updateUi(final @NonNull PApplet app, final @NonNull GameData game, final @NonNull UiState state) {
         // Try to interact with any elements
     }
 

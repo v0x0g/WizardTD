@@ -34,7 +34,7 @@ public class ButtonElement extends ClickableElement {
             @NonNull final Vector2 corner1, @NonNull final Vector2 corner2,
             @NonNull final String text, final float fontSize,
             final int fillColour, final int outlineColour,
-            @Nullable final KeyCode activationKey,
+            @Nullable final KeyPress activationKey,
             @NonNull final BiConsumer<GameData, UiState> click) {
         super(corner1, corner2, activationKey);
         this.click = click;

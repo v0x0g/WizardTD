@@ -7,6 +7,7 @@ import lombok.experimental.*;
 public class LogTag {
     public static final @NonNull String
             UI = "ui",
+            INPUT = "input",
             RENDER = "render",
             EVENT= "event";
 }

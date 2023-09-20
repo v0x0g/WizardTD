@@ -2,7 +2,6 @@ package WizardTD.UI;
 
 import WizardTD.UI.Elements.*;
 import lombok.*;
-import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.*;
@@ -34,8 +33,4 @@ public final class UiState {
      * List of all the UI elements that should be rendered
      */
     public final @NonNull List<UiElement> uiElements         = new ArrayList<>();
-    /**
-     * The 
-     */
-    public final @Nullable UiElement      lastHoveredElement = null;
 }

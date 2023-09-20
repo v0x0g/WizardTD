@@ -20,7 +20,7 @@ public abstract class ClickableElement extends UiElement {
      */
     public @NonNull  Vector2 corner2;
     /**
-     * A key that can be used to activate the button, as an alternative to clicking it
+     * A key press that can be used to activate the button, as an alternative to clicking it
      */
-    public @Nullable KeyCode activationKey;
+    public @Nullable KeyPress activationKey;
 }

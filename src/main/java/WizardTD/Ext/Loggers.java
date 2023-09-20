@@ -8,6 +8,7 @@ import org.tinylog.*;
 public class Loggers {
     public final @NonNull TaggedLogger 
             UI = Logger.tag(LogTag.UI),
+            INPUT = Logger.tag(LogTag.INPUT),
             RENDER = Logger.tag(LogTag.RENDER),
             EVENT= Logger.tag(LogTag.EVENT);
 
