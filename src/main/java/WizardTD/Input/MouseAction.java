@@ -10,8 +10,14 @@ import java.util.*;
 @AllArgsConstructor
 @ExtensionMethod(Arrays.class)
 public enum MouseAction {
+    CLICK(processing.event.MouseEvent.CLICK),
+    DRAG(processing.event.MouseEvent.DRAG),
+    ENTER(processing.event.MouseEvent.ENTER),
+    EXIT(processing.event.MouseEvent.EXIT),
+    MOVE(processing.event.MouseEvent.MOVE),
     PRESS(processing.event.MouseEvent.PRESS),
-    RELEASE(processing.event.MouseEvent.RELEASE);
+    RELEASE(processing.event.MouseEvent.RELEASE),
+    WHEEL(processing.event.MouseEvent.WHEEL);
 
     public final int code;
 

@@ -129,6 +129,7 @@ public class UiManager {
             final Vector2 buttonPos = new Vector2(640 + 16, 40 + 16);
 
 
+            // Local helper method to add a button
             final Consumer<@NonNull Triplet<@NonNull String, @NonNull KeyCode, @NonNull BiConsumer<GameData, UiState>>>
                     addButton = (triplet) -> {
                 final String text = triplet.getValue0();
@@ -146,7 +147,7 @@ public class UiManager {
                                 pos1, pos2,
                                 text, Theme.TEXT_SIZE_LARGE,
                                 Theme.BUTTON_DISABLED.code, Theme.OUTLINE.code,
-                                new KeyPress(activationKey, false, true),
+                                new KeyPress(activationKey, false, KeyAction.PRESS),
                                 click
                         ));
             };
@@ -158,19 +159,23 @@ public class UiManager {
     // ========== INPUT ========== 
     // region
 
-    public void mouseClick(
-            final @NonNull PApplet app, final @NonNull GameData gameData, final @NonNull UiState uiState) {
+    public void mouseEvent(
+            final @NonNull PApplet app, final @NonNull GameData gameData, final @NonNull UiState uiState,
+            final @NonNull MousePress press) {
         final Ref<Integer> tileX = new Ref<>(0);
         final Ref<Integer> tileY = new Ref<>(0);
         @NonNull final Optional<Tile> tile =
-                UiManager.pixelCoordsToTile(new Vector2(app.mouseX, app.mouseY), gameData, tileX, tileY);
-        Loggers.UI.debug(
-                "mouse click: x={0.000} ({})\ty={0.000} ({}) tile {}", app.mouseX, tileX, app.mouseY, tileY, tile);
+                UiManager.pixelCoordsToTile(new Vector2(press.coords.x, press.coords.y), gameData, tileX, tileY);
+        Loggers.INPUT.debug(
+                "mouse event: {}; [{}, {}]: {}",
+                press, tileX,tileY, tile
+        );
     }
 
-    public void keyPressed(
+    public void keyEvent(
             final @NonNull PApplet app, final @NonNull GameData game, final @NonNull UiState state,
             final @NonNull KeyPress press) {
+        Loggers.INPUT.debug("key event: {}", press);
         // Pass on any key-presses to the UI elements
         //noinspection ReturnOfNull
         state.uiElements
@@ -182,13 +187,6 @@ public class UiManager {
                         Logger.warn("press: todo");
                     }
                 });
-    }
-
-    public void mouseClicked(
-            final @NonNull PApplet app, final @NonNull GameData game, final @NonNull UiState state,
-            final @NonNull MouseAction press) {
-
-        
     }
 
     public void updateUi(final @NonNull PApplet app, final @NonNull GameData game, final @NonNull UiState state) {

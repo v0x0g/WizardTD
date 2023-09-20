@@ -10,6 +10,7 @@ import WizardTD.UI.Appearance.*;
 import WizardTD.UI.*;
 import lombok.*;
 import lombok.experimental.*;
+import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.tinylog.*;
 import processing.core.*;
@@ -98,59 +99,39 @@ public final class App extends PApplet {
 
         Logger.info("done setup");
     }
+    
+    // ========== INPUT ==========
+    // region
 
-    /**
-     * Receive key pressed signal from the keyboard.
-     */
     @Override
-    public void keyPressed(final KeyEvent evt) {
-        Loggers.INPUT.debug("key pressed: key='{}' code={}, modifiers={}", evt.getKey(), evt.getKeyCode(), evt.getModifiers());
-        final KeyCode code = KeyCode.tryFromInt(evt.getKeyCode());
-        if (code == null) {
-            Loggers.INPUT.warn("didn't recognise input {} '{}'", evt.getKeyCode(), evt.getKey());
+    protected void handleKeyEvent(final @NonNull KeyEvent evt) {
+        final KeyCode keyCode = KeyCode.fromInt(evt.getKeyCode());
+        final KeyAction keyAction = KeyAction.fromInt(evt.getAction());
+        if(evt.getKeyCode() == 0) return; // Processing does this sometimes
+        if (keyCode == null || keyAction == null) {
+            Loggers.INPUT.warn("didn't recognise input code={}({}) char='{}'", evt.getKeyCode(), keyCode, evt.getKey());
             return;
         }
-        UiManager.keyPressed(this, gameData, uiState, new KeyPress(code, evt.isAutoRepeat(), true));
+        UiManager.keyEvent(this, gameData, uiState, new KeyPress(keyCode, evt.isAutoRepeat(), keyAction));
     }
 
-    /**
-     * Receive key released signal from the keyboard.
-     */
     @Override
-    public void keyReleased(final KeyEvent evt) {
-        Loggers.INPUT.debug("key released: key='{}' code={}, modifiers={}", evt.getKey(), evt.getKeyCode(), evt.getModifiers());
-        final KeyCode code = KeyCode.tryFromInt(evt.getKeyCode());
-        if (code == null) {
-            Loggers.INPUT.warn("didn't recognise input {} '{}'", evt.getKeyCode(), evt.getKey());
+    protected void handleMouseEvent(final @NonNull MouseEvent evt) {
+        final MouseCode mouseCode = MouseCode.fromInt(evt.getButton());
+        final MouseAction mouseAction = MouseAction.fromInt(evt.getAction());
+        if(mouseCode == null && mouseAction == MouseAction.MOVE) return; // Code is null when we move the mouse, ignore
+        if (mouseAction == null || mouseCode == null) {
+            Loggers.INPUT.warn("didn't recognise input action={}({}) button={}({})", evt.getAction(), mouseAction, evt.getButton(), mouseCode);
             return;
         }
-        UiManager.keyPressed(this, gameData, uiState, new KeyPress(code, evt.isAutoRepeat(), false));
-    }
-
-    @Override
-    public void mousePressed(final MouseEvent evt) {
-        Loggers.INPUT.debug(
-                "mouse pressed: {} @ ({},{}) count={}", MouseCode.fromInt(evt.getButton()), evt.getX(), evt.getY(),
-                evt.getCount()
+        UiManager.mouseEvent(
+                this, gameData, uiState,
+                new MousePress(new Vector2(mouseX, mouseY), mouseCode, evt.getCount(), mouseAction)
         );
     }
 
-    @Override
-    public void mouseReleased(final MouseEvent evt) {
-        Loggers.INPUT.debug(
-                "mouse released: {} @ ({},{}) count={}", MouseCode.fromInt(evt.getButton()), evt.getX(), evt.getY(),
-                evt.getCount()
-        );
-    }
-
-    @Override
-    public void mouseDragged(final MouseEvent evt) {
-        Logger.debug(
-                "mouse drag: {} @ ({},{}) count={}", MouseCode.fromInt(evt.getButton()), evt.getX(), evt.getY(),
-                evt.getCount()
-        );
-    }
-
+    // endregion
+    
     /**
      * Draw all elements in the game by current frame.
      */
