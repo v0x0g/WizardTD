@@ -3,6 +3,7 @@ package WizardTD.UI;
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Gameplay.Tiles.*;
+import WizardTD.Input.*;
 import WizardTD.Rendering.*;
 import WizardTD.UI.Appearance.*;
 import WizardTD.UI.ClickableElements.*;
@@ -142,8 +143,8 @@ public class UiManager {
 
                 uiState.uiElements.add(
                         new ButtonElement(
-                                pos1, pos2, 
-                                text, Theme.TEXT_SIZE_LARGE, 
+                                pos1, pos2,
+                                text, Theme.TEXT_SIZE_LARGE,
                                 Theme.BUTTON_DISABLED.code, Theme.OUTLINE.code,
                                 new KeyPress(activationKey, false, true),
                                 click
@@ -181,6 +182,13 @@ public class UiManager {
                         Logger.warn("press: todo");
                     }
                 });
+    }
+
+    public void mouseClicked(
+            final @NonNull PApplet app, final @NonNull GameData game, final @NonNull UiState state,
+            final @NonNull MouseAction press) {
+
+        
     }
 
     public void updateUi(final @NonNull PApplet app, final @NonNull GameData game, final @NonNull UiState state) {

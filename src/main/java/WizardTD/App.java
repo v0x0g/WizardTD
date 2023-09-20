@@ -4,6 +4,7 @@ import WizardTD.Event.Event;
 import WizardTD.Event.*;
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
+import WizardTD.Input.*;
 import WizardTD.Rendering.*;
 import WizardTD.UI.Appearance.*;
 import WizardTD.UI.*;
@@ -103,7 +104,7 @@ public final class App extends PApplet {
      */
     @Override
     public void keyPressed(final KeyEvent evt) {
-        Loggers.INPUT.debug("key pressed: key='{}' code={}, repeat={}, action={}, flavour={}, millis={}, modifiers={}", evt.getKey(), evt.getKeyCode(), evt.isAutoRepeat(), evt.getAction(), evt.getFlavor(), evt.getMillis(), evt.getModifiers());
+        Loggers.INPUT.debug("key pressed: key='{}' code={}, modifiers={}", evt.getKey(), evt.getKeyCode(), evt.getModifiers());
         final KeyCode code = KeyCode.tryFromInt(evt.getKeyCode());
         if (code == null) {
             Loggers.INPUT.warn("didn't recognise input {} '{}'", evt.getKeyCode(), evt.getKey());
@@ -117,7 +118,7 @@ public final class App extends PApplet {
      */
     @Override
     public void keyReleased(final KeyEvent evt) {
-        Loggers.INPUT.debug("key released: key='{}' code={}, repeat={}, action={}, flavour={}, millis={}, modifiers={}", evt.getKey(), evt.getKeyCode(), evt.isAutoRepeat(), evt.getAction(), evt.getFlavor(), evt.getMillis(), evt.getModifiers());
+        Loggers.INPUT.debug("key released: key='{}' code={}, modifiers={}", evt.getKey(), evt.getKeyCode(), evt.getModifiers());
         final KeyCode code = KeyCode.tryFromInt(evt.getKeyCode());
         if (code == null) {
             Loggers.INPUT.warn("didn't recognise input {} '{}'", evt.getKeyCode(), evt.getKey());

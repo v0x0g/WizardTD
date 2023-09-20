@@ -1,7 +1,7 @@
 package WizardTD.UI.ClickableElements;
 
-import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
+import WizardTD.Input.*;
 import WizardTD.UI.*;
 import WizardTD.UI.Appearance.*;
 import lombok.*;

@@ -1,8 +1,7 @@
-package WizardTD.Ext;
+package WizardTD.Input;
 
 import lombok.*;
 import lombok.experimental.*;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.*;
 
 import java.util.*;
@@ -76,28 +75,25 @@ public enum KeyCode {
     DEL(127, ''),
     QUOUTE(222, '"'),
     ;
-
-    /**
-     * Lookup table to easily convert int values to the corresponding keycode
-     */
-    private static final @NonNull HashMap<Integer, KeyCode>   codeLookupMap = new HashMap<>();
-    private static final @NonNull HashMap<Character, KeyCode> charLookupMap = new HashMap<>();
-    static {
-        KeyCode.class
-                .getEnumConstants()
-                .stream()
-                .forEach(k -> {
-                    codeLookupMap.put(k.code, k);
-                    charLookupMap.put(k.char_, k);
-                });
-    }
+    
     public final int  code;
     public final char char_;
 
-    public static @Nullable KeyCode tryFromInt(final int code) {
-        return codeLookupMap.get(code);
+    public static @Nullable KeyCode fromInt(final int code) {
+        return KeyCode
+                .values()
+                .stream()
+                .filter((v) -> v.code == code)
+                .findFirst()
+                .orElse(null);
     }
-    public static @Nullable KeyCode tryFromChar(final char char_) {
-        return charLookupMap.get(char_);
+
+    public static @Nullable KeyCode fromChar(final char char_) {
+        return KeyCode
+                .values()
+                .stream()
+                .filter((v) -> v.char_ == char_)
+                .findFirst()
+                .orElse(null);
     }
 }

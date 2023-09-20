@@ -1,4 +1,4 @@
-package WizardTD.Ext;
+package WizardTD.Input;
 
 import lombok.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -9,5 +9,5 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 public class KeyPress {
     public final @NonNull KeyCode keyCode;
     public final boolean isRepeat;
-    public final boolean isPressDown;
+    public final @NonNull KeyAction action;
 }
