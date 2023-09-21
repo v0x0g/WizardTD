@@ -146,13 +146,21 @@ public class UiManager {
                         new ButtonElement(
                                 pos1, pos2,
                                 text, Theme.TEXT_SIZE_LARGE,
-                                Theme.BUTTON_DISABLED.code, Theme.OUTLINE.code,
+                                Theme.BUTTON_ENABLED.code,
+                                Theme.BUTTON_DISABLED.code,
+                                Theme.OUTLINE.code,
                                 new KeyPress(activationKey, false, KeyAction.PRESS),
                                 click
                         ));
             };
 
-            addButton.accept(Triplet.with("FF", KeyCode.F, (game, ui) -> Logger.warn("PRESS")));
+            addButton.accept(Triplet.with("FF", KeyCode.F, (game, ui) -> Logger.warn("fast forward")));
+            addButton.accept(Triplet.with("P ", KeyCode.P, (game, ui) -> Logger.warn("pause")));
+            addButton.accept(Triplet.with("T ", KeyCode.T, (game, ui) -> Logger.warn("tower")));
+            addButton.accept(Triplet.with("U1", KeyCode.NUM_1, (game, ui) -> Logger.warn("upgrade 1")));
+            addButton.accept(Triplet.with("U2", KeyCode.NUM_2, (game, ui) -> Logger.warn("upgrade 2")));
+            addButton.accept(Triplet.with("U3", KeyCode.NUM_3, (game, ui) -> Logger.warn("upgrade 3")));
+            addButton.accept(Triplet.with("M ", KeyCode.M, (game, ui) -> Logger.warn("mana pool")));
         }
     }
 
@@ -168,7 +176,7 @@ public class UiManager {
                 UiManager.pixelCoordsToTile(new Vector2(press.coords.x, press.coords.y), gameData, tileX, tileY);
         Loggers.INPUT.debug(
                 "mouse event: {}; [{}, {}]: {}",
-                press, tileX,tileY, tile
+                press, tileX, tileY, tile
         );
     }
 
@@ -184,13 +192,14 @@ public class UiManager {
                 .filter(Objects::nonNull)
                 .forEach(elem -> {
                     if (press.equals(elem.activationKey)) {
-                        Logger.warn("press: todo");
+                        elem.activate(game, state);
                     }
                 });
     }
 
     public void updateUi(final @NonNull PApplet app, final @NonNull GameData game, final @NonNull UiState state) {
         // Try to interact with any elements
+        //TODO: 
     }
 
     //endregion

@@ -1,9 +1,10 @@
 package WizardTD.UI.ClickableElements;
 
+import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Input.*;
-import WizardTD.UI.*;
 import WizardTD.UI.Appearance.*;
+import WizardTD.UI.*;
 import lombok.*;
 import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -17,13 +18,15 @@ import java.util.function.*;
 public class ButtonElement extends ClickableElement {
 
     public final @NonNull BiConsumer<GameData, UiState> click;
-    public                int                           fillColour;
+    public                int                           fillColourInactive;
+    public                int                           fillColourActive;
     public                int                           outlineColour;
     /**
      * See {@link PApplet#rectMode(int)}
      */
     public @NonNull       String                        text;
     public                float                         fontSize;
+    public                boolean                       active;
 
     /**
      * See {@link PApplet#textAlign(int)}
@@ -33,12 +36,13 @@ public class ButtonElement extends ClickableElement {
     public ButtonElement(
             @NonNull final Vector2 corner1, @NonNull final Vector2 corner2,
             @NonNull final String text, final float fontSize,
-            final int fillColour, final int outlineColour,
+            final int fillColourActive, final int fillColourInactive, final int outlineColour,
             @Nullable final KeyPress activationKey,
             @NonNull final BiConsumer<GameData, UiState> click) {
         super(corner1, corner2, activationKey);
         this.click = click;
-        this.fillColour = fillColour;
+        this.fillColourActive = fillColourActive;
+        this.fillColourInactive = fillColourInactive;
         this.outlineColour = outlineColour;
         this.text = text;
         this.fontSize = fontSize;
@@ -47,7 +51,7 @@ public class ButtonElement extends ClickableElement {
 
     @Override
     public void render(@NonNull final PApplet app, @NonNull final GameData gameData) {
-        setColours(app, this.fillColour, this.outlineColour);
+        setColours(app, this.active ? this.fillColourActive : this.fillColourInactive, this.outlineColour);
         app.rectMode(PConstants.CORNERS);
         app.rect(
                 (float) corner1.x, (float) corner1.y,
@@ -62,5 +66,12 @@ public class ButtonElement extends ClickableElement {
                 (float) corner2.x, (float) corner2.y,
                 (float) corner1.x, (float) corner1.y
         );
+    }
+
+    @Override
+    public void activate(final @NonNull GameData gameData, final @NonNull UiState uiState) {
+        Loggers.UI.debug("activate button {}", this);
+        this.active ^= true; // Toggle :)
+        this.click.accept(gameData, uiState);
     }
 }
