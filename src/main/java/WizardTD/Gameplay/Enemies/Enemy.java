@@ -2,6 +2,7 @@ package WizardTD.Gameplay.Enemies;
 
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Rendering.*;
+import WizardTD.UI.*;
 import lombok.*;
 import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -44,7 +45,7 @@ public abstract class Enemy extends Renderable {
     }
 
     @Override
-    public void render(@NonNull final PApplet app, @NonNull GameData gameData) {
+    public void render(@NonNull final PApplet app, @NonNull GameData gameData, @NonNull UiState uiState) {
         throw new NotImplementedException();
     }
 }

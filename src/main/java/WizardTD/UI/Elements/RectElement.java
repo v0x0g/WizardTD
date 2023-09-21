@@ -1,6 +1,7 @@
 package WizardTD.UI.Elements;
 
 import WizardTD.Gameplay.Game.*;
+import WizardTD.UI.*;
 import lombok.*;
 import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -28,7 +29,7 @@ public class RectElement extends UiElement {
     }
 
     @Override
-    public void render(@NonNull final PApplet app, @NonNull final GameData gameData) {
+    public void render(@NonNull final PApplet app, @NonNull final GameData gameData, @NonNull UiState uiState) {
         setColours(app, this.fillColour, this.outlineColour);
         app.rectMode(this.rectPosMode);
         app.rect(

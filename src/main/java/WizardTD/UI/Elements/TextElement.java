@@ -1,6 +1,7 @@
 package WizardTD.UI.Elements;
 
 import WizardTD.Gameplay.Game.*;
+import WizardTD.UI.*;
 import WizardTD.UI.Appearance.*;
 import lombok.*;
 import mikera.vectorz.*;
@@ -26,7 +27,7 @@ public class TextElement extends UiElement {
     public @NonNull String  text;
 
     @Override
-    public void render(@NonNull final PApplet app, @NonNull final GameData gameData) {
+    public void render(@NonNull final PApplet app, @NonNull final GameData gameData, @NonNull UiState uiState) {
         app.fill(Theme.TEXT.code);
         app.rectMode(this.rectPosMode);
         app.textAlign(this.textAlignMode);

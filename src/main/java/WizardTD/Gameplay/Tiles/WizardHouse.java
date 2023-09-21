@@ -38,7 +38,7 @@ public final class WizardHouse extends Tile {
     }
 
     @Override
-    public void render(@NonNull final PApplet app, @NonNull GameData gameData) {
+    public void render(@NonNull final PApplet app, @NonNull GameData gameData, @NonNull UiState uiState) {
         final Vector2 pos = UiManager.tileToPixelCoords(this);
         // Render an extra grass sprite beneath the house, because house is transparent and doesn't fill tile
         Renderer.renderSimpleTile(app, grassUnderTileImage, pos.x, pos.y);

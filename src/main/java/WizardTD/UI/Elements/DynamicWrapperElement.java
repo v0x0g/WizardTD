@@ -1,11 +1,11 @@
 package WizardTD.UI.Elements;
 
+import WizardTD.Delegates.*;
 import WizardTD.Gameplay.Game.*;
+import WizardTD.UI.*;
 import lombok.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import processing.core.*;
-
-import java.util.function.*;
 
 /**
  * Fancy wrapper class that allows you to wrap an inner {@link UiElement}
@@ -15,12 +15,12 @@ import java.util.function.*;
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 public class DynamicWrapperElement<T extends UiElement>  extends UiElement{
-    public final @NonNull T                       element;
-    public final @NonNull BiConsumer<T, GameData> update;
+    public final @NonNull T                             element;
+    public final @NonNull Action3<T, GameData, UiState> update;
 
     @Override
-    public void render(@NonNull final PApplet app, @NonNull final GameData gameData) {
-        this.update.accept(this.element, gameData);
-        this.element.render(app, gameData);
+    public void render(@NonNull final PApplet app, @NonNull final GameData gameData, @NonNull final UiState uiState) {
+        this.update.invoke(this.element, gameData, uiState);
+        this.element.render(app, gameData, uiState);
     }
 }

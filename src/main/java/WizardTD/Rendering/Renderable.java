@@ -1,6 +1,7 @@
 package WizardTD.Rendering;
 
 import WizardTD.Gameplay.Game.*;
+import WizardTD.UI.*;
 import org.checkerframework.checker.nullness.qual.*;
 import processing.core.*;
 
@@ -16,5 +17,5 @@ public abstract class Renderable {
     /**
      * Renders the object, using the specified `app` instance
      */
-    public abstract void render(final @NonNull PApplet app, @NonNull GameData gameData);
+    public abstract void render(final @NonNull PApplet app, @NonNull GameData gameData, @NonNull UiState uiState);
 }

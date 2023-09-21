@@ -28,7 +28,7 @@ public final class Tower extends Tile {
     }
 
     @Override
-    public void render(@NonNull final PApplet app, @NonNull GameData gameData) {
+    public void render(@NonNull final PApplet app, @NonNull GameData gameData, @NonNull UiState uiState) {
         final Vector2 pos = UiManager.tileToPixelCoords(this);
         Renderer.renderSimpleTile(app, null, pos.x, pos.y);
     }

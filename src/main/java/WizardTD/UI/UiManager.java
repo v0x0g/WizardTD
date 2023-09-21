@@ -1,5 +1,6 @@
 package WizardTD.UI;
 
+import WizardTD.Delegates.*;
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Gameplay.Tiles.*;
@@ -13,13 +14,11 @@ import lombok.experimental.*;
 import lombok.*;
 import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.javatuples.*;
 import org.tinylog.*;
 import processing.core.*;
 
 import java.text.*;
 import java.util.*;
-import java.util.function.*;
 
 import static WizardTD.GameConfig.*;
 import static WizardTD.UI.Appearance.GuiConfig.*;
@@ -73,39 +72,55 @@ public class UiManager {
     public void initUi(@NonNull final UiState uiState) {
         //Background
         {
-            uiState.uiElements.add(
-                    new RectElement(new Vector2(0, 0), new Vector2(Window.WINDOW_WIDTH_PX, Window.WINDOW_HEIGHT_PX),
-                                    Theme.APP_BACKGROUND.code, Colour.NONE.code
-                    ) {
-                        @Override
-                        public @NonNull RenderOrder getRenderOrder() {
-                            return RenderOrder.BACKGROUND;
-                        }
-                    });
+            uiState.uiElements.add(new RectElement(
+                    new Vector2(0, 0),
+                    new Vector2(Window.WINDOW_WIDTH_PX, Window.WINDOW_HEIGHT_PX),
+                    Theme.APP_BACKGROUND.code,
+                    Colour.NONE.code
+            ) {
+                @Override
+                public @NonNull RenderOrder getRenderOrder() {
+                    return RenderOrder.BACKGROUND;
+                }
+            });
         }
 
         // Mana bar
         {
             final Vector2 manaBarPos1 = new Vector2(320, 10);
             final Vector2 manaBarPos2 = new Vector2(640, 30);
-            uiState.uiElements.add(
-                    new RectElement(manaBarPos1, manaBarPos2, Theme.WIDGET_BACKGROUND.code, Theme.OUTLINE.code));
+            uiState.uiElements.add(new RectElement(
+                    manaBarPos1,
+                    manaBarPos2,
+                    Theme.WIDGET_BACKGROUND.code,
+                    Theme.OUTLINE.code
+            ));
 
 
-            uiState.uiElements.add(
-                    new DynamicWrapperElement<>(new RectElement(manaBarPos1, new Vector2(0, 0), // Will be overwritten
-                                                                Theme.MANA.code, Theme.OUTLINE.code
-                    ), (rectElement, gameData) -> {
-                        rectElement.pos2.x = Numerics.lerp(manaBarPos1.x, manaBarPos2.x,
-                                                           gameData.wizardHouse.mana / gameData.wizardHouse.manaCap
+            uiState.uiElements.add(new DynamicWrapperElement<>(
+                    new RectElement(
+                            manaBarPos1,
+                            new Vector2(0, 0) /* Will be overwritten */,
+                            Theme.MANA.code,
+                            Theme.OUTLINE.code
+                    ),
+                    (rectElement, gameData, ui) -> {
+                        // Each frame, update the position of the mana bar to reflect the
+                        // fraction of how much mana the wizard has, compared to the max
+                        rectElement.pos2.x = Numerics.lerp(
+                                manaBarPos1.x,
+                                manaBarPos2.x,
+                                gameData.wizardHouse.mana / gameData.wizardHouse.manaCap
                         );
                         rectElement.pos2.y = manaBarPos2.y;
-                    }));
+                    }
+            ));
             uiState.uiElements.add(new DynamicWrapperElement<>(
                     new TextElement(manaBarPos1, manaBarPos2, ""),
-                    (text, data) -> text.text = MessageFormat.format(
+                    (text, data, ui) -> text.text = MessageFormat.format(
                             "Mana: {0,number}/{1,number}",
-                            data.wizardHouse.mana, data.wizardHouse.manaCap
+                            data.wizardHouse.mana,
+                            data.wizardHouse.manaCap
                     )
             ));
         }
@@ -113,14 +128,18 @@ public class UiManager {
         {
             final Vector2 waveIndicatorPos1 = new Vector2(0, 10);
             final Vector2 waveIndicatorPos2 = new Vector2(320, 30);
-            uiState.uiElements.add(
-                    new DynamicWrapperElement<>(
-                            new TextElement(waveIndicatorPos1, waveIndicatorPos2, ""),
-                            (text, game) -> text.text = MessageFormat.format(
-                                    "TODO: Wave {0,number,##} starts: {1,number,00.00} seconds",
-                                    59 - PApplet.second(), PApplet.second() * 26 / (float) 1000
-                            )
-                    ));
+            uiState.uiElements.add(new DynamicWrapperElement<>(
+                    new TextElement(
+                            waveIndicatorPos1,
+                            waveIndicatorPos2,
+                            ""
+                    ),
+                    (text, game, ui) -> text.text = MessageFormat.format(
+                            "TODO: Wave {0,number,##} starts: {1,number,00.00} seconds",
+                            59 - PApplet.second(),
+                            PApplet.second() * 26 / (float) 1000
+                    )
+            ));
         }
 
 
@@ -128,39 +147,45 @@ public class UiManager {
             final Vector2 buttonSize = new Vector2(48, 48);
             final Vector2 buttonPos = new Vector2(640 + 16, 40 + 16);
 
-
             // Local helper method to add a button
-            final Consumer<@NonNull Triplet<@NonNull String, @NonNull KeyCode, @NonNull BiConsumer<GameData, UiState>>>
-                    addButton = (triplet) -> {
-                final String text = triplet.getValue0();
-                final KeyCode activationKey = triplet.getValue1();
-                final BiConsumer<GameData, UiState> click = triplet.getValue2();
-
+            final Action4<@NonNull String, @NonNull KeyCode, @NonNull UiAction<ButtonElement>, @NonNull UiAction<ButtonElement>>
+                    addButton = (text, activationKey, click, update) -> {
                 final Vector2 pos1 = buttonPos.clone();
                 final Vector2 pos2 = buttonPos.clone();
                 pos2.add(buttonSize);
 
                 buttonPos.y += buttonSize.y;
 
-                uiState.uiElements.add(
-                        new ButtonElement(
-                                pos1, pos2,
-                                text, Theme.TEXT_SIZE_LARGE,
-                                Theme.BUTTON_ENABLED.code,
-                                Theme.BUTTON_DISABLED.code,
-                                Theme.OUTLINE.code,
-                                new KeyPress(activationKey, false, KeyAction.PRESS),
-                                click
-                        ));
+                uiState.uiElements.add(new DynamicWrapperElement<>(new ButtonElement(
+                        pos1,
+                        pos2,
+                        text,
+                        Theme.TEXT_SIZE_LARGE,
+                        Colour.NONE.code,
+                        Theme.OUTLINE.code,
+                        new KeyPress(
+                                activationKey,
+                                false,
+                                KeyAction.PRESS
+                        ),
+                        click
+                ), update));
             };
 
-            addButton.accept(Triplet.with("FF", KeyCode.F, (game, ui) -> Logger.warn("fast forward")));
-            addButton.accept(Triplet.with("P ", KeyCode.P, (game, ui) -> Logger.warn("pause")));
-            addButton.accept(Triplet.with("T ", KeyCode.T, (game, ui) -> Logger.warn("tower")));
-            addButton.accept(Triplet.with("U1", KeyCode.NUM_1, (game, ui) -> Logger.warn("upgrade 1")));
-            addButton.accept(Triplet.with("U2", KeyCode.NUM_2, (game, ui) -> Logger.warn("upgrade 2")));
-            addButton.accept(Triplet.with("U3", KeyCode.NUM_3, (game, ui) -> Logger.warn("upgrade 3")));
-            addButton.accept(Triplet.with("M ", KeyCode.M, (game, ui) -> Logger.warn("mana pool")));
+            addButton.invoke(
+                    "FF",
+                    KeyCode.F,
+                    (button, game, ui) -> Logger.warn("fast forward"),
+                    (button, game, ui) -> {
+                        button.fillColour = ui.fastForward ? Theme.BUTTON_ENABLED.code : Theme.BUTTON_DISABLED.code;
+                    }
+            );
+//            addButton.accept(Triplet.with("P ", KeyCode.P, (game, ui) -> Logger.warn("pause")));
+//            addButton.accept(Triplet.with("T ", KeyCode.T, (game, ui) -> Logger.warn("tower")));
+//            addButton.accept(Triplet.with("U1", KeyCode.NUM_1, (game, ui) -> Logger.warn("upgrade 1")));
+//            addButton.accept(Triplet.with("U2", KeyCode.NUM_2, (game, ui) -> Logger.warn("upgrade 2")));
+//            addButton.accept(Triplet.with("U3", KeyCode.NUM_3, (game, ui) -> Logger.warn("upgrade 3")));
+//            addButton.accept(Triplet.with("M ", KeyCode.M, (game, ui) -> Logger.warn("mana pool")));
         }
     }
 
@@ -172,12 +197,13 @@ public class UiManager {
             final @NonNull MousePress press) {
         final Ref<Integer> tileX = new Ref<>(0);
         final Ref<Integer> tileY = new Ref<>(0);
-        @NonNull final Optional<Tile> tile =
-                UiManager.pixelCoordsToTile(new Vector2(press.coords.x, press.coords.y), gameData, tileX, tileY);
-        Loggers.INPUT.debug(
-                "mouse event: {}; [{}, {}]: {}",
-                press, tileX, tileY, tile
+        @NonNull final Optional<Tile> tile = UiManager.pixelCoordsToTile(
+                new Vector2(press.coords.x, press.coords.y),
+                gameData,
+                tileX,
+                tileY
         );
+        Loggers.INPUT.debug("mouse event: {}; [{}, {}]: {}", press, tileX, tileY, tile);
     }
 
     public void keyEvent(
@@ -186,15 +212,14 @@ public class UiManager {
         Loggers.INPUT.debug("key event: {}", press);
         // Pass on any key-presses to the UI elements
         //noinspection ReturnOfNull
-        state.uiElements
-                .stream()
-                .map(e -> e instanceof ClickableElement ? (ClickableElement) e : null)
-                .filter(Objects::nonNull)
-                .forEach(elem -> {
-                    if (press.equals(elem.activationKey)) {
-                        elem.activate(game, state);
-                    }
-                });
+        state.uiElements.stream()
+                        .map(e -> e instanceof ClickableElement ? (ClickableElement) e : null)
+                        .filter(Objects::nonNull)
+                        .forEach(elem -> {
+                            if (press.equals(elem.activationKey)) {
+                                elem.activate(game, state);
+                            }
+                        });
     }
 
     public void updateUi(final @NonNull PApplet app, final @NonNull GameData game, final @NonNull UiState state) {

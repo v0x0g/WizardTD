@@ -53,7 +53,7 @@ public class Renderer {
                         final RenderOrder order = entry.getKey();
                         final @Nullable List<Renderable> objs = entry.getValue();
                         Loggers.RENDER.debug("render group {}", order);
-                        if (objs != null) objs.forEach(obj -> obj.render(app, game));
+                        if (objs != null) objs.forEach(obj -> obj.render(app, game, ));
                         else Loggers.RENDER.debug("render group {} empty", order);
                     });
 
