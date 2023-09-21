@@ -2,8 +2,8 @@ package WizardTD.Rendering;
 
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
-import WizardTD.UI.*;
 import WizardTD.UI.Appearance.*;
+import WizardTD.UI.*;
 import com.google.common.collect.*;
 import lombok.experimental.*;
 import org.checkerframework.checker.nullness.qual.*;
@@ -18,16 +18,22 @@ import static WizardTD.UI.Appearance.GuiConfig.*;
 @UtilityClass
 @ExtensionMethod(Arrays.class)
 public class Renderer {
-    public final @NonNull         PImage                                                        missingTextureImage =
-            ImageExt.generatePattern(
-                    GuiConfig.CELL_SIZE_PX, GuiConfig.CELL_SIZE_PX, CELL_SIZE_PX >> 2, 2,
-                    ImageExt.ImagePattern.CHECKERS,
-                    Colour.BRIGHT_PURPLE.code, Colour.BLACK.code
-            );
-    private static final @NonNull ThreadLocal<ConcurrentHashMap<RenderOrder, List<Renderable>>> renderOrderMaps     =
+    public final @NonNull PImage missingTextureImage = ImageExt.generatePattern(
+            GuiConfig.CELL_SIZE_PX,
+            GuiConfig.CELL_SIZE_PX,
+            CELL_SIZE_PX >> 2,
+            2,
+            ImageExt.ImagePattern.CHECKERS,
+            Colour.BRIGHT_PURPLE.code,
+            Colour.BLACK.code
+    );
+    private static final @NonNull ThreadLocal<ConcurrentHashMap<RenderOrder, List<Renderable>>> renderOrderMaps =
             ThreadLocal.withInitial(ConcurrentHashMap::new);
-    private static final @NonNull RenderOrder @NonNull []                                       renderOrders        =
-            RenderOrder.values().stream().sorted().toArray(RenderOrder[]::new);
+    private static final @NonNull RenderOrder @NonNull [] renderOrders =
+            RenderOrder.values()
+                       .stream()
+                       .sorted()
+                       .toArray(RenderOrder[]::new);
 
     public void render(@NonNull final PApplet app, @NonNull final GameData game, @NonNull final UiState ui) {
         Loggers.RENDER.debug("start render");
@@ -38,12 +44,10 @@ public class Renderer {
 
         renderOrderMap.clear(); // Reset the mapping
         Streams.concat(game.enemies.stream(), game.projectiles.stream(), game.board.stream(), ui.uiElements.stream())
-               .forEach(obj ->
-                                // Get the set for this render order, or create if missing
-                                renderOrderMap.computeIfAbsent(
-                                        obj.getRenderOrder(),
-                                        $_ -> new ArrayList<>()
-                                ).add(obj)// Add the object to that set
+               .forEach(obj -> // Get the set for this render order, or create if missing
+                                renderOrderMap
+                                        .computeIfAbsent(obj.getRenderOrder(), $_ -> new ArrayList<>())
+                                        .add(obj)// Add the object to that set
                );
 
         renderOrders.stream()
@@ -53,14 +57,17 @@ public class Renderer {
                         final RenderOrder order = entry.getKey();
                         final @Nullable List<Renderable> objs = entry.getValue();
                         Loggers.RENDER.debug("render group {}", order);
-                        if (objs != null) objs.forEach(obj -> obj.render(app, game, ));
+                        if (objs != null) objs.forEach(obj -> obj.render(app, game, ui));
                         else Loggers.RENDER.debug("render group {} empty", order);
                     });
 
         final Instant endInstant = Instant.now();
         Loggers.RENDER.debug(
-                "end render; start={}, end={}, time={}ms ", startInstant, endInstant,
-                Duration.between(startInstant, endInstant).toMillis()
+                "end render; start={}, end={}, time={}ms ",
+                startInstant,
+                endInstant,
+                Duration.between(startInstant, endInstant)
+                        .toMillis()
         );
     }
 
