@@ -141,7 +141,7 @@ public final class App extends PApplet {
         Loggers.RENDER.debug("enter draw");
 
         Loggers.RENDER.trace("background");
-        background(Colour.DEEP_PURPLE.code);
+        background(Colour.DEEP_PURPLE.getCode());
         // TODO: Dirtying logic
         Loggers.RENDER.trace("dirty");
         this.gameData.board

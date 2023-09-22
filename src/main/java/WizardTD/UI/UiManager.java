@@ -75,8 +75,8 @@ public class UiManager {
             uiState.uiElements.add(new RectElement(
                     new Vector2(0, 0),
                     new Vector2(Window.WINDOW_WIDTH_PX, Window.WINDOW_HEIGHT_PX),
-                    Theme.APP_BACKGROUND.code,
-                    Colour.NONE.code
+                    Theme.APP_BACKGROUND.getCode(),
+                    Colour.NONE.getCode()
             ) {
                 @Override
                 public @NonNull RenderOrder getRenderOrder() {
@@ -92,8 +92,8 @@ public class UiManager {
             uiState.uiElements.add(new RectElement(
                     manaBarPos1,
                     manaBarPos2,
-                    Theme.WIDGET_BACKGROUND.code,
-                    Theme.OUTLINE.code
+                    Theme.WIDGET_BACKGROUND.getCode(),
+                    Theme.OUTLINE.getCode()
             ));
 
 
@@ -101,8 +101,8 @@ public class UiManager {
                     new RectElement(
                             manaBarPos1,
                             new Vector2(0, 0) /* Will be overwritten */,
-                            Theme.MANA.code,
-                            Theme.OUTLINE.code
+                            Theme.MANA.getCode(),
+                            Theme.OUTLINE.getCode()
                     ),
                     (rectElement, gameData, ui) -> {
                         // Each frame, update the position of the mana bar to reflect the
@@ -161,8 +161,8 @@ public class UiManager {
                         pos2,
                         text,
                         Theme.TEXT_SIZE_LARGE,
-                        Colour.NONE.code,
-                        Theme.OUTLINE.code,
+                        Colour.NONE.getCode(),
+                        Theme.OUTLINE.getCode(),
                         new KeyPress(
                                 activationKey,
                                 false,
@@ -175,17 +175,39 @@ public class UiManager {
             addButton.invoke(
                     "FF",
                     KeyCode.F,
-                    (button, game, ui) -> Logger.warn("fast forward"),
-                    (button, game, ui) -> {
-                        button.fillColour = ui.fastForward ? Theme.BUTTON_ENABLED.code : Theme.BUTTON_DISABLED.code;
-                    }
+                    (button, game, ui) -> Logger.debug("toggle fast forward = {}", ui.fastForward ^= true),
+                    (button, game, ui) -> button.fillColour = ui.fastForward ? Theme.BUTTON_ENABLED.getCode() : Theme.BUTTON_DISABLED.getCode()
             );
-//            addButton.accept(Triplet.with("P ", KeyCode.P, (game, ui) -> Logger.warn("pause")));
-//            addButton.accept(Triplet.with("T ", KeyCode.T, (game, ui) -> Logger.warn("tower")));
-//            addButton.accept(Triplet.with("U1", KeyCode.NUM_1, (game, ui) -> Logger.warn("upgrade 1")));
-//            addButton.accept(Triplet.with("U2", KeyCode.NUM_2, (game, ui) -> Logger.warn("upgrade 2")));
-//            addButton.accept(Triplet.with("U3", KeyCode.NUM_3, (game, ui) -> Logger.warn("upgrade 3")));
-//            addButton.accept(Triplet.with("M ", KeyCode.M, (game, ui) -> Logger.warn("mana pool")));
+            addButton.invoke(
+                    "P",
+                    KeyCode.P,
+                    (button, game, ui) -> Logger.debug("toggle pause = {}", ui.paused ^= true),
+                    (button, game, ui) -> button.fillColour = ui.paused ? Theme.BUTTON_ENABLED.getCode() : Theme.BUTTON_DISABLED.getCode()
+            );
+            addButton.invoke(
+                    "U1",
+                    KeyCode.NUM_1,
+                    (button, game, ui) -> Logger.debug("toggle upgrade range = {}", ui.wantsUpgradeRange ^= true),
+                    (button, game, ui) -> button.fillColour = ui.wantsUpgradeRange ? Theme.BUTTON_ENABLED.getCode() : Theme.BUTTON_DISABLED.getCode()
+            );
+            addButton.invoke(
+                    "U2",
+                    KeyCode.NUM_2,
+                    (button, game, ui) -> Logger.debug("toggle upgrade speed = {}", ui.wantsUpgradeSpeed ^= true),
+                    (button, game, ui) -> button.fillColour = ui.wantsUpgradeSpeed ? Theme.BUTTON_ENABLED.getCode() : Theme.BUTTON_DISABLED.getCode()
+            );
+            addButton.invoke(
+                    "U3",
+                    KeyCode.NUM_3,
+                    (button, game, ui) -> Logger.debug("toggle upgrade damage = {}", ui.wantsUpgradeDamage ^= true),
+                    (button, game, ui) -> button.fillColour = ui.wantsUpgradeDamage ? Theme.BUTTON_ENABLED.getCode() : Theme.BUTTON_DISABLED.getCode()
+            );
+            addButton.invoke(
+                    "M",
+                    KeyCode.M,
+                    (button, game, ui) -> {Logger.debug("mana pool!"); button.fillColour = Theme.MANA.getCode();},
+                    (button, game, ui) -> {button.fillColour /= 2;}
+            );
         }
     }
 
@@ -211,15 +233,20 @@ public class UiManager {
             final @NonNull KeyPress press) {
         Loggers.INPUT.debug("key event: {}", press);
         // Pass on any key-presses to the UI elements
-        //noinspection ReturnOfNull
-        state.uiElements.stream()
-                        .map(e -> e instanceof ClickableElement ? (ClickableElement) e : null)
-                        .filter(Objects::nonNull)
-                        .forEach(elem -> {
-                            if (press.equals(elem.activationKey)) {
-                                elem.activate(game, state);
-                            }
-                        });
+        for (final UiElement elem : state.uiElements) {
+            final ClickableElement clickable;
+            if (elem instanceof ClickableElement) clickable = (ClickableElement) elem;
+            else if (elem instanceof DynamicWrapperElement &&
+                     ((DynamicWrapperElement<UiElement>) elem).element instanceof ClickableElement)
+                clickable = (ClickableElement) ((DynamicWrapperElement<UiElement>) elem).element;
+            else continue;
+
+            Loggers.INPUT.trace("elem {}", clickable);
+            if (press.equals(clickable.activationKey)) {
+                Loggers.INPUT.debug("activate element {}", clickable);
+                clickable.activate(game, state);
+            }
+        }
     }
 
     public void updateUi(final @NonNull PApplet app, final @NonNull GameData game, final @NonNull UiState state) {

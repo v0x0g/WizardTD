@@ -24,7 +24,7 @@ public final class UiState {
     public boolean
             wantsUpgradeRange = false,
             wantsUpgradeSpeed = false,
-            wantsUpgradeDamage3 = false;
+            wantsUpgradeDamage = false;
 
     public boolean buildTower = false;
     public boolean manaPool = false;
