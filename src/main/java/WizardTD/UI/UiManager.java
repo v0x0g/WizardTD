@@ -75,8 +75,8 @@ public class UiManager {
             uiState.uiElements.add(new RectElement(
                     new Vector2(0, 0),
                     new Vector2(Window.WINDOW_WIDTH_PX, Window.WINDOW_HEIGHT_PX),
-                    Theme.APP_BACKGROUND.getCode(),
-                    Colour.NONE.getCode()
+                    Theme.APP_BACKGROUND.asInt(),
+                    Colour.NONE.asInt()
             ) {
                 @Override
                 public @NonNull RenderOrder getRenderOrder() {
@@ -92,8 +92,8 @@ public class UiManager {
             uiState.uiElements.add(new RectElement(
                     manaBarPos1,
                     manaBarPos2,
-                    Theme.WIDGET_BACKGROUND.getCode(),
-                    Theme.OUTLINE.getCode()
+                    Theme.WIDGET_BACKGROUND.asInt(),
+                    Theme.OUTLINE.asInt()
             ));
 
 
@@ -101,8 +101,8 @@ public class UiManager {
                     new RectElement(
                             manaBarPos1,
                             new Vector2(0, 0) /* Will be overwritten */,
-                            Theme.MANA.getCode(),
-                            Theme.OUTLINE.getCode()
+                            Theme.MANA.asInt(),
+                            Theme.OUTLINE.asInt()
                     ),
                     (rectElement, gameData, ui) -> {
                         // Each frame, update the position of the mana bar to reflect the
@@ -161,8 +161,8 @@ public class UiManager {
                         pos2,
                         text,
                         Theme.TEXT_SIZE_LARGE,
-                        Colour.NONE.getCode(),
-                        Theme.OUTLINE.getCode(),
+                        Colour.NONE.asInt(),
+                        Theme.OUTLINE.asInt(),
                         new KeyPress(
                                 activationKey,
                                 false,
@@ -176,36 +176,36 @@ public class UiManager {
                     "FF",
                     KeyCode.F,
                     (button, game, ui) -> Logger.debug("toggle fast forward = {}", ui.fastForward ^= true),
-                    (button, game, ui) -> button.fillColour = ui.fastForward ? Theme.BUTTON_ENABLED.getCode() : Theme.BUTTON_DISABLED.getCode()
+                    (button, game, ui) -> button.fillColour = ui.fastForward ? Theme.BUTTON_ENABLED.asInt() : Theme.BUTTON_DISABLED.asInt()
             );
             addButton.invoke(
                     "P",
                     KeyCode.P,
                     (button, game, ui) -> Logger.debug("toggle pause = {}", ui.paused ^= true),
-                    (button, game, ui) -> button.fillColour = ui.paused ? Theme.BUTTON_ENABLED.getCode() : Theme.BUTTON_DISABLED.getCode()
+                    (button, game, ui) -> button.fillColour = ui.paused ? Theme.BUTTON_ENABLED.asInt() : Theme.BUTTON_DISABLED.asInt()
             );
             addButton.invoke(
                     "U1",
                     KeyCode.NUM_1,
                     (button, game, ui) -> Logger.debug("toggle upgrade range = {}", ui.wantsUpgradeRange ^= true),
-                    (button, game, ui) -> button.fillColour = ui.wantsUpgradeRange ? Theme.BUTTON_ENABLED.getCode() : Theme.BUTTON_DISABLED.getCode()
+                    (button, game, ui) -> button.fillColour = ui.wantsUpgradeRange ? Theme.BUTTON_ENABLED.asInt() : Theme.BUTTON_DISABLED.asInt()
             );
             addButton.invoke(
                     "U2",
                     KeyCode.NUM_2,
                     (button, game, ui) -> Logger.debug("toggle upgrade speed = {}", ui.wantsUpgradeSpeed ^= true),
-                    (button, game, ui) -> button.fillColour = ui.wantsUpgradeSpeed ? Theme.BUTTON_ENABLED.getCode() : Theme.BUTTON_DISABLED.getCode()
+                    (button, game, ui) -> button.fillColour = ui.wantsUpgradeSpeed ? Theme.BUTTON_ENABLED.asInt() : Theme.BUTTON_DISABLED.asInt()
             );
             addButton.invoke(
                     "U3",
                     KeyCode.NUM_3,
                     (button, game, ui) -> Logger.debug("toggle upgrade damage = {}", ui.wantsUpgradeDamage ^= true),
-                    (button, game, ui) -> button.fillColour = ui.wantsUpgradeDamage ? Theme.BUTTON_ENABLED.getCode() : Theme.BUTTON_DISABLED.getCode()
+                    (button, game, ui) -> button.fillColour = ui.wantsUpgradeDamage ? Theme.BUTTON_ENABLED.asInt() : Theme.BUTTON_DISABLED.asInt()
             );
             addButton.invoke(
                     "M",
                     KeyCode.M,
-                    (button, game, ui) -> {Logger.debug("mana pool!"); button.fillColour = Theme.MANA.getCode();},
+                    (button, game, ui) -> {Logger.debug("mana pool!"); button.fillColour = Theme.MANA.asInt();},
                     (button, game, ui) -> {button.fillColour /= 2;}
             );
         }

@@ -1,8 +1,7 @@
 package WizardTD.UI.Appearance;
 
+import WizardTD.Ext.*;
 import lombok.*;
-
-import java.nio.*;
 
 @ToString
 public final class Colour {
@@ -23,28 +22,56 @@ public final class Colour {
     public static final @NonNull Colour BRIGHT_PURPLE = new Colour(0xFF_CA_32_F0);
     public static final @NonNull Colour NONE = new Colour(0x00_00_00_00);
 
-    private final int code;
-    private final double r,g,b,a;
+    private final double r, g, b, a;
 
     public Colour(final int code) {
-        this.code = code;
+        this.a = intToDouble((code >> 24) & 255);
+        this.r = intToDouble((code >> 16) & 255);
+        this.g = intToDouble((code >> 8) & 255);
+        this.b = intToDouble((code >> 0) & 255);
     }
 
-    public static Colour withAlpha(final @NonNull Colour colour, final byte alpha) {
-        // Reinterpret as byte[4]
-        final ByteBuffer bytes = ByteBuffer.allocate(4)
-                                           .putInt(colour.getCode());
-        // Override alpha
-        bytes.put(0, alpha);
-        return new Colour(bytes.getInt(0));
+    public Colour(final double r, final double g, final double b, final double a) {
+        this.r = r;
+        this.g = g;
+        this.b = b;
+        this.a = a;
     }
 
-    public static Colour lerp(final @NonNull Colour a, final @NonNull Colour b, final float lerp) {
-
+    public static Colour withAlpha(final @NonNull Colour colour, final double alpha) {
+        return new Colour(colour.r, colour.g, colour.b, alpha);
     }
 
-    public int getCode() {
-        // Float to code
-        return code;
+    public static Colour lerp(final @NonNull Colour c1, final @NonNull Colour c2, final float lerp) {
+        return new Colour(
+                Numerics.lerp(c1.a, c2.a, lerp),
+                Numerics.lerp(c1.r, c2.r, lerp),
+                Numerics.lerp(c1.g, c2.g, lerp),
+                Numerics.lerp(c1.b, c2.b, lerp)
+        );
+    }
+
+    /**
+     * Converts a normalised (0..1) double into a byte (0..255)
+     */
+    public static int doubleToInt(final double val) {
+        //noinspection MagicNumber
+        return (int) (Math.min(Math.max(val, 0.0), 1.0) * 255.0);
+    }
+
+    /**
+     * Converts a normalised (0..1) double into a byte (0..255)
+     */
+    public static double intToDouble(final int val) {
+        //noinspection MagicNumber
+        return (val / 255.0);
+    }
+
+    public int asInt() {
+        return
+                doubleToInt(this.a) << 24
+                | doubleToInt(this.r) << 16
+                | doubleToInt(this.g) << 8
+                | doubleToInt(this.b) << 0;
     }
 }

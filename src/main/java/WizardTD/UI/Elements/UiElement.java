@@ -16,9 +16,9 @@ public abstract class UiElement extends Renderable {
      * @param fill
      */
     protected static void setColours(final @NonNull PApplet app, final int fill, final int outline) {
-        if (fill == Colour.NONE.getCode()) app.noFill();
+        if (fill == Colour.NONE.asInt()) app.noFill();
         else app.fill(fill);
-        if (outline == Colour.NONE.getCode()) app.noStroke();
+        if (outline == Colour.NONE.asInt()) app.noStroke();
         else app.stroke(outline);
     }
 

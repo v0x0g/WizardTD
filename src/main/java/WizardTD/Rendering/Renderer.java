@@ -24,8 +24,8 @@ public class Renderer {
             CELL_SIZE_PX >> 2,
             2,
             ImageExt.ImagePattern.CHECKERS,
-            Colour.BRIGHT_PURPLE.getCode(),
-            Colour.BLACK.getCode()
+            Colour.BRIGHT_PURPLE.asInt(),
+            Colour.BLACK.asInt()
     );
     private static final @NonNull ThreadLocal<ConcurrentHashMap<RenderOrder, List<Renderable>>> renderOrderMaps =
             ThreadLocal.withInitial(ConcurrentHashMap::new);

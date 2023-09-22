@@ -53,7 +53,7 @@ public class ButtonElement extends ClickableElement {
                 (float) corner1.x, (float) corner1.y,
                 (float) corner2.x, (float) corner2.y
         );
-        app.fill(Theme.TEXT.getCode());
+        app.fill(Theme.TEXT.asInt());
         app.textAlign(this.textAlignMode, this.textAlignMode);
         app.textSize(this.fontSize);
         app.text(
