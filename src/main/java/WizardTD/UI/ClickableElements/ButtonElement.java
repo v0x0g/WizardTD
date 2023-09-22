@@ -17,8 +17,8 @@ import processing.core.*;
 public class ButtonElement extends ClickableElement {
 
     public final @NonNull UiAction<ButtonElement> click;
-    public                int                     fillColour;
-    public                int                     outlineColour;
+    public                Colour                     fillColour;
+    public                Colour                     outlineColour;
     /**
      * See {@link PApplet#rectMode(int)}
      */
@@ -33,7 +33,7 @@ public class ButtonElement extends ClickableElement {
     public ButtonElement(
             @NonNull final Vector2 corner1, @NonNull final Vector2 corner2,
             @NonNull final String text, final float fontSize,
-            final int fillColour, final int outlineColour,
+            final @NonNull Colour fillColour, final @NonNull Colour outlineColour,
             @Nullable final KeyPress activationKey,
             @NonNull final UiAction<ButtonElement> click) {
         super(corner1, corner2, activationKey);
@@ -46,7 +46,7 @@ public class ButtonElement extends ClickableElement {
     }
 
     @Override
-    public void render(@NonNull final PApplet app, @NonNull final GameData gameData, @NonNull UiState uiState) {
+    public void render(@NonNull final PApplet app, @NonNull final GameData gameData, @NonNull final UiState uiState) {
         setColours(app, this.fillColour, this.outlineColour);
         app.rectMode(PConstants.CORNERS);
         app.rect(

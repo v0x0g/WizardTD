@@ -1,6 +1,7 @@
 package WizardTD.UI.Elements;
 
 import WizardTD.Gameplay.Game.*;
+import WizardTD.UI.Appearance.*;
 import WizardTD.UI.*;
 import lombok.*;
 import mikera.vectorz.*;
@@ -8,20 +9,19 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import processing.core.*;
 
 @AllArgsConstructor
-@RequiredArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper = true)
 public class RectElement extends UiElement {
     public @NonNull Vector2 pos1;
     public @NonNull Vector2 pos2;
-    public          int     fillColour;
-    public          int     outlineColour;
+    public          @NonNull Colour fillColour;
+    public          @NonNull Colour     outlineColour;
     /**
      * See {@link PApplet#rectMode(int)}
      */
     public          int     rectPosMode = PConstants.CORNERS;
 
-    public RectElement(@NonNull final Vector2 pos1, @NonNull final Vector2 pos2, final int fillColour, final int outlineColour) {
+    public RectElement(@NonNull final Vector2 pos1, @NonNull final Vector2 pos2, final @NonNull Colour fillColour, final @NonNull Colour outlineColour) {
         this.pos1 = pos1;
         this.pos2 = pos2;
         this.fillColour = fillColour;

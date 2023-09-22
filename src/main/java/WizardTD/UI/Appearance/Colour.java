@@ -4,6 +4,7 @@ import WizardTD.Ext.*;
 import lombok.*;
 
 @ToString
+@EqualsAndHashCode
 public final class Colour {
     public static final @NonNull Colour BLACK = new Colour(0xFF_00_00_00);
     public static final @NonNull Colour WHITE = new Colour(0xFF_FF_FF_FF);
@@ -22,13 +23,13 @@ public final class Colour {
     public static final @NonNull Colour BRIGHT_PURPLE = new Colour(0xFF_CA_32_F0);
     public static final @NonNull Colour NONE = new Colour(0x00_00_00_00);
 
-    private final double r, g, b, a;
+    public final double r, g, b, a;
 
     public Colour(final int code) {
         this.a = intToDouble((code >> 24) & 255);
         this.r = intToDouble((code >> 16) & 255);
         this.g = intToDouble((code >> 8) & 255);
-        this.b = intToDouble((code >> 0) & 255);
+        this.b = intToDouble((code) & 255);
     }
 
     public Colour(final double r, final double g, final double b, final double a) {
@@ -42,7 +43,7 @@ public final class Colour {
         return new Colour(colour.r, colour.g, colour.b, alpha);
     }
 
-    public static Colour lerp(final @NonNull Colour c1, final @NonNull Colour c2, final float lerp) {
+    public static Colour lerp(final @NonNull Colour c1, final @NonNull Colour c2, final double lerp) {
         return new Colour(
                 Numerics.lerp(c1.a, c2.a, lerp),
                 Numerics.lerp(c1.r, c2.r, lerp),
@@ -67,6 +68,7 @@ public final class Colour {
         return (val / 255.0);
     }
 
+    @SuppressWarnings("all")
     public int asInt() {
         return
                 doubleToInt(this.a) << 24
