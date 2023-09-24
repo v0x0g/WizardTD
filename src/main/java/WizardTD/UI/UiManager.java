@@ -176,7 +176,8 @@ public class UiManager {
                     "FF",
                     KeyCode.F,
                     (button, game, ui) -> Logger.debug("toggle fast forward = {}", ui.fastForward ^= true),
-                    (button, game, ui) -> button.fillColour = ui.fastForward ? Theme.BUTTON_ENABLED : Theme.BUTTON_DISABLED
+                    (button, game, ui) -> button.fillColour =
+                            ui.fastForward ? Theme.BUTTON_ENABLED : Theme.BUTTON_DISABLED
             );
             addButton.invoke(
                     "P",
@@ -188,26 +189,39 @@ public class UiManager {
                     "U1",
                     KeyCode.NUM_1,
                     (button, game, ui) -> Logger.debug("toggle upgrade range = {}", ui.wantsUpgradeRange ^= true),
-                    (button, game, ui) -> button.fillColour = ui.wantsUpgradeRange ? Theme.BUTTON_ENABLED : Theme.BUTTON_DISABLED
+                    (button, game, ui) -> button.fillColour =
+                            ui.wantsUpgradeRange ? Theme.BUTTON_ENABLED : Theme.BUTTON_DISABLED
             );
             addButton.invoke(
                     "U2",
                     KeyCode.NUM_2,
                     (button, game, ui) -> Logger.debug("toggle upgrade speed = {}", ui.wantsUpgradeSpeed ^= true),
-                    (button, game, ui) -> button.fillColour = ui.wantsUpgradeSpeed ? Theme.BUTTON_ENABLED : Theme.BUTTON_DISABLED
+                    (button, game, ui) -> button.fillColour =
+                            ui.wantsUpgradeSpeed ? Theme.BUTTON_ENABLED : Theme.BUTTON_DISABLED
             );
             addButton.invoke(
                     "U3",
                     KeyCode.NUM_3,
                     (button, game, ui) -> Logger.debug("toggle upgrade damage = {}", ui.wantsUpgradeDamage ^= true),
-                    (button, game, ui) -> button.fillColour = ui.wantsUpgradeDamage ? Theme.BUTTON_ENABLED : Theme.BUTTON_DISABLED
+                    (button, game, ui) -> button.fillColour =
+                            ui.wantsUpgradeDamage ? Theme.BUTTON_ENABLED : Theme.BUTTON_DISABLED
             );
             addButton.invoke(
                     "M",
                     KeyCode.M,
-                    (button, game, ui) -> {Logger.debug("mana pool!"); button.fillColour = Theme.MANA;},
+                    (button, game, ui) -> {
+                        Logger.debug("mana pool!");
+                        button.fillColour = Theme.MANA;
+                    },
                     // Nice little fade out animation
-                    (button, game, ui) -> button.fillColour = Colour.lerp(button.fillColour, Theme.BUTTON_DISABLED, 0.03)
+                    (button, game, ui) -> {
+                        final double ANIM_SPEED = 0.03;
+                        button.fillColour = Colour.lerp(
+                                button.fillColour,
+                                Theme.BUTTON_DISABLED,
+                                ANIM_SPEED
+                        );
+                    }
             );
         }
     }
@@ -229,18 +243,33 @@ public class UiManager {
         Loggers.INPUT.debug("mouse event: {}; [{}, {}]: {}", press, tileX, tileY, tile);
     }
 
+    @SuppressWarnings("unchecked")
     public void keyEvent(
             final @NonNull PApplet app, final @NonNull GameData game, final @NonNull UiState state,
             final @NonNull KeyPress press) {
-        Loggers.INPUT.debug("key event: {}", press);
         // Pass on any key-presses to the UI elements
+
+        Loggers.INPUT.debug("key event: {}", press);
+
+        // SAFETY: This does use unchecked casting, however the objects are validated
+        // Apologies for the horrible code, but Java's type erasure makes this very
+        // difficult and awkward, and I don't think there's a better way to do it
+        // Would be much simpler with pattern matching
         for (final UiElement elem : state.uiElements) {
             final ClickableElement clickable;
-            if (elem instanceof ClickableElement) clickable = (ClickableElement) elem;
-            else if (elem instanceof DynamicWrapperElement &&
-                     ((DynamicWrapperElement<UiElement>) elem).element instanceof ClickableElement)
+            // Try cast it to a clickable element type
+            if (elem instanceof ClickableElement) {
+                clickable = (ClickableElement) elem;
+            }
+            // Also see if it's a DynamicWrapperElement
+            else if ((elem instanceof DynamicWrapperElement) &&
+                     (((DynamicWrapperElement<UiElement>) elem).element instanceof ClickableElement)) {
                 clickable = (ClickableElement) ((DynamicWrapperElement<UiElement>) elem).element;
-            else continue;
+            }
+            // Couldn't cast, skip it
+            else {
+                continue;
+            }
 
             Loggers.INPUT.trace("elem {}", clickable);
             if (press.equals(clickable.activationKey)) {
