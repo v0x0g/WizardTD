@@ -12,7 +12,7 @@ import processing.core.*;
 
 @ToString
 @EqualsAndHashCode(callSuper = true)
-public final class Tower extends Tile {
+public final class TowerTile extends Tile {
 
     public static @Nullable PImage tileLevel0 = null;
     public static @Nullable PImage tileLevel1 = null;

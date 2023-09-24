@@ -24,7 +24,7 @@ public final class GameData {
 
     public @NonNull List<@NonNull Wave> waves;
 
-    public @NonNull WizardHouse wizardHouse;
+    public @NonNull WizardHouseTile wizardHouse;
 
     public @NonNull GameDataConfig config;
 
@@ -36,14 +36,14 @@ public final class GameData {
         final List<Wave> waves = new ArrayList<>();
 
         trace("locating wizard's house");
-        WizardHouse fourPrivetDrive = null;
+        WizardHouseTile fourPrivetDrive = null;
         for (int row = 0; row < BOARD_SIZE_TILES; row++) {
             for (int col = 0; col < BOARD_SIZE_TILES; col++) {
                 final Tile tile = desc.board.getTile(row, col);
-                if (tile instanceof WizardHousePlaceholder) {
+                if (tile instanceof WizardHousePlaceholderTile) {
                     if (null != fourPrivetDrive) warn("only one wizard allowed");
-                    else trace("You're a WizardHouse Harry!\nI'm a WHAT?\nA \033[095m{}\033[000m", tile);
-                    fourPrivetDrive = new WizardHouse();
+                    else trace("You're a WizardHouseTile Harry!\nI'm a WHAT?\nA \033[095m{}\033[000m", tile);
+                    fourPrivetDrive = new WizardHouseTile();
                     desc.board.setTile(row, col, fourPrivetDrive); // Update the board entry to remove placeholder
                     fourPrivetDrive.mana = desc.config.mana.initialManaValue;
                     fourPrivetDrive.manaCap = desc.config.mana.initialManaCap;

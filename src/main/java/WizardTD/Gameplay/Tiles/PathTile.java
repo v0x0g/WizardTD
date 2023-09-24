@@ -16,7 +16,7 @@ import static WizardTD.Gameplay.Tiles.TileSides.*;
 
 @ToString
 @EqualsAndHashCode(callSuper = true)
-public final class Path extends Tile {
+public final class PathTile extends Tile {
     private static final @NonNull Hashtable<EnumSet<TileSides>, PImage> pathSidesMap = new Hashtable<>();
     private transient @NonNull EnumSet<TileSides> connectedPathSides = EnumSet.noneOf(TileSides.class);
 
@@ -71,10 +71,10 @@ public final class Path extends Tile {
     @Override
     public void boardDirty(@NonNull Board board) {
         // Update what sides are connected.
-        val left = board.maybeGetTileGeneric(Path.class, this.getPosX() - 1, this.getPosY()).isPresent();
-        val right = board.maybeGetTileGeneric(Path.class, this.getPosX() + 1, this.getPosY()).isPresent();
-        val up = board.maybeGetTileGeneric(Path.class, this.getPosX(), this.getPosY() - 1).isPresent();
-        val down = board.maybeGetTileGeneric(Path.class, this.getPosX(), this.getPosY() + 1).isPresent();
+        val left = board.maybeGetTileGeneric(PathTile.class, this.getPosX() - 1, this.getPosY()).isPresent();
+        val right = board.maybeGetTileGeneric(PathTile.class, this.getPosX() + 1, this.getPosY()).isPresent();
+        val up = board.maybeGetTileGeneric(PathTile.class, this.getPosX(), this.getPosY() - 1).isPresent();
+        val down = board.maybeGetTileGeneric(PathTile.class, this.getPosX(), this.getPosY() + 1).isPresent();
 
         EnumSet<TileSides> sides = EnumSet.noneOf(TileSides.class);
         if (left) sides.add(LEFT);

@@ -7,7 +7,7 @@ import lombok.*;
  */
 @ToString
 @EqualsAndHashCode(callSuper = true)
-public final class WizardHousePlaceholder extends InvalidTile {
+public final class WizardHousePlaceholderTile extends InvalidTile {
 //    @Override
 //    public void render(@NonNull final PApplet app, final float centreX, final float centreY) {
 //        // Unicorn vomit lol

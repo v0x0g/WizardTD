@@ -10,7 +10,7 @@ import processing.core.*;
 
 @ToString
 @EqualsAndHashCode(callSuper = false)
-public class Fireball extends Projectile {
+public class FireballProjectile extends Projectile {
 
     /**
      * How many units (tiles) per frame the fireball moves
@@ -23,7 +23,7 @@ public class Fireball extends Projectile {
      */
     public double baseDamage;
 
-    public Fireball(@NonNull final Vector2 position, final double baseDamage) {
+    public FireballProjectile(@NonNull final Vector2 position, final double baseDamage) {
         super(position);
         this.baseDamage = baseDamage;
     }

@@ -26,13 +26,13 @@ public abstract class Tile extends Renderable {
     public static @NonNull Optional<Tile> fromChar(final char c) {
         switch (c) {
             case 'S':
-                return Optional.of(new Shrub());
+                return Optional.of(new ShrubTile());
             case 'W':
-                return Optional.of(new WizardHousePlaceholder());
+                return Optional.of(new WizardHousePlaceholderTile());
             case ' ':
-                return Optional.of(new Grass());
+                return Optional.of(new GrassTile());
             case 'X':
-                return Optional.of(new Path());
+                return Optional.of(new PathTile());
             default:
                 return Optional.empty();
         }

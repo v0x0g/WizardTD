@@ -165,7 +165,7 @@ public class GameManager {
                         // Fallback when line is shorter than expected
                         // https://i.imgflip.com/3a8eu4.jpg
                         trace("tile char (line)[{00}] (char)[{00}] fallback as grass", col, row);
-                        tile = new Grass();
+                        tile = new GrassTile();
                     }
                     board.setTile(row, col, tile);
                 }
@@ -198,8 +198,8 @@ public class GameManager {
 //                                            // TODO: Refactor to abstract static method to parse from json?
 //                                            return switch (m.getString("type")){
 //                                                case "gremlin" -> BasicEnemyFactory.;
-//                                                case "beetle" -> new Beetle();
-//                                                case "worm" -> new Worm();
+//                                                case "beetle" -> new BeetleEnemy();
+//                                                case "worm" -> new WormEnemy();
 //                                            };
 //                                        })
 //                        );

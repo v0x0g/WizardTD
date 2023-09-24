@@ -12,7 +12,7 @@ import processing.core.*;
 
 @ToString
 @EqualsAndHashCode(callSuper = true)
-public final class WizardHouse extends Tile {
+public final class WizardHouseTile extends Tile {
 
     private static @Nullable PImage tileImage = null;
     private static @Nullable PImage grassUnderTileImage = null;
