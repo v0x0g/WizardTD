@@ -161,7 +161,7 @@ public class UiManager {
                         pos2,
                         text,
                         Theme.TEXT_SIZE_LARGE,
-                        Colour.NONE,
+                        Theme.BUTTON_DISABLED,
                         Theme.OUTLINE,
                         new KeyPress(
                                 activationKey,
@@ -206,7 +206,8 @@ public class UiManager {
                     "M",
                     KeyCode.M,
                     (button, game, ui) -> {Logger.debug("mana pool!"); button.fillColour = Theme.MANA;},
-                    (button, game, ui) -> {button.fillColour = Colour.lerp(button.fillColour, Colour.BLACK, 0.1);}
+                    // Nice little fade out animation
+                    (button, game, ui) -> button.fillColour = Colour.lerp(button.fillColour, Theme.BUTTON_DISABLED, 0.03)
             );
         }
     }

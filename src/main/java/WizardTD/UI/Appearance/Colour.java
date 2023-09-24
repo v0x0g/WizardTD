@@ -21,7 +21,8 @@ public final class Colour {
     public static final @NonNull Colour CYAN = new Colour(0xFF_00_FF_DF);
     public static final @NonNull Colour DEEP_PURPLE = new Colour(0xFF_6A_0B_C0);
     public static final @NonNull Colour BRIGHT_PURPLE = new Colour(0xFF_CA_32_F0);
-    public static final @NonNull Colour NONE = new Colour(0x00_00_00_00);
+    // Because processing is dumb, we can't have a colour of 0000, so make alpha barely zero
+    public static final @NonNull Colour NONE = new Colour(0x01_00_00_00);
 
     public final double r, g, b, a;
 
@@ -45,11 +46,11 @@ public final class Colour {
 
     public static Colour lerp(final @NonNull Colour c1, final @NonNull Colour c2, final double lerp) {
         return new Colour(
-                Numerics.lerp(c1.a, c2.a, lerp),
                 Numerics.lerp(c1.r, c2.r, lerp),
                 Numerics.lerp(c1.g, c2.g, lerp),
-                Numerics.lerp(c1.b, c2.b, lerp)
-        );
+                Numerics.lerp(c1.b, c2.b, lerp),
+                Numerics.lerp(c1.a, c2.a, lerp)
+                );
     }
 
     /**
