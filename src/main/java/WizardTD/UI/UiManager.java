@@ -13,6 +13,7 @@ import com.google.errorprone.annotations.*;
 import lombok.experimental.*;
 import lombok.*;
 import mikera.vectorz.*;
+import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.tinylog.*;
 import processing.core.*;
@@ -144,69 +145,54 @@ public class UiManager {
 
 
         {
-            final Vector2 buttonSize = new Vector2(48, 48);
             final Vector2 buttonPos = new Vector2(640 + 16, 40 + 16);
-
-            // Local helper method to add a button
-            final Action4<@NonNull String, @NonNull KeyCode, @NonNull UiAction<ButtonElement>, @NonNull UiAction<ButtonElement>>
-                    addButton = (text, activationKey, click, update) -> {
-                final Vector2 pos1 = buttonPos.clone();
-                final Vector2 pos2 = buttonPos.clone();
-                pos2.add(buttonSize);
-
-                buttonPos.y += buttonSize.y;
-
-                uiState.uiElements.add(new DynamicWrapperElement<>(new ButtonElement(
-                        pos1,
-                        pos2,
-                        text,
-                        Theme.TEXT_SIZE_LARGE,
-                        Theme.BUTTON_DISABLED,
-                        Theme.OUTLINE,
-                        new KeyPress(
-                                activationKey,
-                                false,
-                                KeyAction.PRESS
-                        ),
-                        click
-                ), update));
-            };
-
-            addButton.invoke(
+            addSidebarButton(
+                    uiState,
+                    buttonPos,
                     "FF",
                     KeyCode.F,
                     (button, game, ui) -> Logger.debug("toggle fast forward = {}", ui.fastForward ^= true),
                     (button, game, ui) -> button.fillColour =
                             ui.fastForward ? Theme.BUTTON_ENABLED : Theme.BUTTON_DISABLED
             );
-            addButton.invoke(
+            addSidebarButton(
+                    uiState,
+                    buttonPos,
                     "P",
                     KeyCode.P,
                     (button, game, ui) -> Logger.debug("toggle pause = {}", ui.paused ^= true),
                     (button, game, ui) -> button.fillColour = ui.paused ? Theme.BUTTON_ENABLED : Theme.BUTTON_DISABLED
             );
-            addButton.invoke(
+            addSidebarButton(
+                    uiState,
+                    buttonPos,
                     "U1",
                     KeyCode.NUM_1,
                     (button, game, ui) -> Logger.debug("toggle upgrade range = {}", ui.wantsUpgradeRange ^= true),
                     (button, game, ui) -> button.fillColour =
                             ui.wantsUpgradeRange ? Theme.BUTTON_ENABLED : Theme.BUTTON_DISABLED
             );
-            addButton.invoke(
+            addSidebarButton(
+                    uiState,
+                    buttonPos,
                     "U2",
                     KeyCode.NUM_2,
                     (button, game, ui) -> Logger.debug("toggle upgrade speed = {}", ui.wantsUpgradeSpeed ^= true),
                     (button, game, ui) -> button.fillColour =
                             ui.wantsUpgradeSpeed ? Theme.BUTTON_ENABLED : Theme.BUTTON_DISABLED
             );
-            addButton.invoke(
+            addSidebarButton(
+                    uiState,
+                    buttonPos,
                     "U3",
                     KeyCode.NUM_3,
                     (button, game, ui) -> Logger.debug("toggle upgrade damage = {}", ui.wantsUpgradeDamage ^= true),
                     (button, game, ui) -> button.fillColour =
                             ui.wantsUpgradeDamage ? Theme.BUTTON_ENABLED : Theme.BUTTON_DISABLED
             );
-            addButton.invoke(
+            addSidebarButton(
+                    uiState,
+                    buttonPos,
                     "M",
                     KeyCode.M,
                     (button, game, ui) -> {
@@ -224,6 +210,43 @@ public class UiManager {
                     }
             );
         }
+    }
+
+    /**
+     * A helper method that adds sidebar buttons to the UI
+     * @param uiState Object containing the UI data
+     * @param buttonPos Vector position of the button on-screen, will be mutated
+     * @param text Text for the button
+     * @param activationKey Key that activates the button
+     * @param click Function to run when the button is clicked/activated
+     * @param draw Function to be called every frame
+     */
+    private static void addSidebarButton(
+            final @NonNull UiState uiState, final @NonNull Vector2 buttonPos,
+            final @NonNull String text, final @Nullable KeyCode activationKey,
+            final @NonNull UiAction<ButtonElement> click,
+            final @NonNull UiAction<ButtonElement> draw) {
+        final Vector2 buttonSize = new Vector2(48, 48);
+
+        final Vector2 pos1 = buttonPos.clone();
+        final Vector2 pos2 = buttonPos.clone();
+        pos2.add(buttonSize);
+        buttonPos.y += buttonSize.y;
+
+        uiState.uiElements.add(new DynamicWrapperElement<>(new ButtonElement(
+                pos1,
+                pos2,
+                text,
+                Theme.TEXT_SIZE_LARGE,
+                Theme.BUTTON_DISABLED,
+                Theme.OUTLINE,
+                activationKey == null ? null: new KeyPress(
+                        activationKey,
+                        false,
+                        KeyAction.PRESS
+                ),
+                click
+        ), draw));
     }
 
     // ========== INPUT ========== 

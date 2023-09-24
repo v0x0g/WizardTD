@@ -17,13 +17,13 @@ import processing.core.*;
 public class ButtonElement extends ClickableElement {
 
     public final @NonNull UiAction<ButtonElement> click;
-    public                Colour                     fillColour;
-    public                Colour                     outlineColour;
+    public @NonNull Colour fillColour;
+    public @NonNull Colour outlineColour;
     /**
      * See {@link PApplet#rectMode(int)}
      */
-    public @NonNull       String                  text;
-    public                float                   fontSize;
+    public @NonNull String text;
+    public float fontSize;
 
     /**
      * See {@link PApplet#textAlign(int)}

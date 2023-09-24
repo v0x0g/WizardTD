@@ -16,11 +16,11 @@ import processing.core.*;
 @AllArgsConstructor
 public class DynamicWrapperElement<T extends UiElement>  extends UiElement{
     public final @NonNull T                             element;
-    public final @NonNull Action3<T, GameData, UiState> update;
+    public final @NonNull Action3<T, GameData, UiState> preRender;
 
     @Override
     public void render(@NonNull final PApplet app, @NonNull final GameData gameData, @NonNull final UiState uiState) {
-        this.update.invoke(this.element, gameData, uiState);
+        this.preRender.invoke(this.element, gameData, uiState);
         this.element.render(app, gameData, uiState);
     }
 }
