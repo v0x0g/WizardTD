@@ -17,7 +17,8 @@ import static org.tinylog.Logger.*;
 @ExtensionMethod(java.util.Arrays.class)
 public class EventManager {
 
-    private final @NonNull ConcurrentHashMap<@NonNull EventType, @NonNull Set<@NonNull EventMethod>> eventsMap = new ConcurrentHashMap<>();
+    private final @NonNull ConcurrentHashMap<@NonNull EventType, @NonNull Set<@NonNull EventMethod>> eventsMap =
+            new ConcurrentHashMap<>();
 
     /**
      * Gets the subscriber list for the given event type
@@ -36,10 +37,13 @@ public class EventManager {
         Loggers.EVENT.debug("start invoke event: {}", event);
         // Ensure we have the entry for corresponding event type
         final Set<@NonNull EventMethod> subscribers = subscriberList(event.eventType);
-        for (final EventMethod sub : subscribers) {
-            Loggers.EVENT.trace("invoking event: {} for {}", event, sub);
-            sub.processEvent(event);
-        }
+        subscribers
+                .stream()
+                .forEach(sub -> {
+                    Loggers.EVENT.trace("invoking event: {} for {}", event, sub);
+                    sub.processEvent(event);
+                });
+
         Loggers.EVENT.debug("done invoke event: {}", event);
     }
 
@@ -63,7 +67,10 @@ public class EventManager {
         info("init event manager");
         // If we wanted to restrict this slightly, we'd do `newClassGraph.acceptPackages("WizardTD")...`
         // But I don't care lol
-        try (final ScanResult scanResult = new ClassGraph().enableAllInfo().ignoreClassVisibility().ignoreMethodVisibility().scan()) {
+        try (final ScanResult scanResult = new ClassGraph().enableAllInfo()
+                                                           .ignoreClassVisibility()
+                                                           .ignoreMethodVisibility()
+                                                           .scan()) {
             // DO NOT UNCOMMENT THIS LINE
             // Last time I did it dumped 46MiB worth of JSON to stdout
             // and took 34 seconds to complete
@@ -113,7 +120,10 @@ public class EventManager {
                     })
                     // Map each method to a Key-Value pair of [the method instance] and [the @OnEvent attribute instance]
                     // This loads both the method's class and the attribute's class
-                    .map(meth -> new AbstractMap.SimpleImmutableEntry<>(meth.loadClassAndGetMethod(), (OnEvent) meth.getAnnotationInfo(OnEvent.class).loadClassAndInstantiate()))
+                    .map(meth -> new AbstractMap.SimpleImmutableEntry<>(meth.loadClassAndGetMethod(),
+                                                                        (OnEvent) meth.getAnnotationInfo(OnEvent.class)
+                                                                                      .loadClassAndInstantiate()
+                    ))
                     // Iterate over each event method we have
                     .forEach(pair -> {
 
@@ -126,9 +136,11 @@ public class EventManager {
                             public void processEvent(@NonNull final Event event) {
                                 try {
                                     method.invoke(null, event);
-                                } catch (final InvocationTargetException e) {
+                                }
+                                catch (final InvocationTargetException e) {
                                     warn(e, "exception when invoking event method {}", method);
-                                } catch (final IllegalAccessException e) {
+                                }
+                                catch (final IllegalAccessException e) {
                                     error(e, "couldn't invoke event method for {} (Illegal Access)", method);
                                 }
                             }
@@ -139,7 +151,9 @@ public class EventManager {
                         final Method meth = pair.getKey();
                         // Have to override Java's access rules, or we get IllegalAccessException on invoking
                         meth.setAccessible(true);
-                        events.eventTypes().stream().forEach(eventType -> EventManager.subscribe(eventType, new Helper(meth)));
+                        events.eventTypes()
+                              .stream()
+                              .forEach(eventType -> EventManager.subscribe(eventType, new Helper(meth)));
                     });
         }
         info("done init event manager");

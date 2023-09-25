@@ -13,13 +13,14 @@ import com.google.errorprone.annotations.*;
 import lombok.experimental.*;
 import lombok.*;
 import mikera.vectorz.*;
-import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.*;
 import org.tinylog.*;
 import processing.core.*;
 
 import java.text.*;
 import java.util.*;
+import java.util.stream.*;
 
 import static WizardTD.GameConfig.*;
 import static WizardTD.UI.Appearance.GuiConfig.*;
@@ -214,12 +215,13 @@ public class UiManager {
 
     /**
      * A helper method that adds sidebar buttons to the UI
-     * @param uiState Object containing the UI data
-     * @param buttonPos Vector position of the button on-screen, will be mutated
-     * @param text Text for the button
+     *
+     * @param uiState       Object containing the UI data
+     * @param buttonPos     Vector position of the button on-screen, will be mutated
+     * @param text          Text for the button
      * @param activationKey Key that activates the button
-     * @param click Function to run when the button is clicked/activated
-     * @param draw Function to be called every frame
+     * @param click         Function to run when the button is clicked/activated
+     * @param draw          Function to be called every frame
      */
     private static void addSidebarButton(
             final @NonNull UiState uiState, final @NonNull Vector2 buttonPos,
@@ -240,7 +242,7 @@ public class UiManager {
                 Theme.TEXT_SIZE_LARGE,
                 Theme.BUTTON_DISABLED,
                 Theme.OUTLINE,
-                activationKey == null ? null: new KeyPress(
+                activationKey == null ? null : new KeyPress(
                         activationKey,
                         false,
                         KeyAction.PRESS
@@ -264,42 +266,63 @@ public class UiManager {
                 tileY
         );
         Loggers.INPUT.debug("mouse event: {}; [{}, {}]: {}", press, tileX, tileY, tile);
+
+        getClickableElements(uiState.uiElements)
+                .forEach(elem -> {
+                    Loggers.INPUT.trace("elem {}", elem);
+                    if (press.coords.x >= elem.corner1.x && press.coords.y >= elem.corner1.y &&
+                        press.coords.x <= elem.corner2.x && press.coords.y <= elem.corner2.y) {
+                        Loggers.INPUT.debug("activate element {}", elem);
+                        elem.activate(gameData, uiState);
+                    }
+                });
+    }
+
+    public void keyEvent(
+            final @NonNull PApplet app, final @NonNull GameData gameData, final @NonNull UiState uiState,
+            final @NonNull KeyPress press) {
+        // Pass on any key-presses to the UI elements
+        Loggers.INPUT.debug("key event: {}", press);
+
+        getClickableElements(uiState.uiElements)
+                .forEach(elem -> {
+                    Loggers.INPUT.trace("elem {}", elem);
+                    if (press.equals(elem.activationKey)) {
+                        Loggers.INPUT.debug("activate element {}", elem);
+                        elem.activate(gameData, uiState);
+                    }
+                });
     }
 
     @SuppressWarnings("unchecked")
-    public void keyEvent(
-            final @NonNull PApplet app, final @NonNull GameData game, final @NonNull UiState state,
-            final @NonNull KeyPress press) {
-        // Pass on any key-presses to the UI elements
-
-        Loggers.INPUT.debug("key event: {}", press);
-
-        // SAFETY: This does use unchecked casting, however the objects are validated
-        // Apologies for the horrible code, but Java's type erasure makes this very
-        // difficult and awkward, and I don't think there's a better way to do it
-        // Would be much simpler with pattern matching
-        for (final UiElement elem : state.uiElements) {
-            final ClickableElement clickable;
-            // Try cast it to a clickable element type
-            if (elem instanceof ClickableElement) {
-                clickable = (ClickableElement) elem;
-            }
-            // Also see if it's a DynamicWrapperElement
-            else if ((elem instanceof DynamicWrapperElement) &&
-                     (((DynamicWrapperElement<UiElement>) elem).element instanceof ClickableElement)) {
-                clickable = (ClickableElement) ((DynamicWrapperElement<UiElement>) elem).element;
-            }
-            // Couldn't cast, skip it
-            else {
-                continue;
-            }
-
-            Loggers.INPUT.trace("elem {}", clickable);
-            if (press.equals(clickable.activationKey)) {
-                Loggers.INPUT.debug("activate element {}", clickable);
-                clickable.activate(game, state);
-            }
-        }
+    public static @NonNull Stream<ClickableElement> getClickableElements(
+            final @NonNull Collection<UiElement> uiElements) {
+        /*
+         SAFETY: This does use unchecked casting, however the objects are validated
+         Apologies for the horrible code, but Java's type erasure makes this very
+         difficult and awkward, and I don't think there's a better way to do it
+         Would be much simpler with pattern matching
+        
+         TLDR:
+         Java sucks donkey testicles harder than a vacuum cleaner
+        */
+        return uiElements.stream()
+                         .map(elem -> {
+                             // Try cast it to a clickable element type
+                             if (elem instanceof ClickableElement) {
+                                 return (ClickableElement) elem;
+                             }
+                             // Also see if it's a DynamicWrapperElement
+                             else if ((elem instanceof DynamicWrapperElement) &&
+                                      (((DynamicWrapperElement<UiElement>) elem).element instanceof ClickableElement)) {
+                                 return (ClickableElement) ((DynamicWrapperElement<UiElement>) elem).element;
+                             }
+                             // Couldn't cast, skip it
+                             else {
+                                 return null;
+                             }
+                         })
+                         .filter(Objects::nonNull);
     }
 
     public void updateUi(final @NonNull PApplet app, final @NonNull GameData game, final @NonNull UiState state) {

@@ -126,7 +126,7 @@ public final class App extends PApplet {
         }
         UiManager.mouseEvent(
                 this, gameData, uiState,
-                new MousePress(new Vector2(mouseX, mouseY), mouseCode, evt.getCount(), mouseAction)
+                new MousePress(new Vector2(evt.getX(), evt.getY()), mouseCode, evt.getCount(), mouseAction)
         );
     }
 
