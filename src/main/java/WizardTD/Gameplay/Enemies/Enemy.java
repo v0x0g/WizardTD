@@ -17,7 +17,7 @@ public abstract class Enemy extends Renderable {
     /**
      * How much health the enemy has remaining
      */
-    public long health;
+    public double health;
 
     /**
      * Where the enemy is on the map
@@ -37,7 +37,7 @@ public abstract class Enemy extends Renderable {
     /**
      * How much mana the wizard will gain upon killing this enemy
      */
-    public long manaGainedOnKill;
+    public double manaGainedOnKill;
 
     @Override
     public @NonNull RenderOrder getRenderOrder() {
@@ -45,7 +45,7 @@ public abstract class Enemy extends Renderable {
     }
 
     @Override
-    public void render(@NonNull final PApplet app, @NonNull GameData gameData, @NonNull UiState uiState) {
+    public void render(@NonNull final PApplet app, @NonNull final GameData gameData, @NonNull final UiState uiState) {
         throw new NotImplementedException();
     }
 }

@@ -29,8 +29,9 @@ public class ImageExt {
         final int newWidth = (int) Math.floor(w * cos + h * sin);
         final int newHeight = (int) Math.floor(h * cos + w * sin);
 
-        final PImage result = applet.createImage(newWidth, newHeight, PApplet.RGB);
-        //BufferedImage rotated = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+        final PImage result = applet.createImage(newWidth, newHeight, PConstants.RGB);
+        //TODO: Maybe we can use BufferedImage directly and avoid having to reference PApplet
+//        BufferedImage rotated = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
         final BufferedImage rotated = (BufferedImage) result.getNative();
         final Graphics2D g2d = rotated.createGraphics();
         final AffineTransform at = new AffineTransform();

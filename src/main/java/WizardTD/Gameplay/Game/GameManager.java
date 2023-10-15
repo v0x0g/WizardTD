@@ -1,13 +1,16 @@
 package WizardTD.Gameplay.Game;
 
+import WizardTD.Gameplay.Enemies.*;
+import WizardTD.Gameplay.Spawners.*;
 import WizardTD.Gameplay.Tiles.*;
 import lombok.experimental.*;
+import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import processing.data.*;
 
 import java.io.*;
-import java.nio.file.Path;
+import java.math.*;
 import java.nio.file.*;
 import java.util.*;
 import java.util.stream.*;
@@ -33,7 +36,8 @@ public class GameManager {
             trace("reading config file");
             dataStr = new String(Files.readAllBytes(path));
             trace("config file read: contents are \"{}\"", dataStr);
-        } catch (final IOException e) {
+        }
+        catch (final IOException e) {
             debug(e, "error reading config file");
             return empty();
         }
@@ -41,7 +45,8 @@ public class GameManager {
             final JSONObject data = JSONObject.parse(dataStr);
             trace("parsed config: {}", data);
             return Optional.of(data);
-        } catch (final RuntimeException e) {
+        }
+        catch (final RuntimeException e) {
             debug(e, "error parsing config");
             return empty();
         }
@@ -49,7 +54,7 @@ public class GameManager {
 
     @NonNull
     @SideEffectFree
-    private Optional<@NonNull List<@NonNull String>> loadLevelLayout(@NonNull final String fileName) {
+    private Optional<@NonNull List<@NonNull String>> loadLevelLayoutFile(@NonNull final String fileName) {
         debug("loading level layout");
         final Path path = Paths.get(fileName);
         trace("level layout path={}", path);
@@ -59,11 +64,16 @@ public class GameManager {
             dataStr = Files.readAllLines(path);
             trace(
                     "layout file read: contents are \n\"\n{}\n\"",
-                    String.join("\n", (Iterable<String>) dataStr.stream().map((s) -> "'" + s + "'")::iterator)
+                    String.join(
+                            "\n",
+                            (Iterable<String>) dataStr.stream()
+                                                      .map((s) -> "'" + s + "'")::iterator
+                    )
             );
 
             return Optional.of(dataStr);
-        } catch (final IOException e) {
+        }
+        catch (final IOException e) {
             debug(e, "error reading layout file");
             return empty();
         }
@@ -112,7 +122,8 @@ public class GameManager {
                     ))
             );
             trace("level config={}", gameDataConfig);
-        } catch (final RuntimeException e) {
+        }
+        catch (final RuntimeException e) {
             debug(e, "can't load level: failed parsing config json: (simple values)");
             return empty();
         }
@@ -121,7 +132,7 @@ public class GameManager {
         try {
             final String layoutFileName = conf.getString("layout");
             trace("level layout file at {}", layoutFileName);
-            final Optional<List<String>> maybeLayoutData = loadLevelLayout(layoutFileName);
+            final Optional<List<String>> maybeLayoutData = loadLevelLayoutFile(layoutFileName);
             if (!maybeLayoutData.isPresent()) {
                 debug("can't load level: couldn't load layout");
                 return empty();
@@ -170,52 +181,103 @@ public class GameManager {
                     board.setTile(row, col, tile);
                 }
             }
-        } catch (final Exception e) {
+        }
+        catch (final Exception e) {
             debug("can't load level: failed parsing config json (layout)");
             return empty();
         }
 
-//        // Parse waves separately since they're complicated
-//        try {
-//            // TODO: Waves
-//            // TODO: Refactor this shitty code
-//            JSONArray jWaves = conf.getJSONArray("waves");
-//            // Iter all waves and map to Wave objects
-//            JsonArrayToStream(jWaves)
-//                    .map((j) -> {
-//                        trace("wave: {}", j);
-//                        return new Wave(
-//                                j.getDouble("duration"),
-//                                j.getDouble("pre_wave_pause"),
-//                                JsonArrayToStream(j.getJSONArray("monster"))
-//                                        .map((m) -> {
-//                                            trace("\tmonster: {}", m);
-//                                            long qty = m.getLong("quantity");
-//                                            double hp = m.getDouble("hp");
-//                                            double manaPerKill = m.getDouble("mana_gained_on_kill");
-//                                            double speed = m.getDouble("speed");
-//                                            double dmgMult = m.getDouble("armour");
-//                                            // TODO: Refactor to abstract static method to parse from json?
-//                                            return switch (m.getString("type")){
-//                                                case "gremlin" -> BasicEnemyFactory.;
-//                                                case "beetle" -> new BeetleEnemy();
-//                                                case "worm" -> new WormEnemy();
-//                                            };
-//                                        })
-//                        );
-//                    })
-//        } catch (RuntimeException e) {
-//            debug(e, "can't load game: failed parsing config json (waves)");
-//            return empty();
-//        }
+        Parse waves separately since they 're complicated
+        final List<Wave> waves;
+        try {
+            // TODO: Waves
+            // TODO: Refactor this shitty code
+            final JSONArray jWaves = conf.getJSONArray("waves");
+            // Iter all waves and map to Wave objects
+            waves = jsonArrayToStream(jWaves)
+                    .map((j) -> {
+                        trace("wave: {}", j);
+                        return new Wave(
+                                j.getDouble("duration"),
+                                j.getDouble("pre_wave_pause"),
+                                jsonArrayToStream(j.getJSONArray("monster"))
+                                        .map((m) -> {
+                                            trace("\tmonster: {}", m);
+                                            final long qty = m.getLong("quantity", 0);
+                                            final BigInteger qty_big = qty <= 0 ? null : BigInteger.valueOf(qty);
+                                            final double hp = m.getDouble("hp");
+                                            final double manaPerKill = m.getDouble("mana_gained_on_kill");
+                                            final double speed = m.getDouble("speed");
+                                            final double dmgMult = m.getDouble("armour");
+                                            // TODO: Refactor to abstract static method to parse from json?
+                                            switch (m.getString("type")) {
+                                                case "gremlin":
+                                                    return new BasicEnemyFactory<GremlinEnemy>(
+                                                            hp,
+                                                            speed,
+                                                            dmgMult,
+                                                            manaPerKill,
+                                                            qty_big,
+                                                            (fact) -> new GremlinEnemy(
+                                                                    fact.health,
+                                                                    new Vector2(0, 0),
+                                                                    fact.speed,
+                                                                    fact.damageMultiplier,
+                                                                    fact.manaGainedOnKill
+                                                            )
+                                                    );
+                                                case "worm":
+                                                    return new BasicEnemyFactory<WormEnemy>(
+                                                            hp,
+                                                            speed,
+                                                            dmgMult,
+                                                            manaPerKill,
+                                                            qty_big,
+                                                            (fact) -> new WormEnemy(
+                                                                    fact.health,
+                                                                    new Vector2(0, 0),
+                                                                    fact.speed,
+                                                                    fact.damageMultiplier,
+                                                                    fact.manaGainedOnKill
+                                                            )
+                                                    );
+                                                case "beetle":
+                                                    return new BasicEnemyFactory<BeetleEnemy>(
+                                                            hp,
+                                                            speed,
+                                                            dmgMult,
+                                                            manaPerKill,
+                                                            qty_big,
+                                                            (fact) -> new BeetleEnemy(
+                                                                    fact.health,
+                                                                    new Vector2(0, 0),
+                                                                    fact.speed,
+                                                                    fact.damageMultiplier,
+                                                                    fact.manaGainedOnKill
+                                                            )
+                                                    );
+                                                default:
+                                                    throw new IllegalArgumentException();
+                                            }
+                                        })
+                                        .collect(Collectors.<EnemyFactory<?>>toList())
+                        );
+                    })
+                    .collect(Collectors.toList());
+        }
+        catch (final RuntimeException e) {
+            debug(e, "can't load game: failed parsing config json (waves)");
+            return empty();
+        }
 
         debug("got level descriptor");
         return Optional.of(new GameDescriptor("Test Name", board, gameDataConfig, new ArrayList<>() //TODO: waves
         ));
     }
 
-    @NonNull Stream<JSONObject> JsonArrayToStream(final JSONArray arr) {
-        return IntStream.range(0, arr.size()).mapToObj(arr::getJSONObject);
+    @NonNull Stream<JSONObject> jsonArrayToStream(final JSONArray arr) {
+        return IntStream.range(0, arr.size())
+                        .mapToObj(arr::getJSONObject);
     }
 
 }

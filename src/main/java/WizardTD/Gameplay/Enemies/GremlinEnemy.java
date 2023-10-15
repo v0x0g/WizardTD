@@ -9,7 +9,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class GremlinEnemy extends Enemy {
 
-    public GremlinEnemy(final long health, @NonNull final Vector2 position, final double speed, final double damageMultiplier, final long manaGainedOnKill) {
+    public GremlinEnemy(final double health, @NonNull final Vector2 position, final double speed, final double damageMultiplier, final double manaGainedOnKill) {
         super(health, position, speed, damageMultiplier, manaGainedOnKill);
     }
 

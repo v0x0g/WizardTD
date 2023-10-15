@@ -8,7 +8,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 @EqualsAndHashCode(callSuper = false)
 public class WormEnemy extends Enemy {
 
-    public WormEnemy(final long health, @NonNull final Vector2 position, final double speed, final double damageMultiplier, final long manaGainedOnKill) {
+    public WormEnemy(final double health, @NonNull final Vector2 position, final double speed, final double damageMultiplier, final double manaGainedOnKill) {
         super(health, position, speed, damageMultiplier, manaGainedOnKill);
     }
 

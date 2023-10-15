@@ -8,10 +8,9 @@ import WizardTD.Input.*;
 import WizardTD.Rendering.*;
 import WizardTD.UI.Appearance.*;
 import WizardTD.UI.*;
-import lombok.*;
 import lombok.experimental.*;
 import mikera.vectorz.*;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.*;
 import org.tinylog.*;
 import processing.core.*;
 import processing.event.*;
@@ -135,7 +134,6 @@ public final class App extends PApplet {
     /**
      * Draw all elements in the game by current frame.
      */
-    @SneakyThrows
     @Override
     public void draw() {
         Loggers.RENDER.debug("enter draw");
