@@ -42,6 +42,28 @@
           "quantity": 25
         }
       ]
+    },
+    {
+      "duration": 25,
+      "pre_wave_pause": 0,
+      "monsters": [
+        {
+          "type": "worm",
+          "hp": 1,
+          "speed": 1.0,
+          "armour": 0.7,
+          "mana_gained_on_kill": 70,
+          "quantity": 20
+        },
+        {
+          "type": "beetle",
+          "hp": 150,
+          "speed": 1.0,
+          "armour": 0.7,
+          "mana_gained_on_kill": 70,
+          "quantity": 5
+        }
+      ]
     }
   ],
   "initial_tower_range": 96,

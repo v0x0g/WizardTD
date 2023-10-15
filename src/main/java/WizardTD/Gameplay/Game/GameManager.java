@@ -187,7 +187,7 @@ public class GameManager {
             return empty();
         }
 
-        Parse waves separately since they 're complicated
+        // Parse waves separately since they 're complicated
         final List<Wave> waves;
         try {
             // TODO: Waves
@@ -197,70 +197,80 @@ public class GameManager {
             waves = jsonArrayToStream(jWaves)
                     .map((j) -> {
                         trace("wave: {}", j);
+                        final double duration = j.getDouble("duration");
+                        final double preWavePause = j.getDouble("pre_wave_pause");
+
+                        final List<EnemyFactory<?>> factories = jsonArrayToStream(j.getJSONArray("monsters"))
+                                .map((m) -> {
+                                    trace("\tmonster: {}", m);
+                                    final long qty = m.getLong("quantity", 0);
+                                    final BigInteger qty_big = qty <= 0 ? null : BigInteger.valueOf(qty);
+                                    final double hp = m.getDouble("hp");
+                                    final double manaPerKill = m.getDouble("mana_gained_on_kill");
+                                    final double speed = m.getDouble("speed");
+                                    final double dmgMult = m.getDouble("armour");
+                                    // TODO: Refactor to abstract static method to parse from json?
+                                    switch (m.getString("type")) {
+                                        case "gremlin":
+                                            return new EnemyFactory<GremlinEnemy>(
+                                                    hp,
+                                                    speed,
+                                                    dmgMult,
+                                                    manaPerKill,
+                                                    qty_big,
+                                                    (fact) -> new GremlinEnemy(
+                                                            fact.health,
+                                                            new Vector2(0, 0),
+                                                            fact.speed,
+                                                            fact.damageMultiplier,
+                                                            fact.manaGainedOnKill
+                                                    )
+                                            );
+                                        case "worm":
+                                            return new EnemyFactory<WormEnemy>(
+                                                    hp,
+                                                    speed,
+                                                    dmgMult,
+                                                    manaPerKill,
+                                                    qty_big,
+                                                    (fact) -> new WormEnemy(
+                                                            fact.health,
+                                                            new Vector2(0, 0),
+                                                            fact.speed,
+                                                            fact.damageMultiplier,
+                                                            fact.manaGainedOnKill
+                                                    )
+                                            );
+                                        case "beetle":
+                                            return new EnemyFactory<BeetleEnemy>(
+                                                    hp,
+                                                    speed,
+                                                    dmgMult,
+                                                    manaPerKill,
+                                                    qty_big,
+                                                    (fact) -> new BeetleEnemy(
+                                                            fact.health,
+                                                            new Vector2(0, 0),
+                                                            fact.speed,
+                                                            fact.damageMultiplier,
+                                                            fact.manaGainedOnKill
+                                                    )
+                                            );
+                                        default:
+                                            throw new IllegalArgumentException();
+                                    }
+                                })
+                                .collect(Collectors.<EnemyFactory<?>>toList());
+                        final BigInteger totalQuantity =
+                                factories.stream()
+                                         .map((list) -> list.maxQuantity == null ? BigInteger.ZERO : list.maxQuantity)
+                                         .reduce(BigInteger.valueOf(0), BigInteger::add);
+
                         return new Wave(
-                                j.getDouble("duration"),
-                                j.getDouble("pre_wave_pause"),
-                                jsonArrayToStream(j.getJSONArray("monster"))
-                                        .map((m) -> {
-                                            trace("\tmonster: {}", m);
-                                            final long qty = m.getLong("quantity", 0);
-                                            final BigInteger qty_big = qty <= 0 ? null : BigInteger.valueOf(qty);
-                                            final double hp = m.getDouble("hp");
-                                            final double manaPerKill = m.getDouble("mana_gained_on_kill");
-                                            final double speed = m.getDouble("speed");
-                                            final double dmgMult = m.getDouble("armour");
-                                            // TODO: Refactor to abstract static method to parse from json?
-                                            switch (m.getString("type")) {
-                                                case "gremlin":
-                                                    return new BasicEnemyFactory<GremlinEnemy>(
-                                                            hp,
-                                                            speed,
-                                                            dmgMult,
-                                                            manaPerKill,
-                                                            qty_big,
-                                                            (fact) -> new GremlinEnemy(
-                                                                    fact.health,
-                                                                    new Vector2(0, 0),
-                                                                    fact.speed,
-                                                                    fact.damageMultiplier,
-                                                                    fact.manaGainedOnKill
-                                                            )
-                                                    );
-                                                case "worm":
-                                                    return new BasicEnemyFactory<WormEnemy>(
-                                                            hp,
-                                                            speed,
-                                                            dmgMult,
-                                                            manaPerKill,
-                                                            qty_big,
-                                                            (fact) -> new WormEnemy(
-                                                                    fact.health,
-                                                                    new Vector2(0, 0),
-                                                                    fact.speed,
-                                                                    fact.damageMultiplier,
-                                                                    fact.manaGainedOnKill
-                                                            )
-                                                    );
-                                                case "beetle":
-                                                    return new BasicEnemyFactory<BeetleEnemy>(
-                                                            hp,
-                                                            speed,
-                                                            dmgMult,
-                                                            manaPerKill,
-                                                            qty_big,
-                                                            (fact) -> new BeetleEnemy(
-                                                                    fact.health,
-                                                                    new Vector2(0, 0),
-                                                                    fact.speed,
-                                                                    fact.damageMultiplier,
-                                                                    fact.manaGainedOnKill
-                                                            )
-                                                    );
-                                                default:
-                                                    throw new IllegalArgumentException();
-                                            }
-                                        })
-                                        .collect(Collectors.<EnemyFactory<?>>toList())
+                                duration,
+                                preWavePause,
+                                totalQuantity.doubleValue() / duration,
+                                factories
                         );
                     })
                     .collect(Collectors.toList());
@@ -271,7 +281,7 @@ public class GameManager {
         }
 
         debug("got level descriptor");
-        return Optional.of(new GameDescriptor("Test Name", board, gameDataConfig, new ArrayList<>() //TODO: waves
+        return Optional.of(new GameDescriptor("Test Name", board, gameDataConfig, waves //TODO: waves
         ));
     }
 

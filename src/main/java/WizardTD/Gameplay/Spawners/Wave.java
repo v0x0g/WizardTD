@@ -36,11 +36,11 @@ public final class Wave {
     private double timer = 0;
 
     public Wave(
-            final double duration, final double delayBeforeWave, // final double spawnRateMult,
+            final double duration, final double delayBeforeWave, final double spawnRateMult,
             @NonNull final List<@NonNull EnemyFactory<?>> enemyFactories) {
         this.duration = duration;
         this.delayBeforeWave = delayBeforeWave;
-        this.spawnRateMult = 1.0 / duration;
+        this.spawnRateMult = spawnRateMult;
         this.enemyFactories = enemyFactories;
     }
     

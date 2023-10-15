@@ -1,9 +1,12 @@
 package WizardTD.Gameplay.Spawners;
 
+import WizardTD.Delegates.*;
 import WizardTD.Gameplay.Enemies.*;
 import lombok.*;
 import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.math.*;
 import java.util.*;
 
 /**
@@ -12,15 +15,46 @@ import java.util.*;
  * @param <TEnemy>
  */
 @ToString
-public abstract class EnemyFactory<TEnemy extends Enemy> {
+@RequiredArgsConstructor
+@EqualsAndHashCode
+public class EnemyFactory<TEnemy extends Enemy> {
     /**
-     * Spawns a new enemy of the given type
-     *
-     * @return Returns the new enemy.
-     * 
-     * @throws java.util.NoSuchElementException
-     * If the factory has no more enemies to spawn (e.g. reached the end of the wave),
-     * you should throw a NoSuchElementException to indicate this.
+     * How much health the enemy has remaining
      */
-    public abstract @Nullable TEnemy spawnEnemy() throws NoSuchElementException;
+    public final double health;
+
+    /**
+     * How many units (tiles) per frame the monster moves
+     */
+    public final double speed;
+
+    /**
+     * Multiplier on how much damage the enemy takes
+     */
+    public final double damageMultiplier;
+
+    /**
+     * How much mana the wizard will gain upon killing this enemy
+     */
+    public final double manaGainedOnKill;
+
+    /// Maximum number of enemies that can be spawned by this factory.
+    /// If @c null then there is no cap on the enemies
+    public final @Nullable BigInteger maxQuantity;
+
+    /// How many enemies have been spawned so far
+    private @NonNull BigInteger quantitySpawned = BigInteger.valueOf(0L);
+
+    public final @NonNull Func1<TEnemy, EnemyFactory<TEnemy>> spawn;
+
+    @Nullable
+    public TEnemy spawnEnemy() {
+        // Spawn cap
+        if (maxQuantity != null && maxQuantity.compareTo(quantitySpawned) < 0) {
+            throw new NoSuchElementException("spawn cap reached");
+        }
+        quantitySpawned = quantitySpawned.add(BigInteger.valueOf(1));
+        // Delegate to function
+        return spawn.invoke(this);
+    }
 }
