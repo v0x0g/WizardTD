@@ -1,6 +1,7 @@
 package WizardTD.Gameplay.Game;
 
 import WizardTD.Gameplay.Enemies.*;
+import WizardTD.Gameplay.Projectiles.*;
 import WizardTD.Gameplay.Spawners.*;
 import WizardTD.Gameplay.Tiles.*;
 import lombok.experimental.*;
@@ -15,6 +16,7 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.stream.*;
 
+import static WizardTD.Ext.JsonExt.*;
 import static WizardTD.GameConfig.*;
 import static java.util.Optional.*;
 import static org.tinylog.Logger.*;
@@ -25,6 +27,9 @@ import static org.tinylog.Logger.*;
 @UtilityClass
 public class GameManager {
 
+    /**
+     * Loads the game config from disk, and returns it as a JSON object
+     */
     @NonNull
     @SideEffectFree
     private Optional<JSONObject> loadGameConfig() {
@@ -52,6 +57,9 @@ public class GameManager {
         }
     }
 
+    /**
+     * Loads the given level layout file from disk
+     */
     @NonNull
     @SideEffectFree
     private Optional<@NonNull List<@NonNull String>> loadLevelLayoutFile(@NonNull final String fileName) {
@@ -66,8 +74,9 @@ public class GameManager {
                     "layout file read: contents are \n\"\n{}\n\"",
                     String.join(
                             "\n",
-                            (Iterable<String>) dataStr.stream()
-                                                      .map((s) -> "'" + s + "'")::iterator
+                            (Iterable<String>) dataStr
+                                    .stream()
+                                    .map((s) -> "'" + s + "'")::iterator
                     )
             );
 
@@ -190,7 +199,6 @@ public class GameManager {
         // Parse waves separately since they 're complicated
         final List<Wave> waves;
         try {
-            // TODO: Waves
             // TODO: Refactor this shitty code
             final JSONArray jWaves = conf.getJSONArray("waves");
             // Iter all waves and map to Wave objects
@@ -200,15 +208,25 @@ public class GameManager {
                         final double duration = j.getDouble("duration");
                         final double preWavePause = j.getDouble("pre_wave_pause");
 
-                        final List<EnemyFactory<?>> factories = jsonArrayToStream(j.getJSONArray("monsters"))
+                        final List<EnemyFactory<?>> factories = jsonArrayToStream(j.getJSONArray(
+                                "monsters"))
                                 .map((m) -> {
                                     trace("\tmonster: {}", m);
-                                    final long qty = m.getLong("quantity", 0);
-                                    final BigInteger qty_big = qty <= 0 ? null : BigInteger.valueOf(qty);
+                                    final long qty = m.getLong(
+                                            "quantity",
+                                            0
+                                    );
+                                    final BigInteger qty_big = qty <=
+                                                               0 ? null : BigInteger.valueOf(
+                                            qty);
                                     final double hp = m.getDouble("hp");
-                                    final double manaPerKill = m.getDouble("mana_gained_on_kill");
-                                    final double speed = m.getDouble("speed");
-                                    final double dmgMult = m.getDouble("armour");
+                                    final double manaPerKill =
+                                            m.getDouble(
+                                                    "mana_gained_on_kill");
+                                    final double speed = m.getDouble(
+                                            "speed");
+                                    final double dmgMult = m.getDouble(
+                                            "armour");
                                     // TODO: Refactor to abstract static method to parse from json?
                                     switch (m.getString("type")) {
                                         case "gremlin":
@@ -220,7 +238,10 @@ public class GameManager {
                                                     qty_big,
                                                     (fact) -> new GremlinEnemy(
                                                             fact.health,
-                                                            new Vector2(0, 0),
+                                                            new Vector2(
+                                                                    0,
+                                                                    0
+                                                            ),
                                                             fact.speed,
                                                             fact.damageMultiplier,
                                                             fact.manaGainedOnKill
@@ -235,7 +256,10 @@ public class GameManager {
                                                     qty_big,
                                                     (fact) -> new WormEnemy(
                                                             fact.health,
-                                                            new Vector2(0, 0),
+                                                            new Vector2(
+                                                                    0,
+                                                                    0
+                                                            ),
                                                             fact.speed,
                                                             fact.damageMultiplier,
                                                             fact.manaGainedOnKill
@@ -250,7 +274,10 @@ public class GameManager {
                                                     qty_big,
                                                     (fact) -> new BeetleEnemy(
                                                             fact.health,
-                                                            new Vector2(0, 0),
+                                                            new Vector2(
+                                                                    0,
+                                                                    0
+                                                            ),
                                                             fact.speed,
                                                             fact.damageMultiplier,
                                                             fact.manaGainedOnKill
@@ -262,9 +289,11 @@ public class GameManager {
                                 })
                                 .collect(Collectors.<EnemyFactory<?>>toList());
                         final BigInteger totalQuantity =
-                                factories.stream()
-                                         .map((list) -> list.maxQuantity == null ? BigInteger.ZERO : list.maxQuantity)
-                                         .reduce(BigInteger.valueOf(0), BigInteger::add);
+                                factories
+                                        .stream()
+                                        .map((list) -> list.maxQuantity ==
+                                                       null ? BigInteger.ZERO : list.maxQuantity)
+                                        .reduce(BigInteger.valueOf(0), BigInteger::add);
 
                         return new Wave(
                                 duration,
@@ -284,10 +313,38 @@ public class GameManager {
         return Optional.of(new GameDescriptor("Test Name", board, gameDataConfig, waves //TODO: waves
         ));
     }
+    
+    public static @Nullable GameData createGame(@NonNull final GameDescriptor desc) {
+        trace("creating game from level desc: {}", desc);
 
-    @NonNull Stream<JSONObject> jsonArrayToStream(final JSONArray arr) {
-        return IntStream.range(0, arr.size())
-                        .mapToObj(arr::getJSONObject);
+        final Board board = desc.board;
+        final List<Enemy> enemies = new ArrayList<>();
+        final List<Wave> waves = desc.waves;
+        final List<Projectile> projectiles = new ArrayList<>();
+        
+        trace("locating wizard's house");
+        WizardHouseTile fourPrivetDrive = null;
+        for (int row = 0; row < BOARD_SIZE_TILES; row++) {
+            for (int col = 0; col < BOARD_SIZE_TILES; col++) {
+                final Tile tile = desc.board.getTile(row, col);
+                if (tile instanceof WizardHousePlaceholderTile) {
+                    if (null != fourPrivetDrive) warn("only one wizard allowed");
+                    else trace("You're a WizardHouseTile Harry!\nI'm a WHAT?\nA \033[095m{}\033[000m", tile);
+                    fourPrivetDrive = new WizardHouseTile();
+                    desc.board.setTile(row, col, fourPrivetDrive); // Update the board entry to remove placeholder
+                    fourPrivetDrive.mana = desc.config.mana.initialManaValue;
+                    fourPrivetDrive.manaCap = desc.config.mana.initialManaCap;
+                    fourPrivetDrive.manaTrickle = desc.config.mana.initialManaTrickle;
+                }
+            }
+        }
+        if (fourPrivetDrive == null) {
+            warn("expected a wizard but didn't find house");
+            return null;
+        }
+
+        error("TODO: Waves");
+        return new GameData(board, enemies, projectiles, waves, fourPrivetDrive, desc.config);
     }
 
 }

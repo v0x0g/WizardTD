@@ -10,6 +10,9 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.*;
 import processing.core.*;
 
+// TODO: The WizardHouse should not hold the mana information
+//  That should go directly inside the GameData class
+
 @ToString
 @EqualsAndHashCode(callSuper = true)
 public final class WizardHouseTile extends Tile {

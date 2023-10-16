@@ -12,6 +12,9 @@ import java.util.*;
 import static WizardTD.GameConfig.*;
 import static org.tinylog.Logger.*;
 
+/**
+ * Data class that contains all the game state
+ */
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor
@@ -27,37 +30,5 @@ public final class GameData {
     public @NonNull WizardHouseTile wizardHouse;
 
     public @NonNull GameDataConfig config;
-
-    public static @NonNull Optional<GameData> fromGameDescriptor(@NonNull final GameDescriptor desc) {
-        trace("creating game from level desc: {}", desc);
-
-        final Board board = desc.board;
-        final List<Enemy> enemies = new ArrayList<>();
-        final List<Wave> waves = new ArrayList<>();
-
-        trace("locating wizard's house");
-        WizardHouseTile fourPrivetDrive = null;
-        for (int row = 0; row < BOARD_SIZE_TILES; row++) {
-            for (int col = 0; col < BOARD_SIZE_TILES; col++) {
-                final Tile tile = desc.board.getTile(row, col);
-                if (tile instanceof WizardHousePlaceholderTile) {
-                    if (null != fourPrivetDrive) warn("only one wizard allowed");
-                    else trace("You're a WizardHouseTile Harry!\nI'm a WHAT?\nA \033[095m{}\033[000m", tile);
-                    fourPrivetDrive = new WizardHouseTile();
-                    desc.board.setTile(row, col, fourPrivetDrive); // Update the board entry to remove placeholder
-                    fourPrivetDrive.mana = desc.config.mana.initialManaValue;
-                    fourPrivetDrive.manaCap = desc.config.mana.initialManaCap;
-                    fourPrivetDrive.manaTrickle = desc.config.mana.initialManaTrickle;
-                }
-            }
-        }
-        if (fourPrivetDrive == null) {
-            warn("expected a wizard but didn't find house");
-            return Optional.empty();
-        }
-
-        error("TODO: Waves");
-        return Optional.of(new GameData(board, enemies, new ArrayList<>(), waves, fourPrivetDrive, desc.config));
-    }
 
 }
