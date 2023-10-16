@@ -48,7 +48,7 @@ public class GremlinEnemy extends Enemy {
 
     @Override
     public void render(final PApplet app, final GameData gameData, final UiState uiState) {
-        Renderer.renderSimpleTile(app, entityImage, this.position);
+        Renderer.renderSimpleEnemy(app, entityImage, this.position);
     }
 
 }

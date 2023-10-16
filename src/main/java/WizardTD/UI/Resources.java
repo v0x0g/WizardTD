@@ -43,12 +43,12 @@ public class Resources {
         public static final String DIR = Resources.BASE_DIR + "/Enemies";
         @UtilityClass
         public static class Beetle {
-            public static final String DIR = Tiles.DIR + "/Beetle";
+            public static final String DIR = Enemies.DIR + "/Beetle";
             public static final String ONLY_TILE = DIR + "/beetle.png";
         }
         @UtilityClass
         public static class Gremlin {
-            public static final String DIR = Tiles.DIR + "/Path";
+            public static final String DIR = Enemies.DIR + "/Gremlin";
             public static final String NORMAL = DIR + "/gremlin.png";
             public static final String DYING_1 = DIR + "/gremlin1.png";
             public static final String DYING_2 = DIR + "/gremlin2.png";
@@ -58,7 +58,7 @@ public class Resources {
         }
         @UtilityClass
         public static class Worm {
-            public static final String DIR = Tiles.DIR + "/Worm";
+            public static final String DIR = Enemies.DIR + "/Worm";
             public static final String ONLY_TILE = DIR + "/worm.png";
         }
     }

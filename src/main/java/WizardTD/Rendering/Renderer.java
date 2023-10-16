@@ -95,17 +95,18 @@ public class Renderer {
      * Renders a simple tile image at the given tile coordinates
      * 
      * @param img Image to render for the entity
-     * @param centre Position of the entity, in tile coordinates
+     * @param pos Position of the entity, in tile coordinates
      */
     public void renderSimpleEnemy(
-            final PApplet app, @Nullable PImage img, final Vector2 centre) {
-        Loggers.RENDER.trace("entity ({0}, {0): render img {}", centre.x, centre.y, img);
+            final PApplet app, @Nullable PImage img, final Vector2 pos) {
+        Loggers.RENDER.trace("entity ({0}, {0): render img {}", pos.x, pos.y, img);
         if (!ImageExt.isValidImage(img)) {
             img = missingTextureImage;
-            Loggers.RENDER.debug("entity ({0}, {0): missing texture", centre.x, centre.y);
+            Loggers.RENDER.debug("entity ({0}, {0): missing texture", pos.x, pos.y);
         }
         app.imageMode(PConstants.CENTER);
         app.colorMode(PConstants.ARGB);
-        app.image(img, (float) centre.x, (float) centre.y);
+        final Vector2 pixelPos = UiManager.tileToPixelCoords(pos);
+        app.image(img, (float) pixelPos.x, (float) pixelPos.y);
     }
 }

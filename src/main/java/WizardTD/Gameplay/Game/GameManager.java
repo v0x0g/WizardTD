@@ -374,7 +374,7 @@ public class GameManager {
             while (null != (enemy = wave.getEnemy())){
                 game.enemies.add(enemy);
                 final ThreadLocalRandom rng = ThreadLocalRandom.current();
-                enemy.position = new Vector2(rng.nextDouble(BOARD_SIZE_TILES),rng.nextDouble(BOARD_SIZE_TILES));
+                enemy.position = new Vector2(rng.nextDouble(BOARD_SIZE_TILES), rng.nextDouble(BOARD_SIZE_TILES));
             }
             
             break;

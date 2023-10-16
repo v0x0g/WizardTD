@@ -13,7 +13,6 @@ import com.google.errorprone.annotations.*;
 import lombok.experimental.*;
 import lombok.*;
 import mikera.vectorz.*;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.*;
 import org.tinylog.*;
 import processing.core.*;
@@ -48,8 +47,8 @@ public class UiManager {
     }
 
     public Optional<Tile> pixelCoordsToTile(
-            final Vector2 coords, final GameData gameData, final Ref<Integer> outX,
-            final Ref<Integer> outY) {
+            final Vector2 coords, final GameData gameData, 
+            final Ref<Integer> outX, final Ref<Integer> outY) {
         // Use inverse lerp to extract the tile coordinates from the mouse pos
         final double x = Numerics.inverseLerp(coords.x, BOARD_POS_X, BOARD_POS_X + (CELL_SIZE_PX * BOARD_SIZE_TILES));
         final double y = Numerics.inverseLerp(coords.y, BOARD_POS_Y, BOARD_POS_Y + (CELL_SIZE_PX * BOARD_SIZE_TILES));
@@ -65,9 +64,16 @@ public class UiManager {
     }
 
     public Vector2 tileToPixelCoords(final Tile tile) {
+        return tileToPixelCoords(new Vector2(tile.getPosX(), tile.getPosY()));
+    }
+
+    /**
+     * Converts a tile coordinate to pixel coordinates
+     */
+    public Vector2 tileToPixelCoords(final Vector2 tilePos) {
         // Offset by the tile's coordinates, and then half a tile extra to move to the centre 
-        final int middlePosX = BOARD_POS_X + (tile.getPosX() * CELL_SIZE_PX) + (CELL_SIZE_PX / 2);
-        final int middlePosY = BOARD_POS_Y + (tile.getPosY() * CELL_SIZE_PX) + (CELL_SIZE_PX / 2);
+        final double middlePosX = BOARD_POS_X + (tilePos.x * CELL_SIZE_PX) + (CELL_SIZE_PX / 2.0);
+        final double middlePosY = BOARD_POS_Y + (tilePos.y * CELL_SIZE_PX) + (CELL_SIZE_PX / 2.0);
         return new Vector2(middlePosX, middlePosY);
     }
 
