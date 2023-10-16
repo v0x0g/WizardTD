@@ -120,7 +120,7 @@ public class UiManager {
             uiState.uiElements.add(new DynamicWrapperElement<>(
                     new TextElement(manaBarPos1, manaBarPos2, ""),
                     (text, data, ui) -> text.text = MessageFormat.format(
-                            "Mana: {0,number}/{1,number}",
+                            "Mana: {0,number,integer}/{1,number,integer}",
                             data.mana,
                             data.manaCap
                     )
