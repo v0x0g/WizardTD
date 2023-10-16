@@ -9,5 +9,6 @@ public class LogTag {
             UI = "ui",
             INPUT = "input",
             RENDER = "render",
+            GAMEPLAY = "gameplay",
             EVENT= "event";
 }

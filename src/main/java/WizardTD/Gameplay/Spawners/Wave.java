@@ -2,7 +2,6 @@ package WizardTD.Gameplay.Spawners;
 
 import WizardTD.Gameplay.Enemies.*;
 import lombok.*;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.*;
 import org.tinylog.*;
 
@@ -44,24 +43,24 @@ public final class Wave {
         this.spawnRateMult = spawnRateMult;
         this.enemyFactories = enemyFactories;
     }
-    
-    public void tick(final double deltaTime){
+
+    public void tick(final double deltaTime) {
         this.timer += deltaTime;
-        
+
         final double t = (this.timer - this.delayBeforeWave);
         if (t > 0) this.enemySpawnCounter += deltaTime * this.spawnRateMult;
     }
-    
-    public WaveState getWaveState(){
+
+    public WaveState getWaveState() {
         if (this.timer < this.delayBeforeWave) return WaveState.PRE_DELAY;
         else if (this.timer > (this.duration + this.delayBeforeWave)) return WaveState.COMPLETE;
         else return WaveState.SPAWNING;
     }
-    
+
     /// Gets the next enemy for this wave
     public @Nullable Enemy getEnemy() {
         if (this.getWaveState() != WaveState.SPAWNING) return null;
-        
+
         while (!enemyFactories.isEmpty()) {
             // Pick a random factory by index, and spawn an enemy from it
             final int randIndex = ThreadLocalRandom.current()
@@ -85,11 +84,11 @@ public final class Wave {
         }
 
         Logger.error("tried to get enemy from wave, but wave had no more factories left. Might be a bug");
-        
+
         return null;
     }
-    
-    public enum WaveState{
+
+    public enum WaveState {
         /**
          * Wave is still waiting to spawn enemies
          */

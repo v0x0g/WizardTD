@@ -1,5 +1,6 @@
 package WizardTD.Gameplay.Game;
 
+import WizardTD.Ext.*;
 import WizardTD.Gameplay.Enemies.*;
 import WizardTD.Gameplay.Projectiles.*;
 import WizardTD.Gameplay.Spawners.*;
@@ -365,13 +366,14 @@ public class GameManager {
             final Wave wave = game.waves.get(0);
             wave.tick(gameDeltaTime);
             if(wave.getWaveState() == Wave.WaveState.COMPLETE){
-                Logger.debug("wave complete, moving onto next");
+                Loggers.GAMEPLAY.debug("wave complete, moving onto next");
                 game.waves.remove(0);
                 continue;
             }
             
             Enemy enemy;
             while (null != (enemy = wave.getEnemy())){
+                Loggers.GAMEPLAY.trace("spawn enemy {}", enemy);
                 game.enemies.add(enemy);
                 final ThreadLocalRandom rng = ThreadLocalRandom.current();
                 enemy.position = new Vector2(rng.nextDouble(BOARD_SIZE_TILES), rng.nextDouble(BOARD_SIZE_TILES));

@@ -10,6 +10,7 @@ public class Loggers {
             UI = Logger.tag(LogTag.UI),
             INPUT = Logger.tag(LogTag.INPUT),
             RENDER = Logger.tag(LogTag.RENDER),
+            GAMEPLAY = Logger.tag(LogTag.GAMEPLAY),
             EVENT= Logger.tag(LogTag.EVENT);
 
 }
