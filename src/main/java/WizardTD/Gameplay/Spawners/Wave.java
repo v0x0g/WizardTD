@@ -60,20 +60,18 @@ public final class Wave {
     /// Gets the next enemy for this wave
     public @Nullable Enemy getEnemy() {
         if (this.getWaveState() != WaveState.SPAWNING) return null;
-        if(this.enemySpawnCounter <= 1) return null;
+        if (this.enemySpawnCounter <= 1) return null;
 
         while (!enemyFactories.isEmpty()) {
-                       
             // Pick a random factory by index, and spawn an enemy from it
-            final int randIndex = ThreadLocalRandom.current()
-                                                   .nextInt(0, this.enemyFactories.size());
+            final int randIndex = ThreadLocalRandom.current().nextInt(0, this.enemyFactories.size());
             final EnemyFactory<?> factory = this.enemyFactories.get(randIndex);
 
             @Nullable Enemy enemy;
             try {
                 enemy = factory.spawnEnemy();
             }
-            catch (NoSuchElementException e) {
+            catch (final NoSuchElementException e) {
                 // NoSuchElementException indicates the factory is empty
                 // so remove
                 this.enemyFactories.remove(randIndex);
@@ -103,6 +101,6 @@ public final class Wave {
         /**
          * Wave has spawned all the enemies it is going to spawn
          */
-        COMPLETE;
+        COMPLETE
     }
 }

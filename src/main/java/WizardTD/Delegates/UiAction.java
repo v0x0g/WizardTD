@@ -5,6 +5,7 @@ import WizardTD.UI.*;
 
 /**
  * Delegate type for UI actions
+ *
  * @param <TElement>
  */
 @FunctionalInterface

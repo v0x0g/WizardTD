@@ -47,7 +47,7 @@ public class UiManager {
     }
 
     public Optional<Tile> pixelCoordsToTile(
-            final Vector2 coords, final GameData gameData, 
+            final Vector2 coords, final GameData gameData,
             final Ref<Integer> outX, final Ref<Integer> outY) {
         // Use inverse lerp to extract the tile coordinates from the mouse pos
         final double x = Numerics.inverseLerp(coords.x, BOARD_POS_X, BOARD_POS_X + (CELL_SIZE_PX * BOARD_SIZE_TILES));

@@ -1,7 +1,6 @@
 package WizardTD;
 
 import lombok.*;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Class that configures the program.
@@ -24,7 +23,7 @@ public class GameConfig {
     public static final double FAST_FORWARD_SPEED = 2.0;
     /**
      * Time threshold for enabling subticks.
-     * <p> 
+     * <p>
      * If {@code deltaTime > SUB_TICK_THRESHOLD}, then the tick will be split into multiple sub-ticks,
      * each at most SUB_TICK_THRESHOLD long
      */

@@ -5,13 +5,10 @@ import WizardTD.Gameplay.Enemies.*;
 import WizardTD.Gameplay.Projectiles.*;
 import WizardTD.Gameplay.Spawners.*;
 import WizardTD.Gameplay.Tiles.*;
-import lombok.*;
 import lombok.experimental.*;
 import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.dataflow.qual.*;
-import org.tinylog.*;
 import processing.core.*;
 import processing.data.*;
 
@@ -36,7 +33,7 @@ public class GameManager {
     /**
      * Loads the game config from disk, and returns it as a JSON object
      */
-        @SideEffectFree
+    @SideEffectFree
     private Optional<JSONObject> loadGameConfig() {
         debug("loading game config");
         final Path path = Paths.get(WizardTD.GameConfig.CONFIG_PATH);
@@ -65,7 +62,7 @@ public class GameManager {
     /**
      * Loads the given level layout file from disk
      */
-        @SideEffectFree
+    @SideEffectFree
     private Optional<List<String>> loadLevelLayoutFile(final String fileName) {
         debug("loading level layout");
         final Path path = Paths.get(fileName);
@@ -353,32 +350,32 @@ public class GameManager {
     public static void tickGame(final PApplet app, final GameData game, final double deltaTime) {
         final double visualDeltaTime = deltaTime;
         final double gameDeltaTime;
-        
+
         if (game.paused) gameDeltaTime = 0;
         else if (game.fastForward) gameDeltaTime = deltaTime * FAST_FORWARD_SPEED;
         else gameDeltaTime = deltaTime;
-        
+
         // Absorb mana through the atmosphere using mana accumulators
         game.mana += gameDeltaTime * game.manaTrickle;
         game.mana = Math.min(game.mana, game.manaCap);
-        
-        while(!game.waves.isEmpty()){
+
+        while (!game.waves.isEmpty()) {
             final Wave wave = game.waves.get(0);
             wave.tick(gameDeltaTime);
-            if(wave.getWaveState() == Wave.WaveState.COMPLETE){
+            if (wave.getWaveState() == Wave.WaveState.COMPLETE) {
                 Loggers.GAMEPLAY.debug("wave complete, moving onto next");
                 game.waves.remove(0);
                 continue;
             }
-            
+
             Enemy enemy;
-            while (null != (enemy = wave.getEnemy())){
+            while (null != (enemy = wave.getEnemy())) {
                 Loggers.GAMEPLAY.trace("spawn enemy {}", enemy);
                 game.enemies.add(enemy);
                 final ThreadLocalRandom rng = ThreadLocalRandom.current();
                 enemy.position = new Vector2(rng.nextDouble(BOARD_SIZE_TILES), rng.nextDouble(BOARD_SIZE_TILES));
             }
-            
+
             break;
         }
     }

@@ -5,8 +5,6 @@ import WizardTD.Gameplay.Game.*;
 import WizardTD.Rendering.*;
 import WizardTD.UI.*;
 import lombok.*;
-import mikera.vectorz.*;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import processing.core.*;
 
 import java.util.*;

@@ -5,8 +5,6 @@ import WizardTD.Gameplay.Game.*;
 import WizardTD.Rendering.*;
 import WizardTD.UI.*;
 import lombok.*;
-import mikera.vectorz.*;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.*;
 import processing.core.*;
 
@@ -23,7 +21,7 @@ public final class ShrubTile extends Tile {
     }
 
     @Override
-    public void render(final PApplet app, GameData gameData, UiState uiState) {
+    public void render(final PApplet app, final GameData gameData, final UiState uiState) {
         Renderer.renderSimpleTile(app, tileImage, UiManager.tileToPixelCoords(this));
     }
 }

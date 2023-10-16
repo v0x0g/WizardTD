@@ -3,7 +3,6 @@ package WizardTD.Gameplay.Projectiles;
 import WizardTD.Rendering.*;
 import lombok.*;
 import mikera.vectorz.*;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 @ToString
 @EqualsAndHashCode(callSuper = false)

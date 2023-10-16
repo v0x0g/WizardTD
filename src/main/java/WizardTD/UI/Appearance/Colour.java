@@ -50,7 +50,7 @@ public final class Colour {
                 Numerics.lerp(c1.g, c2.g, lerp),
                 Numerics.lerp(c1.b, c2.b, lerp),
                 Numerics.lerp(c1.a, c2.a, lerp)
-                );
+        );
     }
 
     /**

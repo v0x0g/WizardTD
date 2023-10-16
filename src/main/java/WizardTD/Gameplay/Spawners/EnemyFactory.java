@@ -4,7 +4,6 @@ import WizardTD.Delegates.*;
 import WizardTD.Gameplay.Enemies.*;
 import lombok.*;
 import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.math.*;
 import java.util.*;
@@ -41,11 +40,9 @@ public class EnemyFactory<TEnemy extends Enemy> {
     /// Maximum number of enemies that can be spawned by this factory.
     /// If @c null then there is no cap on the enemies
     public final @Nullable BigInteger maxQuantity;
-
+    public final Func1<TEnemy, EnemyFactory<TEnemy>> spawn;
     /// How many enemies have been spawned so far
     private BigInteger quantitySpawned = BigInteger.valueOf(0L);
-
-    public final Func1<TEnemy, EnemyFactory<TEnemy>> spawn;
 
     @Nullable
     public TEnemy spawnEnemy() {

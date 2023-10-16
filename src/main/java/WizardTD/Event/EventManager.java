@@ -5,7 +5,6 @@ import io.github.classgraph.*;
 import lombok.*;
 import lombok.var;
 import lombok.experimental.*;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -120,9 +119,10 @@ public class EventManager {
                     })
                     // Map each method to a Key-Value pair of [the method instance] and [the @OnEvent attribute instance]
                     // This loads both the method's class and the attribute's class
-                    .map(meth -> new AbstractMap.SimpleImmutableEntry<>(meth.loadClassAndGetMethod(),
-                                                                        (OnEvent) meth.getAnnotationInfo(OnEvent.class)
-                                                                                      .loadClassAndInstantiate()
+                    .map(meth -> new AbstractMap.SimpleImmutableEntry<>(
+                            meth.loadClassAndGetMethod(),
+                            (OnEvent) meth.getAnnotationInfo(OnEvent.class)
+                                          .loadClassAndInstantiate()
                     ))
                     // Iterate over each event method we have
                     .forEach(pair -> {

@@ -1,13 +1,8 @@
 package WizardTD.Gameplay.Enemies;
 
-import WizardTD.Gameplay.Game.*;
 import WizardTD.Rendering.*;
-import WizardTD.UI.*;
 import lombok.*;
 import mikera.vectorz.*;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import processing.core.*;
-import sun.reflect.generics.reflectiveObjects.*;
 
 @ToString
 @EqualsAndHashCode(callSuper = false)

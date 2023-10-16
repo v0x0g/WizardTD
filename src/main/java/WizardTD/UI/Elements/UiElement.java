@@ -3,7 +3,6 @@ package WizardTD.UI.Elements;
 import WizardTD.Rendering.*;
 import WizardTD.UI.Appearance.*;
 import lombok.*;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import processing.core.*;
 
 @ToString

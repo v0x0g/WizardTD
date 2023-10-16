@@ -5,8 +5,6 @@ import WizardTD.Gameplay.Game.*;
 import WizardTD.Rendering.*;
 import WizardTD.UI.*;
 import lombok.*;
-import mikera.vectorz.*;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.*;
 import processing.core.*;
 
@@ -28,7 +26,7 @@ public final class TowerTile extends Tile {
     }
 
     @Override
-    public void render(final PApplet app, GameData gameData, UiState uiState) {
+    public void render(final PApplet app, final GameData gameData, final UiState uiState) {
         Renderer.renderSimpleTile(app, tileLevel0, UiManager.tileToPixelCoords(this));
     }
 }

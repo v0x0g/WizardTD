@@ -1,7 +1,5 @@
 package WizardTD.Event;
 
-import org.checkerframework.checker.nullness.qual.*;
-
 import java.lang.annotation.*;
 
 /**
@@ -15,6 +13,6 @@ import java.lang.annotation.*;
 @SuppressWarnings("unused")
 public @interface OnEvent {
 
-    EventType [] eventTypes();// default EventType.Init;
+    EventType[] eventTypes();// default EventType.Init;
 
 }

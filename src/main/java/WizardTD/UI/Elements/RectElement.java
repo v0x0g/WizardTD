@@ -5,7 +5,6 @@ import WizardTD.UI.Appearance.*;
 import WizardTD.UI.*;
 import lombok.*;
 import mikera.vectorz.*;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import processing.core.*;
 
 @AllArgsConstructor
@@ -14,12 +13,12 @@ import processing.core.*;
 public class RectElement extends UiElement {
     public Vector2 pos1;
     public Vector2 pos2;
-    public          Colour fillColour;
-    public          Colour     outlineColour;
+    public Colour fillColour;
+    public Colour outlineColour;
     /**
      * See {@link PApplet#rectMode(int)}
      */
-    public          int     rectPosMode = PConstants.CORNERS;
+    public int rectPosMode = PConstants.CORNERS;
 
     public RectElement(final Vector2 pos1, final Vector2 pos2, final Colour fillColour, final Colour outlineColour) {
         this.pos1 = pos1;
@@ -29,7 +28,7 @@ public class RectElement extends UiElement {
     }
 
     @Override
-    public void render(final PApplet app, final GameData gameData, UiState uiState) {
+    public void render(final PApplet app, final GameData gameData, final UiState uiState) {
         setColours(app, this.fillColour, this.outlineColour);
         app.rectMode(this.rectPosMode);
         app.rect(

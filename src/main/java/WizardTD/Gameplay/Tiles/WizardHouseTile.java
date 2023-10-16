@@ -6,16 +6,16 @@ import WizardTD.Rendering.*;
 import WizardTD.UI.*;
 import lombok.*;
 import mikera.vectorz.*;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.*;
 import processing.core.*;
+
 @ToString
 @EqualsAndHashCode(callSuper = true)
 public final class WizardHouseTile extends Tile {
 
     private static @Nullable PImage tileImage = null;
     private static @Nullable PImage grassUnderTileImage = null;
-    
+
     @SuppressWarnings({"unused", "DataFlowIssue"})
     @OnEvent(eventTypes = EventType.AppSetup)
     private static void loadImages(final Event event) {

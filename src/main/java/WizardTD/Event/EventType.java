@@ -13,8 +13,8 @@ public enum EventType {
      * Called inside the `PApplet::setup()` method
      * <p>
      * Should be used to init graphics, sprites, etc
-     * 
-     * 
+     * <p>
+     * <p>
      * This is guaranteed to have the `dataObject` parameter as being the `PApplet` class
      */
     AppSetup,

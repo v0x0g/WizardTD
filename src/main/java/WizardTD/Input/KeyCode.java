@@ -68,8 +68,8 @@ public enum KeyCode {
     PERIOD_NUMPAD(110, '.'),
     SLASH_NUMPAD(111, '/'),
     ;
-    
-    public final int  code;
+
+    public final int code;
     public final char char_;
 
     public static @Nullable KeyCode fromInt(final int code) {

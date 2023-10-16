@@ -1,6 +1,5 @@
 package WizardTD.Ext;
 
-import lombok.*;
 import lombok.experimental.*;
 
 @UtilityClass
@@ -10,5 +9,5 @@ public class LogTag {
             INPUT = "input",
             RENDER = "render",
             GAMEPLAY = "gameplay",
-            EVENT= "event";
+            EVENT = "event";
 }

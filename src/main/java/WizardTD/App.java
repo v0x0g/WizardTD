@@ -10,7 +10,6 @@ import WizardTD.UI.Appearance.*;
 import WizardTD.UI.*;
 import lombok.experimental.*;
 import mikera.vectorz.*;
-import org.checkerframework.checker.nullness.qual.*;
 import org.tinylog.*;
 import processing.core.*;
 import processing.event.*;

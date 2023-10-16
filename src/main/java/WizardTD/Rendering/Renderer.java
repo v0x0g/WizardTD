@@ -30,7 +30,7 @@ public class Renderer {
     );
     private static final ThreadLocal<ConcurrentHashMap<RenderOrder, List<Renderable>>> renderOrderMaps =
             ThreadLocal.withInitial(ConcurrentHashMap::new);
-    private static final RenderOrder [] renderOrders =
+    private static final RenderOrder[] renderOrders =
             RenderOrder.values()
                        .stream()
                        .sorted()
@@ -74,7 +74,8 @@ public class Renderer {
 
     /**
      * Renders a simple tile image at the given pixel coordinates
-     * @param img Image to render for the tile
+     *
+     * @param img    Image to render for the tile
      * @param centre Position of the tile, in pixel coordinates
      */
     public void renderSimpleTile(
@@ -89,11 +90,9 @@ public class Renderer {
         app.image(img, (float) centre.x, (float) centre.y);
     }
 
-
-
     /**
      * Renders a simple tile image at the given tile coordinates
-     * 
+     *
      * @param img Image to render for the entity
      * @param pos Position of the entity, in tile coordinates
      */

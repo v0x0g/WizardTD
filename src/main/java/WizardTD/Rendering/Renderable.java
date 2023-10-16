@@ -2,7 +2,6 @@ package WizardTD.Rendering;
 
 import WizardTD.Gameplay.Game.*;
 import WizardTD.UI.*;
-import org.checkerframework.checker.nullness.qual.*;
 import processing.core.*;
 
 /**

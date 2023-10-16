@@ -3,7 +3,6 @@ package WizardTD.Gameplay.Game;
 import WizardTD.Gameplay.Tiles.*;
 import lombok.*;
 import lombok.experimental.*;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.text.*;
 import java.util.*;
@@ -22,7 +21,7 @@ public final class Board {
      * Indices are `[row][col]`
      */
 
-    public final Tile [] [] tiles =
+    public final Tile[][] tiles =
             // Default value is filled with invalid tiles
             IntStream.range(0, BOARD_SIZE_TILES).mapToObj(
                     $_ -> IntStream.range(0, BOARD_SIZE_TILES).mapToObj($__ -> (Tile) new InvalidTile())

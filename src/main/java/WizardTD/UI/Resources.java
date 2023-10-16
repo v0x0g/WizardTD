@@ -38,7 +38,8 @@ public class Resources {
             public static final String Tile1 = DIR + "/tower1.png";
             public static final String Tile2 = DIR + "/tower2.png";
         }
-    }@UtilityClass
+    }
+    @UtilityClass
     public static class Enemies {
         public static final String DIR = Resources.BASE_DIR + "/Enemies";
         @UtilityClass

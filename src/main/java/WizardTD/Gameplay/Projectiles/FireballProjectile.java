@@ -5,7 +5,6 @@ import WizardTD.Rendering.*;
 import WizardTD.UI.*;
 import lombok.*;
 import mikera.vectorz.*;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import processing.core.*;
 
 @ToString
@@ -34,7 +33,7 @@ public class FireballProjectile extends Projectile {
     }
 
     @Override
-    public void render(final PApplet app, GameData gameData, UiState uiState) {
+    public void render(final PApplet app, final GameData gameData, final UiState uiState) {
         throw null;
     }
 }

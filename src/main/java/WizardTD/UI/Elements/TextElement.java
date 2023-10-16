@@ -1,8 +1,8 @@
 package WizardTD.UI.Elements;
 
 import WizardTD.Gameplay.Game.*;
-import WizardTD.UI.*;
 import WizardTD.UI.Appearance.*;
+import WizardTD.UI.*;
 import lombok.*;
 import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -12,22 +12,22 @@ import processing.core.*;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 public class TextElement extends UiElement {
-    
+
     public @NonNull Vector2 pos1;
     public @NonNull Vector2 pos2;
     /**
      * See {@link PApplet#rectMode(int)}
      */
-    public          int     rectPosMode = PConstants.CORNERS;
+    public int rectPosMode = PConstants.CORNERS;
     /**
      * See {@link PApplet#textAlign(int)}
      */
-    public          int     textAlignMode = PConstants.CENTER;
-    public         float   fontSize = Theme.TEXT_SIZE_NORMAL;
-    public @NonNull String  text;
+    public int textAlignMode = PConstants.CENTER;
+    public float fontSize = Theme.TEXT_SIZE_NORMAL;
+    public @NonNull String text;
 
     @Override
-    public void render(final PApplet app, final GameData gameData, UiState uiState) {
+    public void render(final PApplet app, final GameData gameData, final UiState uiState) {
         app.fill(Theme.TEXT.asInt());
         app.rectMode(this.rectPosMode);
         app.textAlign(this.textAlignMode);
