@@ -10,7 +10,7 @@ import org.checkerframework.checker.nullness.qual.*;
 public class Event {
 
     public final EventType eventType;
-
+    // TODO: Redo with fancy enums?
     public final @Nullable Object dataObject;
 
     public Event(final EventType eventType) {

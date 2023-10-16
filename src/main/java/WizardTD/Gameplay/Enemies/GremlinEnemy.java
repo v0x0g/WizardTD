@@ -1,20 +1,25 @@
 package WizardTD.Gameplay.Enemies;
 
 import WizardTD.Event.*;
+import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Rendering.*;
 import WizardTD.UI.*;
 import lombok.*;
 import mikera.vectorz.*;
-import org.checkerframework.checker.nullness.qual.*;
 import processing.core.*;
+
+import java.util.*;
+import java.util.stream.*;
 
 @ToString
 @EqualsAndHashCode(callSuper = false)
 
 public class GremlinEnemy extends Enemy {
-
-    public static @Nullable PImage entityImage = null;
+    public static final double DEATH_ANIM_DURATION = 4 / 60.0 /* 4 frames @ 60 FPS */;
+    // TODO: Dying Enemy
+    public static PImage entityImage;
+    public static ImageAnimation deathAnim;
 
     public GremlinEnemy(
             final double health, final Vector2 position, final double speed, final double damageMultiplier,
@@ -27,6 +32,18 @@ public class GremlinEnemy extends Enemy {
     private static void loadImages(final Event event) {
         final PApplet app = (PApplet) event.dataObject;
         entityImage = UiManager.loadImage(app, Resources.Enemies.Gremlin.NORMAL);
+        deathAnim = new ImageAnimation(
+                Arrays.stream(new String[]{
+                              Resources.Enemies.Gremlin.DYING_1,
+                              Resources.Enemies.Gremlin.DYING_2,
+                              Resources.Enemies.Gremlin.DYING_3,
+                              Resources.Enemies.Gremlin.DYING_4,
+                              Resources.Enemies.Gremlin.DYING_5
+                      })
+                      .map(path -> UiManager.loadImage(app, path))
+                      .collect(Collectors.toList()),
+                DEATH_ANIM_DURATION
+        );
     }
 
     @Override
