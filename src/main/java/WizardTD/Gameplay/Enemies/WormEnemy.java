@@ -13,7 +13,7 @@ import processing.core.*;
 @EqualsAndHashCode(callSuper = false)
 public class WormEnemy extends Enemy {
 
-    public static @Nullable PImage tileImage = null;
+    public static @Nullable PImage entityImage = null;
 
     public WormEnemy(
             final double health, final Vector2 position, final double speed, final double damageMultiplier,
@@ -25,12 +25,12 @@ public class WormEnemy extends Enemy {
     @OnEvent(eventTypes = EventType.AppSetup)
     private static void loadImages(final Event event) {
         final PApplet app = (PApplet) event.dataObject;
-        tileImage = UiManager.loadImage(app, Resources.Tiles.Grass.ONLY_TILE);
+        entityImage = UiManager.loadImage(app, Resources.Enemies.Worm.ONLY_TILE);
     }
 
     @Override
     public void render(final PApplet app, final GameData gameData, final UiState uiState) {
-        Renderer.renderSimpleTile(app, tileImage, this.position);
+        Renderer.renderSimpleTile(app, entityImage, this.position);
     }
 
 }
