@@ -9,24 +9,13 @@ import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.*;
 import processing.core.*;
-
-// TODO: The WizardHouse should not hold the mana information
-//  That should go directly inside the GameData class
-
 @ToString
 @EqualsAndHashCode(callSuper = true)
 public final class WizardHouseTile extends Tile {
 
     private static @Nullable PImage tileImage = null;
     private static @Nullable PImage grassUnderTileImage = null;
-
-    /**
-     * How much mana the wizard has remaining
-     */
-    public double mana;
-    public double manaCap;
-    public double manaTrickle;
-
+    
     @SuppressWarnings({"unused", "DataFlowIssue"})
     @OnEvent(eventTypes = EventType.AppSetup)
     private static void loadImages(@NonNull final Event event) {
@@ -41,7 +30,7 @@ public final class WizardHouseTile extends Tile {
     }
 
     @Override
-    public void render(@NonNull final PApplet app, @NonNull GameData gameData, @NonNull UiState uiState) {
+    public void render(@NonNull final PApplet app, @NonNull final GameData gameData, @NonNull final UiState uiState) {
         final Vector2 pos = UiManager.tileToPixelCoords(this);
         // Render an extra grass sprite beneath the house, because house is transparent and doesn't fill tile
         Renderer.renderSimpleTile(app, grassUnderTileImage, pos.x, pos.y);

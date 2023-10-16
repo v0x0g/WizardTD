@@ -112,7 +112,7 @@ public class UiManager {
                         rectElement.pos2.x = Numerics.lerp(
                                 manaBarPos1.x,
                                 manaBarPos2.x,
-                                gameData.wizardHouse.mana / gameData.wizardHouse.manaCap
+                                gameData.mana / gameData.manaCap
                         );
                         rectElement.pos2.y = manaBarPos2.y;
                     }
@@ -121,8 +121,8 @@ public class UiManager {
                     new TextElement(manaBarPos1, manaBarPos2, ""),
                     (text, data, ui) -> text.text = MessageFormat.format(
                             "Mana: {0,number}/{1,number}",
-                            data.wizardHouse.mana,
-                            data.wizardHouse.manaCap
+                            data.mana,
+                            data.manaCap
                     )
             ));
         }

@@ -28,7 +28,7 @@ public abstract class Tile extends Renderable {
             case 'S':
                 return Optional.of(new ShrubTile());
             case 'W':
-                return Optional.of(new WizardHousePlaceholderTile());
+                return Optional.of(new WizardHouseTile());
             case ' ':
                 return Optional.of(new GrassTile());
             case 'X':

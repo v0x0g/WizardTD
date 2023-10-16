@@ -29,22 +29,15 @@ public final class App extends PApplet {
         Logger.info("init game and stuff");
 
         Logger.warn("WARN: DEBUG MODE");
-        final Optional<GameDescriptor> maybeGameDesc = GameManager.loadGameDescriptor();
-        Logger.debug("gameDesc={}", maybeGameDesc);
-        if (!maybeGameDesc.isPresent()) {
+        final GameDescriptor gameDesc = GameManager.loadGameDescriptor();
+        Logger.debug("gameDesc={}", gameDesc);
+        if (gameDesc == null) {
             Logger.warn("did not manage to load game descriptor :(");
             throw new AppInitException("couldn't load game descriptor");
         }
-        final GameDescriptor gameDesc = maybeGameDesc.get();
         Logger.debug("got gameDesc");
-        final Optional<GameData> maybeGameData = GameData.fromGameDescriptor(gameDesc);
-        if (!maybeGameData.isPresent()) {
-            Logger.warn("did not manage to create game :(");
-            throw new AppInitException("couldn't create game data");
-        }
-        this.gameData = maybeGameData.get();
-        Logger.debug("got gameData");
-        Logger.debug("gameData={}", gameData);
+        this.gameData = GameManager.createGame(gameDesc);
+        Logger.debug("gameData={}", this.gameData);
 
         Logger.debug("init uiState");
         this.uiState = new UiState();

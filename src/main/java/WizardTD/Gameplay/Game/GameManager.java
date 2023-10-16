@@ -88,16 +88,15 @@ public class GameManager {
         }
     }
 
-    @NonNull
     @SideEffectFree
-    public Optional<GameDescriptor> loadGameDescriptor() {
+    public @Nullable GameDescriptor loadGameDescriptor() {
         debug("loading level descriptor");
 
         // Load the config object
         final Optional<JSONObject> maybeConfigJson = loadGameConfig();
         if (!maybeConfigJson.isPresent()) {
             debug("can't load game: failed getting config");
-            return empty();
+            return null;
         }
         final JSONObject conf = maybeConfigJson.get();
 
@@ -134,7 +133,7 @@ public class GameManager {
         }
         catch (final RuntimeException e) {
             debug(e, "can't load level: failed parsing config json: (simple values)");
-            return empty();
+            return null;
         }
 
         final Board board;
@@ -144,7 +143,7 @@ public class GameManager {
             final Optional<List<String>> maybeLayoutData = loadLevelLayoutFile(layoutFileName);
             if (!maybeLayoutData.isPresent()) {
                 debug("can't load level: couldn't load layout");
-                return empty();
+                return null;
             }
             final List<String> lines = maybeLayoutData.get();
             trace("got layout data");
@@ -155,7 +154,7 @@ public class GameManager {
             // I hate this syntax
             if (lines.size() != BOARD_SIZE_TILES) {
                 debug("level layout invalid: expected {} lines but got {}", BOARD_SIZE_TILES, lines.size());
-                return empty();
+                return null;
             }
             for (int col = 0; col < BOARD_SIZE_TILES; col++) {
                 final String line = lines.get(col);
@@ -167,7 +166,7 @@ public class GameManager {
                             "level layout invalid: line {}: expected at most {} chars but got {}", col + 1,
                             BOARD_SIZE_TILES, line.length()
                     );
-                    return empty();
+                    return null;
                 }
                 for (int row = 0; row < BOARD_SIZE_TILES; row++) {
                     final Tile tile;
@@ -177,7 +176,7 @@ public class GameManager {
                         trace("tile char (line)[{00}] (char)[{00}]: '{}' -> {}", col, row, tileChar, maybeTile);
                         if (!maybeTile.isPresent()) {
                             debug("invalid tile char '{}'", tileChar);
-                            return empty();
+                            return null;
                         }
                         tile = maybeTile.get();
                     }
@@ -193,7 +192,7 @@ public class GameManager {
         }
         catch (final Exception e) {
             debug("can't load level: failed parsing config json (layout)");
-            return empty();
+            return null;
         }
 
         // Parse waves separately since they 're complicated
@@ -306,45 +305,26 @@ public class GameManager {
         }
         catch (final RuntimeException e) {
             debug(e, "can't load game: failed parsing config json (waves)");
-            return empty();
+            return null;
         }
 
         debug("got level descriptor");
-        return Optional.of(new GameDescriptor("Test Name", board, gameDataConfig, waves //TODO: waves
-        ));
+        return new GameDescriptor("Test Name", board, gameDataConfig, waves );
     }
     
-    public static @Nullable GameData createGame(@NonNull final GameDescriptor desc) {
+    public static @NonNull GameData createGame(@NonNull final GameDescriptor desc) {
         trace("creating game from level desc: {}", desc);
 
         final Board board = desc.board;
         final List<Enemy> enemies = new ArrayList<>();
         final List<Wave> waves = desc.waves;
         final List<Projectile> projectiles = new ArrayList<>();
-        
-        trace("locating wizard's house");
-        WizardHouseTile fourPrivetDrive = null;
-        for (int row = 0; row < BOARD_SIZE_TILES; row++) {
-            for (int col = 0; col < BOARD_SIZE_TILES; col++) {
-                final Tile tile = desc.board.getTile(row, col);
-                if (tile instanceof WizardHousePlaceholderTile) {
-                    if (null != fourPrivetDrive) warn("only one wizard allowed");
-                    else trace("You're a WizardHouseTile Harry!\nI'm a WHAT?\nA \033[095m{}\033[000m", tile);
-                    fourPrivetDrive = new WizardHouseTile();
-                    desc.board.setTile(row, col, fourPrivetDrive); // Update the board entry to remove placeholder
-                    fourPrivetDrive.mana = desc.config.mana.initialManaValue;
-                    fourPrivetDrive.manaCap = desc.config.mana.initialManaCap;
-                    fourPrivetDrive.manaTrickle = desc.config.mana.initialManaTrickle;
-                }
-            }
-        }
-        if (fourPrivetDrive == null) {
-            warn("expected a wizard but didn't find house");
-            return null;
-        }
 
-        error("TODO: Waves");
-        return new GameData(board, enemies, projectiles, waves, fourPrivetDrive, desc.config);
+        final double mana = desc.config.mana.initialManaValue;
+        final double manaCap = desc.config.mana.initialManaCap;
+        final double manaTrickle = desc.config.mana.initialManaTrickle;
+
+        return new GameData(board, enemies, projectiles, waves, desc.config, mana, manaCap, manaTrickle);
     }
 
 }
