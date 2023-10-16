@@ -20,7 +20,9 @@ public abstract class Enemy extends Renderable {
     public double health;
 
     /**
-     * Where the enemy is on the map
+     * Where the enemy is on the map.
+     * <p/>
+     * This is in TILE coordinates, not pixels
      */
     public @NonNull Vector2 position;
 
@@ -41,11 +43,6 @@ public abstract class Enemy extends Renderable {
 
     @Override
     public @NonNull RenderOrder getRenderOrder() {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public void render(@NonNull final PApplet app, @NonNull final GameData gameData, @NonNull final UiState uiState) {
-        throw new NotImplementedException();
+        return RenderOrder.ENTITY;
     }
 }

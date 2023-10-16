@@ -6,6 +6,7 @@ import WizardTD.UI.Appearance.*;
 import WizardTD.UI.*;
 import com.google.common.collect.*;
 import lombok.experimental.*;
+import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.*;
 import processing.core.*;
 
@@ -71,16 +72,21 @@ public class Renderer {
         );
     }
 
+    /**
+     * Renders a simple tile image at the given pixel coordinates
+     * @param img Image to render for the tile
+     * @param centre Position of the tile, in pixel coordinates
+     */
     public void renderSimpleTile(
-            @NonNull final PApplet app, @Nullable PImage img, final double centreX, final double centreY) {
-        Loggers.RENDER.trace("tile [{00}}, {00}]: render img {}", centreX, centreY, img);
+            @NonNull final PApplet app, @Nullable PImage img, final Vector2 centre) {
+        Loggers.RENDER.trace("tile [{00}}, {00}]: render img {}", centre.x, centre.y, img);
         if (!ImageExt.isValidImage(img)) {
             img = missingTextureImage;
-            Loggers.RENDER.trace("render tile [{00}, {00}]: missing texture", centreX, centreY);
+            Loggers.RENDER.trace("render tile [{00}, {00}]: missing texture", centre.x, centre.y);
         }
         app.imageMode(PConstants.CENTER);
         app.colorMode(PConstants.ARGB);
-        app.image(img, (float) centreX, (float) centreY);
+        app.image(img, (float) centre.x, (float) centre.y);
     }
 
 }

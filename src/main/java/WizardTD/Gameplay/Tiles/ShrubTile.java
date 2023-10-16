@@ -24,7 +24,6 @@ public final class ShrubTile extends Tile {
 
     @Override
     public void render(@NonNull final PApplet app, @NonNull GameData gameData, @NonNull UiState uiState) {
-        final Vector2 pos = UiManager.tileToPixelCoords(this);
-        Renderer.renderSimpleTile(app, tileImage, pos.x, pos.y);
+        Renderer.renderSimpleTile(app, tileImage, UiManager.tileToPixelCoords(this));
     }
 }

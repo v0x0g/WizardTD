@@ -86,8 +86,7 @@ public final class PathTile extends Tile {
     }
 
     @Override
-    public void render(@NonNull final PApplet app, @NonNull GameData gameData, @NonNull UiState uiState) {
-        final Vector2 pos = UiManager.tileToPixelCoords(this);
-        Renderer.renderSimpleTile(app, pathSidesMap.get(this.connectedPathSides), pos.x, pos.y);
+    public void render(@NonNull final PApplet app, @NonNull final GameData gameData, @NonNull final UiState uiState) {
+        Renderer.renderSimpleTile(app, pathSidesMap.get(this.connectedPathSides), UiManager.tileToPixelCoords(this));
     }
 }

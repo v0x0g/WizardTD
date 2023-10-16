@@ -26,8 +26,7 @@ public final class GrassTile extends Tile {
     }
 
     @Override
-    public void render(@NonNull final PApplet app, @NonNull GameData gameData, @NonNull UiState uiState) {
-        final Vector2 pos = UiManager.tileToPixelCoords(this);
-        Renderer.renderSimpleTile(app, GrassTile.tileImage, pos.x, pos.y);
+    public void render(@NonNull final PApplet app, final @NonNull GameData gameData, final @NonNull UiState uiState) {
+        Renderer.renderSimpleTile(app, tileImage, UiManager.tileToPixelCoords(this));
     }
 }
