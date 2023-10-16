@@ -64,7 +64,7 @@ public class UiManager {
     }
 
     public Vector2 tileToPixelCoords(final Tile tile) {
-        return tileToPixelCoords(new Vector2(tile.getPosX(), tile.getPosY()));
+        return tileToPixelCoords(new Vector2(tile.getPos().getX(), tile.getPos().getY()));
     }
 
     /**
@@ -159,9 +159,7 @@ public class UiManager {
                     "FF",
                     KeyCode.F,
                     (button, game, ui) -> Logger.debug("toggle fast forward = {}", game.fastForward ^= true),
-                    (button, game, ui) -> {
-                        button.fillColour = game.fastForward ? Theme.BUTTON_ENABLED : Theme.BUTTON_DISABLED;
-                    }
+                    (button, game, ui) -> button.fillColour = game.fastForward ? Theme.BUTTON_ENABLED : Theme.BUTTON_DISABLED
             );
             addSidebarButton(
                     uiState,

@@ -69,10 +69,10 @@ public final class PathTile extends Tile {
     @Override
     public void boardDirty(Board board) {
         // Update what sides are connected.
-        val left = board.maybeGetTileGeneric(PathTile.class, this.getPosX() - 1, this.getPosY()).isPresent();
-        val right = board.maybeGetTileGeneric(PathTile.class, this.getPosX() + 1, this.getPosY()).isPresent();
-        val up = board.maybeGetTileGeneric(PathTile.class, this.getPosX(), this.getPosY() - 1).isPresent();
-        val down = board.maybeGetTileGeneric(PathTile.class, this.getPosX(), this.getPosY() + 1).isPresent();
+        val left = board.maybeGetTileGeneric(PathTile.class, this.getPos().getX() - 1, this.getPos().getY()).isPresent();
+        val right = board.maybeGetTileGeneric(PathTile.class, this.getPos().getX() + 1, this.getPos().getY()).isPresent();
+        val up = board.maybeGetTileGeneric(PathTile.class, this.getPos().getX(), this.getPos().getY() - 1).isPresent();
+        val down = board.maybeGetTileGeneric(PathTile.class, this.getPos().getX(), this.getPos().getY() + 1).isPresent();
 
         EnumSet<TileSides> sides = EnumSet.noneOf(TileSides.class);
         if (left) sides.add(LEFT);

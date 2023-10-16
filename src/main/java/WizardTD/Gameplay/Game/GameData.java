@@ -23,6 +23,7 @@ public final class GameData {
     public @NonNull List<Projectile> projectiles;
 
     public @NonNull List<Wave> waves;
+//    public @NonNull List
 
     public @NonNull GameDataConfig config;
 

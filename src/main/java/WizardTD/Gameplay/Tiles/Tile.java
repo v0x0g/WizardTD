@@ -9,13 +9,9 @@ import java.util.*;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 public abstract class Tile extends Renderable {
-    /**
-     * The tile coordinates for this tile
-     */
-    @Getter
-    @Setter
-    private int posX, posY;
 
+    @Getter private final TilePos pos = new TilePos(0,0);
+    
     /**
      * Parses a char as a Tile
      *

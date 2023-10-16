@@ -57,8 +57,8 @@ public final class Board {
         // As a note:
         // This won't work if the tile instances are shared across positions (instanced tiling)
         // So we hope the user creates a new instance each time
-        tile.setPosX(row);
-        tile.setPosY(col);
+        tile.getPos().setX(row);
+        tile.getPos().setY(col);
     }
 
     @Override
