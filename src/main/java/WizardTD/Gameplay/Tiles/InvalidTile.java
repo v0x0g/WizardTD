@@ -18,14 +18,14 @@ import processing.core.*;
 @EqualsAndHashCode(callSuper = true)
 public class InvalidTile extends Tile {
 
-    private static final @NonNull PImage invalidTileImg = ImageExt.generatePattern(
+    private static final PImage invalidTileImg = ImageExt.generatePattern(
             GuiConfig.CELL_SIZE_PX, GuiConfig.CELL_SIZE_PX, GuiConfig.CELL_SIZE_PX/2, 2,
             ImageExt.ImagePattern.CHECKERS,
             Colour.BRIGHT_PURPLE.asInt(), Colour.RED.asInt()
     );
 
     @Override
-    public void render(@NonNull final PApplet app, @NonNull final GameData gameData, @NonNull final UiState uiState) {
+    public void render(final PApplet app, final GameData gameData, final UiState uiState) {
         Renderer.renderSimpleTile(app, invalidTileImg, UiManager.tileToPixelCoords(this));
     }
 }

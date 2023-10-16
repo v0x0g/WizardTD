@@ -23,18 +23,18 @@ public class FireballProjectile extends Projectile {
      */
     public double baseDamage;
 
-    public FireballProjectile(@NonNull final Vector2 position, final double baseDamage) {
+    public FireballProjectile(final Vector2 position, final double baseDamage) {
         super(position);
         this.baseDamage = baseDamage;
     }
 
     @Override
-    public @NonNull RenderOrder getRenderOrder() {
+    public RenderOrder getRenderOrder() {
         return RenderOrder.PROJECTILE;
     }
 
     @Override
-    public void render(final @NonNull PApplet app, @NonNull GameData gameData, @NonNull UiState uiState) {
+    public void render(final PApplet app, GameData gameData, UiState uiState) {
         throw null;
     }
 }

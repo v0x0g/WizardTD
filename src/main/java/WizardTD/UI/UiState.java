@@ -25,5 +25,5 @@ public final class UiState {
     /**
      * List of all the UI elements that should be rendered
      */
-    public final @NonNull List<UiElement> uiElements         = new ArrayList<>();
+    public final List<UiElement> uiElements         = new ArrayList<>();
 }

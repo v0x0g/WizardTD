@@ -12,17 +12,17 @@ public final class GameDataConfig {
     /**
      * Config for the towers
      */
-    public final @NonNull TowerConfig tower;
+    public final TowerConfig tower;
 
     /**
      * Config for mana
      */
-    public final @NonNull ManaConfig mana;
+    public final ManaConfig mana;
 
     /**
      * Config for the spells
      */
-    public final @NonNull SpellConfig spell;
+    public final SpellConfig spell;
 
     @ToString
     @EqualsAndHashCode
@@ -82,7 +82,7 @@ public final class GameDataConfig {
         /**
          * Config for the mana pool spell
          */
-        public final @NonNull ManaPool manaPool;
+        public final ManaPool manaPool;
 
         @ToString
         @EqualsAndHashCode

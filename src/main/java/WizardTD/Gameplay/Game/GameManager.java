@@ -35,8 +35,7 @@ public class GameManager {
     /**
      * Loads the game config from disk, and returns it as a JSON object
      */
-    @NonNull
-    @SideEffectFree
+        @SideEffectFree
     private Optional<JSONObject> loadGameConfig() {
         debug("loading game config");
         final Path path = Paths.get(WizardTD.GameConfig.CONFIG_PATH);
@@ -65,9 +64,8 @@ public class GameManager {
     /**
      * Loads the given level layout file from disk
      */
-    @NonNull
-    @SideEffectFree
-    private Optional<@NonNull List<@NonNull String>> loadLevelLayoutFile(@NonNull final String fileName) {
+        @SideEffectFree
+    private Optional<List<String>> loadLevelLayoutFile(final String fileName) {
         debug("loading level layout");
         final Path path = Paths.get(fileName);
         trace("level layout path={}", path);
@@ -325,7 +323,7 @@ public class GameManager {
     /**
      * Actually creates a game object, that can then be played
      */
-    public static @NonNull GameData createGame(@NonNull final GameDescriptor desc) {
+    public static GameData createGame(final GameDescriptor desc) {
         trace("creating game from level desc: {}", desc);
 
         final Board board = desc.board;
@@ -351,7 +349,7 @@ public class GameManager {
      * @param game      The object storing the game data
      * @param deltaTime Time between the last frame start and the current frame start
      */
-    public static void tickGame(final @NonNull PApplet app, final @NonNull GameData game, final double deltaTime) {
+    public static void tickGame(final PApplet app, final GameData game, final double deltaTime) {
         final double visualDeltaTime = deltaTime;
         final double gameDeltaTime;
         

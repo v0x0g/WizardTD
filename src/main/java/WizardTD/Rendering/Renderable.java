@@ -12,10 +12,10 @@ public abstract class Renderable {
     /**
      * Returns the `RenderOrder` for this object, which respresents the time at which it should be rendered
      */
-    public abstract @NonNull RenderOrder getRenderOrder();
+    public abstract RenderOrder getRenderOrder();
 
     /**
      * Renders the object, using the specified `app` instance
      */
-    public abstract void render(final @NonNull PApplet app, @NonNull GameData gameData, @NonNull UiState uiState);
+    public abstract void render(final PApplet app, GameData gameData, UiState uiState);
 }

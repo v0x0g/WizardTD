@@ -9,11 +9,11 @@ import org.checkerframework.checker.nullness.qual.*;
 @EqualsAndHashCode
 public class Event {
 
-    public final @NonNull EventType eventType;
+    public final EventType eventType;
 
     public final @Nullable Object dataObject;
 
-    public Event(@NonNull final EventType eventType) {
+    public Event(final EventType eventType) {
         this(eventType, null);
     }
 }

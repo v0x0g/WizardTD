@@ -9,7 +9,7 @@ public interface Clickable {
      * @param mouse
      * @return
      */
-    boolean mouseOver(@NonNull Vector2 mouse);
+    boolean mouseOver(Vector2 mouse);
     
 //    boolean 
 }

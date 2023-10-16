@@ -6,7 +6,7 @@ import org.tinylog.*;
 
 @UtilityClass
 public class Loggers {
-    public final @NonNull TaggedLogger 
+    public final TaggedLogger 
             UI = Logger.tag(LogTag.UI),
             INPUT = Logger.tag(LogTag.INPUT),
             RENDER = Logger.tag(LogTag.RENDER),

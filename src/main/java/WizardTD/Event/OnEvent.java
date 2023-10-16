@@ -15,6 +15,6 @@ import java.lang.annotation.*;
 @SuppressWarnings("unused")
 public @interface OnEvent {
 
-    EventType @NonNull [] eventTypes();// default EventType.Init;
+    EventType [] eventTypes();// default EventType.Init;
 
 }

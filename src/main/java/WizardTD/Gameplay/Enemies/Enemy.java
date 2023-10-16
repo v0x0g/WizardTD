@@ -13,7 +13,7 @@ import sun.reflect.generics.reflectiveObjects.*;
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Enemy extends Renderable {
-
+//TODO: Render
     /**
      * How much health the enemy has remaining
      */
@@ -24,7 +24,7 @@ public abstract class Enemy extends Renderable {
      * <p/>
      * This is in TILE coordinates, not pixels
      */
-    public @NonNull Vector2 position;
+    public Vector2 position;
 
     /**
      * How many units (tiles) per frame the monster moves
@@ -42,7 +42,7 @@ public abstract class Enemy extends Renderable {
     public double manaGainedOnKill;
 
     @Override
-    public @NonNull RenderOrder getRenderOrder() {
+    public RenderOrder getRenderOrder() {
         return RenderOrder.ENTITY;
     }
 }

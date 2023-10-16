@@ -10,6 +10,6 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Projectile extends Renderable {
 
-    public @NonNull Vector2 position;
+    public Vector2 position;
 
 }

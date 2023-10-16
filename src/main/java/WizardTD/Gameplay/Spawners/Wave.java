@@ -25,7 +25,7 @@ public final class Wave {
      * Multiplier on how fast monsters should spawn. This should be 1/duration
      */
     public final double spawnRateMult;
-    public final @NonNull List<@NonNull EnemyFactory<?>> enemyFactories;
+    public final List<EnemyFactory<?>> enemyFactories;
 
     /**
      * Internal value used to keep track of how enemies to spawn.
@@ -38,7 +38,7 @@ public final class Wave {
 
     public Wave(
             final double duration, final double delayBeforeWave, final double spawnRateMult,
-            @NonNull final List<@NonNull EnemyFactory<?>> enemyFactories) {
+            final List<EnemyFactory<?>> enemyFactories) {
         this.duration = duration;
         this.delayBeforeWave = delayBeforeWave;
         this.spawnRateMult = spawnRateMult;

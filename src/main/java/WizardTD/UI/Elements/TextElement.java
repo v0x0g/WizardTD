@@ -12,7 +12,7 @@ import processing.core.*;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 public class TextElement extends UiElement {
-
+    
     public @NonNull Vector2 pos1;
     public @NonNull Vector2 pos2;
     /**
@@ -23,11 +23,11 @@ public class TextElement extends UiElement {
      * See {@link PApplet#textAlign(int)}
      */
     public          int     textAlignMode = PConstants.CENTER;
-    public          float   fontSize = Theme.TEXT_SIZE_NORMAL;
+    public         float   fontSize = Theme.TEXT_SIZE_NORMAL;
     public @NonNull String  text;
 
     @Override
-    public void render(@NonNull final PApplet app, @NonNull final GameData gameData, @NonNull UiState uiState) {
+    public void render(final PApplet app, final GameData gameData, UiState uiState) {
         app.fill(Theme.TEXT.asInt());
         app.rectMode(this.rectPosMode);
         app.textAlign(this.textAlignMode);

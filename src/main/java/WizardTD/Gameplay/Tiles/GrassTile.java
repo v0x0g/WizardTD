@@ -20,13 +20,13 @@ public final class GrassTile extends Tile {
 
     @SuppressWarnings({"unused", "DataFlowIssue"})
     @OnEvent(eventTypes = EventType.AppSetup)
-    private static void loadImages(@NonNull final Event event) {
-        final @NonNull PApplet app = (PApplet) event.dataObject;
+    private static void loadImages(final Event event) {
+        final PApplet app = (PApplet) event.dataObject;
         tileImage = UiManager.loadImage(app, Resources.Tiles.Grass.ONLY_TILE);
     }
 
     @Override
-    public void render(@NonNull final PApplet app, final @NonNull GameData gameData, final @NonNull UiState uiState) {
+    public void render(final PApplet app, final GameData gameData, final UiState uiState) {
         Renderer.renderSimpleTile(app, tileImage, UiManager.tileToPixelCoords(this));
     }
 }

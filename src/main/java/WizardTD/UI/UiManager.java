@@ -35,7 +35,7 @@ public class UiManager {
      * @param app  Applet instance to load the image with
      * @param path Path to the image file
      */
-    public @NonNull PImage loadImage(@NonNull final PApplet app, @NonNull @CompileTimeConstant final String path) {
+    public PImage loadImage(final PApplet app, @CompileTimeConstant final String path) {
         Loggers.UI.debug("loading image at {}", path);
         //noinspection LocalCanBeFinal
         val img = app.loadImage(path);
@@ -43,13 +43,13 @@ public class UiManager {
         return img;
     }
 
-    public @NonNull Optional<Tile> pixelCoordsToTile(final @NonNull Vector2 coords, final @NonNull GameData gameData) {
+    public Optional<Tile> pixelCoordsToTile(final Vector2 coords, final GameData gameData) {
         return pixelCoordsToTile(coords, gameData, new Ref<>(0), new Ref<>(0));
     }
 
-    public @NonNull Optional<Tile> pixelCoordsToTile(
-            final @NonNull Vector2 coords, final @NonNull GameData gameData, final @NonNull Ref<Integer> outX,
-            final @NonNull Ref<Integer> outY) {
+    public Optional<Tile> pixelCoordsToTile(
+            final Vector2 coords, final GameData gameData, final Ref<Integer> outX,
+            final Ref<Integer> outY) {
         // Use inverse lerp to extract the tile coordinates from the mouse pos
         final double x = Numerics.inverseLerp(coords.x, BOARD_POS_X, BOARD_POS_X + (CELL_SIZE_PX * BOARD_SIZE_TILES));
         final double y = Numerics.inverseLerp(coords.y, BOARD_POS_Y, BOARD_POS_Y + (CELL_SIZE_PX * BOARD_SIZE_TILES));
@@ -64,14 +64,14 @@ public class UiManager {
         return tile;
     }
 
-    public @NonNull Vector2 tileToPixelCoords(final @NonNull Tile tile) {
+    public Vector2 tileToPixelCoords(final Tile tile) {
         // Offset by the tile's coordinates, and then half a tile extra to move to the centre 
         final int middlePosX = BOARD_POS_X + (tile.getPosX() * CELL_SIZE_PX) + (CELL_SIZE_PX / 2);
         final int middlePosY = BOARD_POS_Y + (tile.getPosY() * CELL_SIZE_PX) + (CELL_SIZE_PX / 2);
         return new Vector2(middlePosX, middlePosY);
     }
 
-    public void initUi(@NonNull final UiState uiState) {
+    public void initUi(final UiState uiState) {
         //Background
         {
             uiState.uiElements.add(new RectElement(
@@ -81,7 +81,7 @@ public class UiManager {
                     Colour.NONE
             ) {
                 @Override
-                public @NonNull RenderOrder getRenderOrder() {
+                public RenderOrder getRenderOrder() {
                     return RenderOrder.BACKGROUND;
                 }
             });
@@ -225,10 +225,10 @@ public class UiManager {
      * @param draw          Function to be called every frame
      */
     private static void addSidebarButton(
-            final @NonNull UiState uiState, final @NonNull Vector2 buttonPos,
-            final @NonNull String text, final @Nullable KeyCode activationKey,
-            final @NonNull UiAction<ButtonElement> click,
-            final @NonNull UiAction<ButtonElement> draw) {
+            final UiState uiState, final Vector2 buttonPos,
+            final String text, final @Nullable KeyCode activationKey,
+            final UiAction<ButtonElement> click,
+            final UiAction<ButtonElement> draw) {
         final Vector2 buttonSize = new Vector2(48, 48);
 
         final Vector2 pos1 = buttonPos.clone();
@@ -256,11 +256,11 @@ public class UiManager {
     // region
 
     public void mouseEvent(
-            final @NonNull PApplet app, final @NonNull GameData gameData, final @NonNull UiState uiState,
-            final @NonNull MousePress press) {
+            final PApplet app, final GameData gameData, final UiState uiState,
+            final MousePress press) {
         final Ref<Integer> tileX = new Ref<>(0);
         final Ref<Integer> tileY = new Ref<>(0);
-        @NonNull final Optional<Tile> tile = UiManager.pixelCoordsToTile(
+        final Optional<Tile> tile = UiManager.pixelCoordsToTile(
                 new Vector2(press.coords.x, press.coords.y),
                 gameData,
                 tileX,
@@ -281,8 +281,8 @@ public class UiManager {
     }
 
     public void keyEvent(
-            final @NonNull PApplet app, final @NonNull GameData gameData, final @NonNull UiState uiState,
-            final @NonNull KeyPress press) {
+            final PApplet app, final GameData gameData, final UiState uiState,
+            final KeyPress press) {
         // Pass on any key-presses to the UI elements
         Loggers.INPUT.debug("key event: {}", press);
 
@@ -297,8 +297,8 @@ public class UiManager {
     }
 
     @SuppressWarnings("unchecked")
-    public static @NonNull Stream<ClickableElement> getClickableElements(
-            final @NonNull Collection<UiElement> uiElements) {
+    public static Stream<ClickableElement> getClickableElements(
+            final Collection<UiElement> uiElements) {
         /*
          SAFETY: This does use unchecked casting, however the objects are validated
          Apologies for the horrible code, but Java's type erasure makes this very

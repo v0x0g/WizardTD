@@ -20,16 +20,15 @@ public final class TowerTile extends Tile {
 
     @SuppressWarnings({"unused", "DataFlowIssue"})
     @OnEvent(eventTypes = EventType.AppSetup)
-    private static void loadImages(@NonNull final Event event) {
-        final @NonNull PApplet app = (PApplet) event.dataObject;
+    private static void loadImages(final Event event) {
+        final PApplet app = (PApplet) event.dataObject;
         tileLevel0 = UiManager.loadImage(app, Resources.Tiles.Tower.Tile0);
         tileLevel1 = UiManager.loadImage(app, Resources.Tiles.Tower.Tile1);
         tileLevel2 = UiManager.loadImage(app, Resources.Tiles.Tower.Tile2);
     }
 
     @Override
-    public void render(@NonNull final PApplet app, @NonNull GameData gameData, @NonNull UiState uiState) {
-        final Vector2 pos = UiManager.tileToPixelCoords(this);
-        Renderer.renderSimpleTile(app, null, pos.x, pos.y);
+    public void render(final PApplet app, GameData gameData, UiState uiState) {
+        Renderer.renderSimpleTile(app, tileLevel0, UiManager.tileToPixelCoords(this));
     }
 }

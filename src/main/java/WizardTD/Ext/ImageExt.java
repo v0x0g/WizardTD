@@ -19,7 +19,7 @@ public class ImageExt {
      * @param applet PApplet so we can create the image
      * @return the new rotated image
      */
-    public @NonNull PImage rotate(final PApplet applet, final PImage pImg, final double angle) {
+    public PImage rotate(final PApplet applet, final PImage pImg, final double angle) {
         final BufferedImage img = (BufferedImage) pImg.getNative();
         final double rads = Math.toRadians(angle);
         final double sin = Math.abs(Math.sin(rads));
@@ -53,8 +53,8 @@ public class ImageExt {
         return result;
     }
 
-    public @NonNull PImage generatePattern(
-            final int w, final int h, final int thickness, final int spacing, @NonNull final ImagePattern pattern,
+    public PImage generatePattern(
+            final int w, final int h, final int thickness, final int spacing, final ImagePattern pattern,
             final int col1, final int col2) {
         final PImage img = new PImage(w, h);
         for (int x = 0; x < w; x++) {

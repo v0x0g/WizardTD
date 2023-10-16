@@ -20,8 +20,8 @@ import java.util.*;
 
 public final class App extends PApplet {
 
-    public final @NonNull GameData gameData;
-    public final @NonNull UiState uiState;
+    public final GameData gameData;
+    public final UiState uiState;
     /**
      * The last time at which a frame was rendered
      * <p/>
@@ -102,7 +102,7 @@ public final class App extends PApplet {
     // region
 
     @Override
-    protected void handleKeyEvent(final @NonNull KeyEvent evt) {
+    protected void handleKeyEvent(final KeyEvent evt) {
         final KeyCode keyCode = KeyCode.fromInt(evt.getKeyCode());
         final KeyAction keyAction = KeyAction.fromInt(evt.getAction());
         if (evt.getKeyCode() == 0) return; // Processing does this sometimes
@@ -114,7 +114,7 @@ public final class App extends PApplet {
     }
 
     @Override
-    protected void handleMouseEvent(final @NonNull MouseEvent evt) {
+    protected void handleMouseEvent(final MouseEvent evt) {
         final MouseCode mouseCode = MouseCode.fromInt(evt.getButton());
         final MouseAction mouseAction = MouseAction.fromInt(evt.getAction());
         if (mouseCode == null && mouseAction == MouseAction.MOVE) return; // Code is null when we move the mouse, ignore

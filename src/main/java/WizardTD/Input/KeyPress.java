@@ -7,7 +7,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 @EqualsAndHashCode
 @AllArgsConstructor
 public class KeyPress {
-    public final @NonNull KeyCode keyCode;
+    public final KeyCode keyCode;
     public final boolean isRepeat;
-    public final @NonNull KeyAction action;
+    public final KeyAction action;
 }

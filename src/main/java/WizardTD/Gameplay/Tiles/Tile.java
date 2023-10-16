@@ -23,7 +23,7 @@ public abstract class Tile extends Renderable {
      * @param c The char to parse
      * @return Either a parsed tile, or empty if the char was invalid
      */
-    public static @NonNull Optional<Tile> fromChar(final char c) {
+    public static Optional<Tile> fromChar(final char c) {
         switch (c) {
             case 'S':
                 return Optional.of(new ShrubTile());
@@ -39,7 +39,7 @@ public abstract class Tile extends Renderable {
     }
 
     @Override
-    public @NonNull RenderOrder getRenderOrder() {
+    public RenderOrder getRenderOrder() {
         return RenderOrder.TILE;
     }
 
@@ -47,5 +47,5 @@ public abstract class Tile extends Renderable {
      * Method to be called whenever something changes on the board,
      * and the tile should be updated to reflect this
      */
-    public void boardDirty(@NonNull final Board board) {}
+    public void boardDirty(final Board board) {}
 }

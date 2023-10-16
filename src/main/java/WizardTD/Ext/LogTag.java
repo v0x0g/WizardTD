@@ -5,7 +5,7 @@ import lombok.experimental.*;
 
 @UtilityClass
 public class LogTag {
-    public static final @NonNull String
+    public static final String
             UI = "ui",
             INPUT = "input",
             RENDER = "render",

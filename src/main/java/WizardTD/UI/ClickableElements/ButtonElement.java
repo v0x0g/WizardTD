@@ -16,13 +16,13 @@ import processing.core.*;
 @EqualsAndHashCode(callSuper = true)
 public class ButtonElement extends ClickableElement {
 
-    public final @NonNull UiAction<ButtonElement> click;
-    public @NonNull Colour fillColour;
-    public @NonNull Colour outlineColour;
+    public final UiAction<ButtonElement> click;
+    public Colour fillColour;
+    public Colour outlineColour;
     /**
      * See {@link PApplet#rectMode(int)}
      */
-    public @NonNull String text;
+    public String text;
     public float fontSize;
 
     /**
@@ -31,11 +31,11 @@ public class ButtonElement extends ClickableElement {
     public int textAlignMode = PConstants.CENTER;
 
     public ButtonElement(
-            @NonNull final Vector2 corner1, @NonNull final Vector2 corner2,
-            @NonNull final String text, final float fontSize,
-            final @NonNull Colour fillColour, final @NonNull Colour outlineColour,
+            final Vector2 corner1, final Vector2 corner2,
+            final String text, final float fontSize,
+            final Colour fillColour, final Colour outlineColour,
             @Nullable final KeyPress activationKey,
-            @NonNull final UiAction<ButtonElement> click) {
+            final UiAction<ButtonElement> click) {
         super(corner1, corner2, activationKey);
         this.click = click;
         this.fillColour = fillColour;
@@ -46,7 +46,7 @@ public class ButtonElement extends ClickableElement {
     }
 
     @Override
-    public void render(@NonNull final PApplet app, @NonNull final GameData gameData, @NonNull final UiState uiState) {
+    public void render(final PApplet app, final GameData gameData, final UiState uiState) {
         setColours(app, this.fillColour, this.outlineColour);
         app.rectMode(PConstants.CORNERS);
         app.rect(
@@ -65,7 +65,7 @@ public class ButtonElement extends ClickableElement {
     }
 
     @Override
-    public void activate(final @NonNull GameData gameData, final @NonNull UiState uiState) {
+    public void activate(final GameData gameData, final UiState uiState) {
         Loggers.UI.debug("activate button {}", this);
         this.click.invoke(this, gameData, uiState);
     }

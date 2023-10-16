@@ -17,7 +17,7 @@ public abstract class UiElement extends Renderable {
      * @param fill
      */
     protected static void setColours(
-            final @NonNull PApplet app, final @NonNull Colour fill, final @NonNull Colour outline) {
+            final PApplet app, final Colour fill, final Colour outline) {
         if (fill == Colour.NONE) app.noFill();
         else app.fill(fill.asInt());
         if (outline == Colour.NONE) app.noStroke();
@@ -26,7 +26,7 @@ public abstract class UiElement extends Renderable {
 
     // TODO: Refactor this?
     @Override
-    public @NonNull RenderOrder getRenderOrder() {
+    public RenderOrder getRenderOrder() {
         return RenderOrder.UI;
     }
 

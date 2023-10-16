@@ -17,7 +17,7 @@ public class GameConfig {
      */
     public static final int BOARD_SIZE_TILES = 20;
 
-    public static final @NonNull String CONFIG_PATH = "config.json";
+    public static final String CONFIG_PATH = "config.json";
     /**
      * How fast the game should go when fast-forwarded
      */

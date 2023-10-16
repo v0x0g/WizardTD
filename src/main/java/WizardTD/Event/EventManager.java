@@ -17,13 +17,13 @@ import static org.tinylog.Logger.*;
 @ExtensionMethod(java.util.Arrays.class)
 public class EventManager {
 
-    private final @NonNull ConcurrentHashMap<@NonNull EventType, @NonNull Set<@NonNull EventMethod>> eventsMap =
+    private final ConcurrentHashMap<EventType, Set<EventMethod>> eventsMap =
             new ConcurrentHashMap<>();
 
     /**
      * Gets the subscriber list for the given event type
      */
-    private @NonNull Set<@NonNull EventMethod> subscriberList(final @NonNull EventType type) {
+    private Set<EventMethod> subscriberList(final EventType type) {
         // Use a concurrent HashMap's key set to get a concurrent set
         return eventsMap.computeIfAbsent(type, $_ -> ConcurrentHashMap.newKeySet());
     }
@@ -33,10 +33,10 @@ public class EventManager {
      *
      * @param event The event to invoke
      */
-    public void invokeEvent(@NonNull final Event event) {
+    public void invokeEvent(final Event event) {
         Loggers.EVENT.debug("start invoke event: {}", event);
         // Ensure we have the entry for corresponding event type
-        final Set<@NonNull EventMethod> subscribers = subscriberList(event.eventType);
+        final Set<EventMethod> subscribers = subscriberList(event.eventType);
         subscribers
                 .stream()
                 .forEach(sub -> {
@@ -50,7 +50,7 @@ public class EventManager {
     /**
      * Adds a subscriber to a given event type
      */
-    public void subscribe(final @NonNull EventType type, final @NonNull EventMethod method) {
+    public void subscribe(final EventType type, final EventMethod method) {
         Loggers.EVENT.debug("adding subscriber for {}: {}", type, method);
         subscriberList(type).add(method);
     }
@@ -58,7 +58,7 @@ public class EventManager {
     /**
      * Removes a subscriber from a given event type
      */
-    public void unsubscribe(final @NonNull EventType type, final @NonNull EventMethod method) {
+    public void unsubscribe(final EventType type, final EventMethod method) {
         Loggers.EVENT.debug("removing subscriber for {}: {}", type, method);
         subscriberList(type).remove(method);
     }
@@ -130,10 +130,10 @@ public class EventManager {
                         @AllArgsConstructor
                         @ToString
                         class Helper implements EventMethod {
-                            public final @NonNull Method method;
+                            public final Method method;
 
                             @Override
-                            public void processEvent(@NonNull final Event event) {
+                            public void processEvent(final Event event) {
                                 try {
                                     method.invoke(null, event);
                                 }

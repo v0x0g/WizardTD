@@ -17,14 +17,14 @@ import static WizardTD.Gameplay.Tiles.TileSides.*;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 public final class PathTile extends Tile {
-    private static final @NonNull Hashtable<EnumSet<TileSides>, PImage> pathSidesMap = new Hashtable<>();
-    private transient @NonNull EnumSet<TileSides> connectedPathSides = EnumSet.noneOf(TileSides.class);
+    private static final Hashtable<EnumSet<TileSides>, PImage> pathSidesMap = new Hashtable<>();
+    private transient EnumSet<TileSides> connectedPathSides = EnumSet.noneOf(TileSides.class);
 
     @OnEvent(eventTypes = EventType.AppSetup)
     @SuppressWarnings("unused")
-    private static void loadImages(@NonNull final Event evt) {
+    private static void loadImages(final Event evt) {
         assert evt.dataObject != null;
-        @NonNull final PApplet app = (PApplet) evt.dataObject;
+        final PApplet app = (PApplet) evt.dataObject;
 
         // Angles to rotate by
         final double NONE = 0;
@@ -69,7 +69,7 @@ public final class PathTile extends Tile {
      */
     @SuppressWarnings("LocalCanBeFinal")
     @Override
-    public void boardDirty(@NonNull Board board) {
+    public void boardDirty(Board board) {
         // Update what sides are connected.
         val left = board.maybeGetTileGeneric(PathTile.class, this.getPosX() - 1, this.getPosY()).isPresent();
         val right = board.maybeGetTileGeneric(PathTile.class, this.getPosX() + 1, this.getPosY()).isPresent();
@@ -86,7 +86,7 @@ public final class PathTile extends Tile {
     }
 
     @Override
-    public void render(@NonNull final PApplet app, @NonNull final GameData gameData, @NonNull final UiState uiState) {
+    public void render(final PApplet app, final GameData gameData, final UiState uiState) {
         Renderer.renderSimpleTile(app, pathSidesMap.get(this.connectedPathSides), UiManager.tileToPixelCoords(this));
     }
 }

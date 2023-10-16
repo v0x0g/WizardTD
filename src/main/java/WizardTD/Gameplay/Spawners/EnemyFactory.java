@@ -43,9 +43,9 @@ public class EnemyFactory<TEnemy extends Enemy> {
     public final @Nullable BigInteger maxQuantity;
 
     /// How many enemies have been spawned so far
-    private @NonNull BigInteger quantitySpawned = BigInteger.valueOf(0L);
+    private BigInteger quantitySpawned = BigInteger.valueOf(0L);
 
-    public final @NonNull Func1<TEnemy, EnemyFactory<TEnemy>> spawn;
+    public final Func1<TEnemy, EnemyFactory<TEnemy>> spawn;
 
     @Nullable
     public TEnemy spawnEnemy() {

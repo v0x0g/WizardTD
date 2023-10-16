@@ -19,7 +19,7 @@ import static WizardTD.UI.Appearance.GuiConfig.*;
 @UtilityClass
 @ExtensionMethod(Arrays.class)
 public class Renderer {
-    public final @NonNull PImage missingTextureImage = ImageExt.generatePattern(
+    public final PImage missingTextureImage = ImageExt.generatePattern(
             GuiConfig.CELL_SIZE_PX,
             GuiConfig.CELL_SIZE_PX,
             CELL_SIZE_PX >> 2,
@@ -28,15 +28,15 @@ public class Renderer {
             Colour.BRIGHT_PURPLE.asInt(),
             Colour.BLACK.asInt()
     );
-    private static final @NonNull ThreadLocal<ConcurrentHashMap<RenderOrder, List<Renderable>>> renderOrderMaps =
+    private static final ThreadLocal<ConcurrentHashMap<RenderOrder, List<Renderable>>> renderOrderMaps =
             ThreadLocal.withInitial(ConcurrentHashMap::new);
-    private static final @NonNull RenderOrder @NonNull [] renderOrders =
+    private static final RenderOrder [] renderOrders =
             RenderOrder.values()
                        .stream()
                        .sorted()
                        .toArray(RenderOrder[]::new);
 
-    public void render(@NonNull final PApplet app, @NonNull final GameData game, @NonNull final UiState ui) {
+    public void render(final PApplet app, final GameData game, final UiState ui) {
         Loggers.RENDER.debug("start render");
         final Instant startInstant = Instant.now();
         // When we render, we aggregate all the `Renderables`, and sort them into our map
@@ -78,15 +78,34 @@ public class Renderer {
      * @param centre Position of the tile, in pixel coordinates
      */
     public void renderSimpleTile(
-            @NonNull final PApplet app, @Nullable PImage img, final Vector2 centre) {
+            final PApplet app, @Nullable PImage img, final Vector2 centre) {
         Loggers.RENDER.trace("tile [{00}}, {00}]: render img {}", centre.x, centre.y, img);
         if (!ImageExt.isValidImage(img)) {
             img = missingTextureImage;
-            Loggers.RENDER.trace("render tile [{00}, {00}]: missing texture", centre.x, centre.y);
+            Loggers.RENDER.debug("tile [{00}, {00}]: missing texture", centre.x, centre.y);
         }
         app.imageMode(PConstants.CENTER);
         app.colorMode(PConstants.ARGB);
         app.image(img, (float) centre.x, (float) centre.y);
     }
 
+
+
+    /**
+     * Renders a simple tile image at the given tile coordinates
+     * 
+     * @param img Image to render for the entity
+     * @param centre Position of the entity, in tile coordinates
+     */
+    public void renderSimpleEnemy(
+            final PApplet app, @Nullable PImage img, final Vector2 centre) {
+        Loggers.RENDER.trace("entity ({0}, {0): render img {}", centre.x, centre.y, img);
+        if (!ImageExt.isValidImage(img)) {
+            img = missingTextureImage;
+            Loggers.RENDER.debug("entity ({0}, {0): missing texture", centre.x, centre.y);
+        }
+        app.imageMode(PConstants.CENTER);
+        app.colorMode(PConstants.ARGB);
+        app.image(img, (float) centre.x, (float) centre.y);
+    }
 }

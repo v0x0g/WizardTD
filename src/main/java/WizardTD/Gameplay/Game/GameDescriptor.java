@@ -16,12 +16,12 @@ import java.util.*;
 @AllArgsConstructor
 public class GameDescriptor {
 
-    public final @NonNull String name;
+    public final String name;
 
-    public final @NonNull Board board;
+    public final Board board;
 
-    public final @NonNull GameDataConfig config;
+    public final GameDataConfig config;
 
-    public final @NonNull List<@NonNull Wave> waves;
+    public final List<Wave> waves;
 
 }
