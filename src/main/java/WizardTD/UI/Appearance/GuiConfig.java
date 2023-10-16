@@ -38,7 +38,7 @@ public class GuiConfig {
          */
         public static final int WINDOW_WIDTH_PX =
                 CELL_SIZE_PX * GameConfig.BOARD_SIZE_TILES + UiPositions.SIDEBAR_WIDTH_PX;
-        public static final double TARGET_FPS = 60000.0f;
+        public static final double TARGET_FPS = 6.0f;
     }
 
 }

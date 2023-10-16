@@ -12,13 +12,6 @@ import java.util.*;
 public final class UiState {
 
     /**
-     * Flags for controlling the speed of the game
-     */
-    public boolean
-            paused = false,
-            fastForward = false;
-
-    /**
      * Flags for what upgrades the user has currently selected
      */
     public boolean

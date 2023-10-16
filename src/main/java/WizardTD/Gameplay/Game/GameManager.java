@@ -4,7 +4,6 @@ import WizardTD.Gameplay.Enemies.*;
 import WizardTD.Gameplay.Projectiles.*;
 import WizardTD.Gameplay.Spawners.*;
 import WizardTD.Gameplay.Tiles.*;
-import WizardTD.UI.*;
 import lombok.experimental.*;
 import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.*;
@@ -92,7 +91,7 @@ public class GameManager {
 
     /**
      * Loads the game descriptor from the disk
-     * <p> 
+     * <p>
      * This can then be used to actually instantiate the gameData object
      */
     @SideEffectFree
@@ -330,15 +329,33 @@ public class GameManager {
         final List<Wave> waves = desc.waves;
         final List<Projectile> projectiles = new ArrayList<>();
 
-        final double mana = desc.config.mana.initialManaValue;
-        final double manaCap = desc.config.mana.initialManaCap;
-        final double manaTrickle = desc.config.mana.initialManaTrickle;
+        final double mana_ = desc.config.mana.initialManaValue;
+        final double manaCap_ = desc.config.mana.initialManaCap;
+        final double manaTrickle_ = desc.config.mana.initialManaTrickle;
 
-        return new GameData(board, enemies, projectiles, waves, desc.config, mana, manaCap, manaTrickle);
+        final GameData game = new GameData(board, enemies, projectiles, waves, desc.config);
+        game.mana = mana_;
+        game.manaCap = manaCap_;
+        game.manaTrickle = manaTrickle_;
+        return game;
     }
 
+    /**
+     * Ticks (updates) the game
+     *
+     * @param app       The app instance
+     * @param game      The object storing the game data
+     * @param deltaTime Time between the last frame start and the current frame start
+     */
     public static void tickGame(final @NonNull PApplet app, final @NonNull GameData game, final double deltaTime) {
-        game.mana += deltaTime * game.manaTrickle;
-        game.mana = Math.min(game.mana,game.manaCap);
+        final double visualDeltaTime = deltaTime;
+        final double gameDeltaTime;
+        
+        if (game.paused) gameDeltaTime = 0;
+        else if (game.fastForward) gameDeltaTime = deltaTime * FAST_FORWARD_SPEED;
+        else gameDeltaTime = deltaTime;
+        
+        game.mana += gameDeltaTime * game.manaTrickle;
+        game.mana = Math.min(game.mana, game.manaCap);
     }
 }

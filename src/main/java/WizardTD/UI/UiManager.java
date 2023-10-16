@@ -152,17 +152,18 @@ public class UiManager {
                     buttonPos,
                     "FF",
                     KeyCode.F,
-                    (button, game, ui) -> Logger.debug("toggle fast forward = {}", ui.fastForward ^= true),
-                    (button, game, ui) -> button.fillColour =
-                            ui.fastForward ? Theme.BUTTON_ENABLED : Theme.BUTTON_DISABLED
+                    (button, game, ui) -> Logger.debug("toggle fast forward = {}", game.fastForward ^= true),
+                    (button, game, ui) -> {
+                        button.fillColour = game.fastForward ? Theme.BUTTON_ENABLED : Theme.BUTTON_DISABLED;
+                    }
             );
             addSidebarButton(
                     uiState,
                     buttonPos,
                     "P",
                     KeyCode.P,
-                    (button, game, ui) -> Logger.debug("toggle pause = {}", ui.paused ^= true),
-                    (button, game, ui) -> button.fillColour = ui.paused ? Theme.BUTTON_ENABLED : Theme.BUTTON_DISABLED
+                    (button, game, ui) -> Logger.debug("toggle pause = {}", game.paused ^= true),
+                    (button, game, ui) -> button.fillColour = game.paused ? Theme.BUTTON_ENABLED : Theme.BUTTON_DISABLED
             );
             addSidebarButton(
                     uiState,

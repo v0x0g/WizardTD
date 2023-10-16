@@ -14,6 +14,7 @@ import java.util.*;
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor
+@RequiredArgsConstructor
 public final class GameData {
 
     public @NonNull Board board;
@@ -24,6 +25,13 @@ public final class GameData {
     public @NonNull List<@NonNull Wave> waves;
 
     public @NonNull GameDataConfig config;
+
+    /**
+     * Flags for controlling the speed of the game
+     */
+    public boolean
+            paused = false,
+            fastForward = false;
 
     /**
      * How much mana the wizard has remaining
