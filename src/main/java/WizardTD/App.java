@@ -21,7 +21,13 @@ import java.util.*;
 public final class App extends PApplet {
 
     public final @NonNull GameData gameData;
-    public final @NonNull UiState  uiState;
+    public final @NonNull UiState uiState;
+    /**
+     * The last time at which a frame was rendered
+     * <p/>
+     * See {@link System#nanoTime()}
+     */
+    private double lastFrameTime = -1.0;
 
     public App() throws AppInitException {
         Logger.info("app ctor");
@@ -57,9 +63,9 @@ public final class App extends PApplet {
         Logger.debug("run PApplet.main({})", APP_CLASS_NAME);
         try {
             PApplet.main(APP_CLASS_NAME);
-        } catch (final Exception e) {
-            if (e.getCause() instanceof InvocationTargetException
-                    && e
+        }
+        catch (final Exception e) {
+            if (e.getCause() instanceof InvocationTargetException && e
                     .getCause()
                     .getCause() instanceof AppInitException)
                 Logger.error("couldn't init game: {}", e.getLocalizedMessage());
@@ -91,7 +97,7 @@ public final class App extends PApplet {
 
         Logger.info("done setup");
     }
-    
+
     // ========== INPUT ==========
     // region
 
@@ -99,7 +105,7 @@ public final class App extends PApplet {
     protected void handleKeyEvent(final @NonNull KeyEvent evt) {
         final KeyCode keyCode = KeyCode.fromInt(evt.getKeyCode());
         final KeyAction keyAction = KeyAction.fromInt(evt.getAction());
-        if(evt.getKeyCode() == 0) return; // Processing does this sometimes
+        if (evt.getKeyCode() == 0) return; // Processing does this sometimes
         if (keyCode == null || keyAction == null) {
             Loggers.INPUT.warn("didn't recognise input code={}({}) char='{}'", evt.getKeyCode(), keyCode, evt.getKey());
             return;
@@ -111,9 +117,15 @@ public final class App extends PApplet {
     protected void handleMouseEvent(final @NonNull MouseEvent evt) {
         final MouseCode mouseCode = MouseCode.fromInt(evt.getButton());
         final MouseAction mouseAction = MouseAction.fromInt(evt.getAction());
-        if(mouseCode == null && mouseAction == MouseAction.MOVE) return; // Code is null when we move the mouse, ignore
+        if (mouseCode == null && mouseAction == MouseAction.MOVE) return; // Code is null when we move the mouse, ignore
         if (mouseAction == null || mouseCode == null) {
-            Loggers.INPUT.warn("didn't recognise input action={}({}) button={}({})", evt.getAction(), mouseAction, evt.getButton(), mouseCode);
+            Loggers.INPUT.warn(
+                    "didn't recognise input action={}({}) button={}({})",
+                    evt.getAction(),
+                    mouseAction,
+                    evt.getButton(),
+                    mouseCode
+            );
             return;
         }
         UiManager.mouseEvent(
@@ -123,7 +135,7 @@ public final class App extends PApplet {
     }
 
     // endregion
-    
+
     /**
      * Draw all elements in the game by current frame.
      */
@@ -133,15 +145,48 @@ public final class App extends PApplet {
 
         Loggers.RENDER.trace("background");
         background(Colour.DEEP_PURPLE.asInt());
+
+        final double NANOS_PER_SECOND = 1000_000_000.0;
+        final double lastTick = this.lastFrameTime > 0 ? this.lastFrameTime : System.nanoTime() / NANOS_PER_SECOND;
+        final double thisTick = System.nanoTime() / NANOS_PER_SECOND;
+        final double deltaTime = thisTick - lastTick;
+        this.lastFrameTime = thisTick;
+        GameManager.tickGame(this, this.gameData, deltaTime);
+
         // TODO: Dirtying logic
         Loggers.RENDER.trace("dirty");
         this.gameData.board
                 .stream()
                 .forEach(t -> t.boardDirty(this.gameData.board));
-        Loggers.RENDER.trace("update ui");
-        UiManager.updateUi(this, gameData, uiState);
+
         Loggers.RENDER.trace("render gameData");
-        Renderer.render(this, gameData, uiState);
+        Renderer.render(this, this.gameData, this.uiState);
+
+        {
+            final String SEP = "=====";
+            final String str = String.format(
+                    "%s FRAMES %s\n" +
+                    "P.frameRate=%03.1f, P.frameCount=%05d\n" +
+                    "lastTick=%08.3f, thisTick=%08.3f, deltaTime=%.4f, fps=%03.1f\n",
+                    SEP, SEP,
+                    this.frameRate, this.frameCount,
+                    lastTick, thisTick, deltaTime, 1 / deltaTime
+            );
+
+            float x1 = 16, y1 = 40 + 16,
+                    x2 = 420, y2 = 420;
+            this.fill(Colour
+                              .withAlpha(Colour.DARK_GREY, 0.5)
+                              .asInt());
+            this.rectMode(PConstants.CORNER);
+            this.rect(x1, y1, x2, y2);
+
+            this.fill(Theme.TEXT.asInt());
+            this.textAlign(PConstants.LEFT, PConstants.TOP);
+            this.textSize(12);
+
+            this.text(str, x1, y1);
+        }
 
         Loggers.RENDER.debug("exit draw");
     }

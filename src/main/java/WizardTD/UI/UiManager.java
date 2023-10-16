@@ -271,7 +271,8 @@ public class UiManager {
                 .forEach(elem -> {
                     Loggers.INPUT.trace("elem {}", elem);
                     if (press.coords.x >= elem.corner1.x && press.coords.y >= elem.corner1.y &&
-                        press.coords.x <= elem.corner2.x && press.coords.y <= elem.corner2.y) {
+                        press.coords.x <= elem.corner2.x && press.coords.y <= elem.corner2.y &&
+                        press.action == MouseAction.CLICK) {
                         Loggers.INPUT.debug("activate element {}", elem);
                         elem.activate(gameData, uiState);
                     }
@@ -319,15 +320,11 @@ public class UiManager {
                              }
                              // Couldn't cast, skip it
                              else {
+                                 //noinspection ReturnOfNull
                                  return null;
                              }
                          })
                          .filter(Objects::nonNull);
-    }
-
-    public void updateUi(final @NonNull PApplet app, final @NonNull GameData game, final @NonNull UiState state) {
-        // Try to interact with any elements
-        //TODO: 
     }
 
     //endregion

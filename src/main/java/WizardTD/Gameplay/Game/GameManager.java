@@ -4,10 +4,12 @@ import WizardTD.Gameplay.Enemies.*;
 import WizardTD.Gameplay.Projectiles.*;
 import WizardTD.Gameplay.Spawners.*;
 import WizardTD.Gameplay.Tiles.*;
+import WizardTD.UI.*;
 import lombok.experimental.*;
 import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
+import processing.core.*;
 import processing.data.*;
 
 import java.io.*;
@@ -88,9 +90,14 @@ public class GameManager {
         }
     }
 
+    /**
+     * Loads the game descriptor from the disk
+     * <p> 
+     * This can then be used to actually instantiate the gameData object
+     */
     @SideEffectFree
     public @Nullable GameDescriptor loadGameDescriptor() {
-        debug("loading level descriptor");
+        debug("loading game descriptor");
 
         // Load the config object
         final Optional<JSONObject> maybeConfigJson = loadGameConfig();
@@ -309,9 +316,12 @@ public class GameManager {
         }
 
         debug("got level descriptor");
-        return new GameDescriptor("Test Name", board, gameDataConfig, waves );
+        return new GameDescriptor("Test Name", board, gameDataConfig, waves);
     }
-    
+
+    /**
+     * Actually creates a game object, that can then be played
+     */
     public static @NonNull GameData createGame(@NonNull final GameDescriptor desc) {
         trace("creating game from level desc: {}", desc);
 
@@ -327,4 +337,8 @@ public class GameManager {
         return new GameData(board, enemies, projectiles, waves, desc.config, mana, manaCap, manaTrickle);
     }
 
+    public static void tickGame(final @NonNull PApplet app, final @NonNull GameData game, final double deltaTime) {
+        game.mana += deltaTime * game.manaTrickle;
+        game.mana = Math.min(game.mana,game.manaCap);
+    }
 }
