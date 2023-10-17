@@ -36,4 +36,12 @@ public class Pathfinder {
              .forEach(spawnPoints::add);
 
     }
+
+    /**
+     * 
+     * @return
+     */
+    public List<EnemyPath> findPath(final Tile startPos, final Tile endPos){
+        Heap<>
+    }
 }
