@@ -3,6 +3,7 @@ package WizardTD.Gameplay.Game;
 import WizardTD.Gameplay.Tiles.*;
 import lombok.*;
 import lombok.experimental.*;
+import org.checkerframework.checker.nullness.qual.*;
 
 import java.text.*;
 import java.util.*;
@@ -31,25 +32,25 @@ public final class Board {
         return this.tiles[row][col];
     }
 
-    public Optional<Tile> maybeGetTile(final int row, final int col) {
-        if (row < 0 || col < 0 || row >= BOARD_SIZE_TILES || col >= BOARD_SIZE_TILES) return Optional.empty();
-        return Optional.of(getTile(row, col));
+    public @Nullable Tile maybeGetTile(final int row, final int col) {
+        if (row < 0 || col < 0 || row >= BOARD_SIZE_TILES || col >= BOARD_SIZE_TILES) return null;
+        return getTile(row, col);
     }
 
-    public <T extends Tile> Optional<T> maybeGetTileGeneric(
+    public <T extends Tile> @Nullable T maybeGetTileGeneric(
             final Class<T> tClass, final int row, final int col) {
-        final Optional<Tile> tile = maybeGetTile(row, col);
+        final Tile tile = maybeGetTile(row, col);
         // Because java is fucking dumb, I can't just do a simple `if instanceof T` check with the generic type
         // Because when type erasure happens, T just vanishes to nothing, and therefore it's always true even when it's wrong
         // See https://stackoverflow.com/a/17072077
         //  if (tile.isPresent() && tile.get() instanceof T) return (T) tile.get();
 
-        if (tile.isPresent() && tClass.isAssignableFrom(tile.get().getClass())) {
+        if (tile != null && tClass.isAssignableFrom(tile.getClass())) {
             // Cast is safe because we asserted types match above
             // noinspection unchecked
-            return Optional.of((T) tile.get());
+            return (T) tile;
         }
-        return Optional.empty();
+        return null;
     }
 
     public void setTile(final int row, final int col, final Tile tile) {

@@ -43,11 +43,11 @@ public class UiManager {
         return img;
     }
 
-    public Optional<Tile> pixelCoordsToTile(final Vector2 coords, final GameData gameData) {
+    public @Nullable Tile pixelCoordsToTile(final Vector2 coords, final GameData gameData) {
         return pixelCoordsToTile(coords, gameData, new Ref<>(0), new Ref<>(0));
     }
 
-    public Optional<Tile> pixelCoordsToTile(
+    public @Nullable Tile pixelCoordsToTile(
             final Vector2 coords, final GameData gameData,
             final Ref<Integer> outX, final Ref<Integer> outY) {
         // Use inverse lerp to extract the tile coordinates from the mouse pos
@@ -58,7 +58,7 @@ public class UiManager {
         final int tileX = (int) (Math.floor(x * BOARD_SIZE_TILES));
         final int tileY = (int) (Math.floor(y * BOARD_SIZE_TILES));
 
-        final Optional<Tile> tile = gameData.board.maybeGetTile(tileX, tileY);
+        final Tile tile = gameData.board.maybeGetTile(tileX, tileY);
         outX.value = tileX;
         outY.value = tileY;
         return tile;
@@ -285,7 +285,7 @@ public class UiManager {
             final MousePress press) {
         final Ref<Integer> tileX = new Ref<>(0);
         final Ref<Integer> tileY = new Ref<>(0);
-        final Optional<Tile> tile = UiManager.pixelCoordsToTile(
+        final @Nullable Tile tile = UiManager.pixelCoordsToTile(
                 new Vector2(press.coords.x, press.coords.y),
                 gameData,
                 tileX,

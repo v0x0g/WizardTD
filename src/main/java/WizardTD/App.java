@@ -4,8 +4,9 @@ import WizardTD.Event.Event;
 import WizardTD.Event.*;
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
-import WizardTD.Gameplay.Pathfinding.*;
 import WizardTD.Gameplay.Pathfinding.AStar.*;
+import WizardTD.Gameplay.Pathfinding.BRDFS.*;
+import WizardTD.Gameplay.Pathfinding.*;
 import WizardTD.Gameplay.Tiles.*;
 import WizardTD.Input.*;
 import WizardTD.Rendering.*;
@@ -223,33 +224,36 @@ public final class App extends PApplet {
                 this.fill(Colour.BLUE.asInt());
                 this.ellipse((float) pos.x, (float) pos.y, size, size);
             });
-            
-            final Grid grid = new Grid(gameData.board);
-            final List<EnemyPath> paths = AStarPathfinder.findPath(grid, spawnPoints.get(0), wizards.get(0));
-//            EnemyPath path = new EnemyPath(new TilePos[]{
-//                new TilePos(0,0),
-//                    new TilePos(10,10)
-//            });
-            for (int i = 0; i < paths.size(); i++) {
-                final EnemyPath path = paths.get(i);
-                final Colour[] colours = new Colour[]{
-                        Colour.RED,
-                        Colour.BLUE,
-                        Colour.GREEN,
-                        Colour.WHITE,
-                        Colour.DEEP_PURPLE,
-                        Colour.BRIGHT_PURPLE,
-                        Colour.LIGHT_BLUE,
-                        Colour.BRIGHT_ORANGE,
-                };
-                final Colour colour = Colour.withAlpha(colours[i], 0.3);
-                for (double d = 0; d <= path.positions.length; d += 0.4){
-                    final Vector2 pos = UiManager.tileToPixelCoords(path.calculatePos(d));
-                    final float size = 16;
-                    this.fill(colour.asInt());
-                    this.ellipse((float) pos.x, (float) pos.y, size, size);
+
+//            final Grid grid = new Grid(gameData.board);
+//            final List<EnemyPath> paths = AStarPathfinder.findPath(grid, spawnPoints.get(0), wizards.get(0));
+            final List<EnemyPath> paths = BRDFSPathfinder.findPaths(
+                    gameData.board,
+                    spawnPoints.get(0).getPos(),
+                    wizards.get(0).getPos()
+            );
+            if (paths != null) {
+                for (int i = 0; i < paths.size(); i++) {
+                    final EnemyPath path = paths.get(i);
+                    final Colour[] colours = new Colour[]{
+                            Colour.RED,
+                            Colour.BLUE,
+                            Colour.GREEN,
+                            Colour.WHITE,
+                            Colour.DEEP_PURPLE,
+                            Colour.BRIGHT_PURPLE,
+                            Colour.LIGHT_BLUE,
+                            Colour.BRIGHT_ORANGE,
+                    };
+                    final Colour colour = colours[i];
+                    for (double d = 0; d <= path.positions.length; d += 0.5) {
+                        final Vector2 pos = UiManager.tileToPixelCoords(path.calculatePos(d));
+                        final float size = 12;
+                        this.fill(Colour.withAlpha(colour, Numerics.lerp(0.7, 0.2, d / path.positions.length)).asInt());
+                        this.ellipse((float) pos.x, (float) pos.y, size, size);
+                    }
+
                 }
-                
             }
         }
 

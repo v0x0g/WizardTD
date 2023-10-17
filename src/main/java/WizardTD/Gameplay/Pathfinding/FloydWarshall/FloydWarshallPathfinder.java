@@ -23,9 +23,9 @@ public class FloydWarshallPathfinder {
 //
 //        if prev[u][v] = null then
 //        return []
-//        path ← [v]
+//        path <- [v]
 //        while u ≠ v
-//        v ← prev[u][v]
+//        v <- prev[u][v]
 //        path.prepend(v)
 //        return path
 //    }
