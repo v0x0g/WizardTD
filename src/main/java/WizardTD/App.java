@@ -227,16 +227,31 @@ public final class App extends PApplet {
             });
             
             final Grid grid = new Grid(gameData.board);
-            final EnemyPath path = Pathfinder.findPath(grid, spawnPoints.get(0), wizards.get(0)).get(0);
+            final List<EnemyPath> paths = Pathfinder.findPath(grid, spawnPoints.get(0), wizards.get(0));
 //            EnemyPath path = new EnemyPath(new TilePos[]{
 //                new TilePos(0,0),
 //                    new TilePos(10,10)
 //            });
-            for (double d = 0; d <= path.positions.length; d += 0.3){
-                final Vector2 pos = UiManager.tileToPixelCoords(path.calculatePos(d));
-                final float size = 16;
-                this.fill(Colour.withAlpha(Colour.BLUE, 0.3).asInt());
-                this.ellipse((float) pos.x, (float) pos.y, size, size);
+            for (int i = 0; i < paths.size(); i++) {
+                final EnemyPath path = paths.get(i);
+                final Colour[] colours = new Colour[]{
+                        Colour.RED,
+                        Colour.BLUE,
+                        Colour.GREEN,
+                        Colour.WHITE,
+                        Colour.DEEP_PURPLE,
+                        Colour.BRIGHT_PURPLE,
+                        Colour.LIGHT_BLUE,
+                        Colour.BRIGHT_ORANGE,
+                };
+                final Colour colour = Colour.withAlpha(colours[i], 0.3);
+                for (double d = 0; d <= path.positions.length; d ++){
+                    final Vector2 pos = UiManager.tileToPixelCoords(path.calculatePos(d));
+                    final float size = 16;
+                    this.fill(colour.asInt());
+                    this.ellipse((float) pos.x, (float) pos.y, size, size);
+                }
+                
             }
         }
 

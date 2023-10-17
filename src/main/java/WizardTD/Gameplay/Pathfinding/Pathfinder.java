@@ -44,17 +44,17 @@ public class Pathfinder {
         final HashSet<Node> closedSet = new HashSet<>();
         openSet.add(startNode);
 
+        final List<EnemyPath> validPaths = new ArrayList<>();
+
         while (openSet.count > 0) {
             final Node currentNode = openSet.removeFirst();
             closedSet.add(currentNode);
 
+            // If we are at the target node, we have found the path we want
+            // So add to the list and keep searching
             if (currentNode == targetNode) {
                 final List<Node> nodes = retracePath(startNode, targetNode);
-                return Collections.singletonList(
-                        new EnemyPath(nodes.stream()
-                                           .map(node -> node.pos)
-                                           .toArray(TilePos[]::new))
-                );
+                validPaths.add(new EnemyPath(nodes.stream().map(node -> node.pos).toArray(TilePos[]::new)));
             }
 
             for (final Node neighbour : grid.getNeighbours(currentNode)) {
@@ -76,7 +76,7 @@ public class Pathfinder {
                 }
             }
         }
-        return null;
+        return validPaths;
     }
 
     List<Node> retracePath(final Node startNode, final Node endNode) {
@@ -93,7 +93,8 @@ public class Pathfinder {
         return path;
     }
 
-    @SuppressWarnings("MagicNumber") // A* magic constants
+    @SuppressWarnings("MagicNumber")
+        // A* magic constants
     int getDistance(final Node nodeA, final Node nodeB) {
         final int dstX = Math.abs(nodeA.pos.getX() - nodeB.pos.getX());
         final int dstY = Math.abs(nodeA.pos.getY() - nodeB.pos.getY());
