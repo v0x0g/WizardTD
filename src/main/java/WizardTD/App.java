@@ -232,7 +232,7 @@ public final class App extends PApplet {
 //                new TilePos(0,0),
 //                    new TilePos(10,10)
 //            });
-            for (double d = 0; d <= 1; d += 0.1){
+            for (double d = 0; d <= path.positions.length; d += 0.3){
                 final Vector2 pos = UiManager.tileToPixelCoords(path.calculatePos(d));
                 final float size = 16;
                 this.fill(Colour.withAlpha(Colour.BLUE, 0.3).asInt());
