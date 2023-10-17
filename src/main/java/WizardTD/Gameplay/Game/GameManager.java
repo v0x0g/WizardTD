@@ -326,7 +326,8 @@ public class GameManager {
         final double manaCap_ = desc.config.mana.initialManaCap;
         final double manaTrickle_ = desc.config.mana.initialManaTrickle;
 
-        final GameData game = new GameData(board, enemies, projectiles, waves, desc.config);
+        //TODO: Pathfinding
+        final GameData game = new GameData(board, enemies, projectiles, waves, new ArrayList<>(), desc.config);
         game.mana = mana_;
         game.manaCap = manaCap_;
         game.manaTrickle = manaTrickle_;

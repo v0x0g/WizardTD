@@ -18,8 +18,11 @@ public class Pathfinder {
 
     /**
      * Scans the board to find all the wizard houses and valid spawn points
+     * 
+     * @param spawnPoints The destination list to add the wizard houses to
+     * @param wizardHouses The destination list to add the spawn points to
      */
-    public void scanBoard(final Board board, List<Tile> wizardHouses, List<Tile> spawnPoints) {
+    public void scanBoard(final Board board, final List<Tile> wizardHouses, final List<Tile> spawnPoints) {
         board.stream()
              .filter(tile -> tile instanceof WizardHouseTile)
              .forEach(wizardHouses::add);

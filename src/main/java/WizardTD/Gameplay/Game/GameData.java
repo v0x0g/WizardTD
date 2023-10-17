@@ -1,6 +1,7 @@
 package WizardTD.Gameplay.Game;
 
 import WizardTD.Gameplay.Enemies.*;
+import WizardTD.Gameplay.Pathfinding.*;
 import WizardTD.Gameplay.Projectiles.*;
 import WizardTD.Gameplay.Spawners.*;
 import lombok.*;
@@ -23,7 +24,7 @@ public final class GameData {
     public @NonNull List<Projectile> projectiles;
 
     public @NonNull List<Wave> waves;
-//    public @NonNull List
+    public @NonNull List<EnemyPath> enemyPaths;
 
     public @NonNull GameDataConfig config;
 

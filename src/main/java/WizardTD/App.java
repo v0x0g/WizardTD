@@ -214,14 +214,14 @@ public final class App extends PApplet {
             this.ellipseMode(PConstants.CENTER);
             wizards.forEach(t -> {
                 final Vector2 pos = UiManager.tileToPixelCoords(t);
-                final float size = 10;
-                this.fill(Colour.RED.asInt());
+                final float size = 40;
+                this.fill(Colour.BLACK.asInt());
                 this.ellipse((float) pos.x, (float) pos.y, size, size);
             });
 
             spawnPoints.forEach(t -> {
                 final Vector2 pos = UiManager.tileToPixelCoords(t);
-                final float size = 10;
+                final float size = 40;
                 this.fill(Colour.BLUE.asInt());
                 this.ellipse((float) pos.x, (float) pos.y, size, size);
             });
