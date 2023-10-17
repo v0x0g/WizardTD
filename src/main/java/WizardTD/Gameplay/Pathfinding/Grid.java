@@ -30,7 +30,8 @@ public class Grid {
 
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
-                if (x == 0 && y == 0)
+                // Only count tiles on sides, not corners
+                if (Math.abs(x) + Math.abs(y) != 1)
                     continue;
 
                 final int checkX = node.pos.getX() + x;
