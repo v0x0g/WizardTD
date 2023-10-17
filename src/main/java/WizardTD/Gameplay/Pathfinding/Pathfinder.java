@@ -57,7 +57,7 @@ public class Pathfinder {
                 );
             }
 
-            for (final Node neighbour : grid.GetNeighbours(currentNode)) {
+            for (final Node neighbour : grid.getNeighbours(currentNode)) {
                 if (!neighbour.walkable || closedSet.contains(neighbour)) {
                     continue;
                 }

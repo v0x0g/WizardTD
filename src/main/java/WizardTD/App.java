@@ -205,39 +205,39 @@ public final class App extends PApplet {
 
             this.text(str, x1, y1);
 
-                               
-//            // Path
-//            final List<Tile> wizards = new ArrayList<>();
-//            final List<Tile> spawnPoints = new ArrayList<>();
-//            Pathfinder.scanBoard(gameData.board, wizards, spawnPoints);
-//
-//            this.ellipseMode(PConstants.CENTER);
-//            wizards.forEach(t -> {
-//                final Vector2 pos = UiManager.tileToPixelCoords(t);
-//                final float size = 40;
-//                this.fill(Colour.BLACK.asInt());
-//                this.ellipse((float) pos.x, (float) pos.y, size, size);
+
+            // Path
+            final List<Tile> wizards = new ArrayList<>();
+            final List<Tile> spawnPoints = new ArrayList<>();
+            Pathfinder.scanBoard(gameData.board, wizards, spawnPoints);
+
+            this.ellipseMode(PConstants.CENTER);
+            wizards.forEach(t -> {
+                final Vector2 pos = UiManager.tileToPixelCoords(t);
+                final float size = 40;
+                this.fill(Colour.BLACK.asInt());
+                this.ellipse((float) pos.x, (float) pos.y, size, size);
+            });
+
+            spawnPoints.forEach(t -> {
+                final Vector2 pos = UiManager.tileToPixelCoords(t);
+                final float size = 40;
+                this.fill(Colour.BLUE.asInt());
+                this.ellipse((float) pos.x, (float) pos.y, size, size);
+            });
+            
+            final Grid grid = new Grid(gameData.board);
+            final EnemyPath path = Pathfinder.findPath(grid, spawnPoints.get(0), wizards.get(0)).get(0);
+//            EnemyPath path = new EnemyPath(new TilePos[]{
+//                new TilePos(0,0),
+//                    new TilePos(10,10)
 //            });
-//
-//            spawnPoints.forEach(t -> {
-//                final Vector2 pos = UiManager.tileToPixelCoords(t);
-//                final float size = 40;
-//                this.fill(Colour.BLUE.asInt());
-//                this.ellipse((float) pos.x, (float) pos.y, size, size);
-//            });
-//            
-//            final Grid grid = new Grid(gameData.board);
-//                final EnemyPath path = Pathfinder.findPath(grid, spawnPoints.get(0), wizards.get(0)).get(0);
-////            EnemyPath path = new EnemyPath(new TilePos[]{
-////                new TilePos(0,0),
-////                    new TilePos(10,10)
-////            });
-//            for (double d = 0; d <= 1; d += 0.1){
-//                final Vector2 pos = UiManager.tileToPixelCoords(path.calculatePos(d));
-//                final float size = 16;
-//                this.fill(Colour.withAlpha(Colour.BLUE, 0.3).asInt());
-//                this.ellipse((float) pos.x, (float) pos.y, size, size);
-//            }
+            for (double d = 0; d <= 1; d += 0.1){
+                final Vector2 pos = UiManager.tileToPixelCoords(path.calculatePos(d));
+                final float size = 16;
+                this.fill(Colour.withAlpha(Colour.BLUE, 0.3).asInt());
+                this.ellipse((float) pos.x, (float) pos.y, size, size);
+            }
         }
 
         Loggers.RENDER.debug("exit draw");

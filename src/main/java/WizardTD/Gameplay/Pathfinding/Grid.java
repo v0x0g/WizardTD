@@ -7,25 +7,25 @@ import lombok.experimental.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import static WizardTD.GameConfig.BOARD_SIZE_TILES;
+import static WizardTD.GameConfig.*;
 
 @ExtensionMethod(Arrays.class)
 public class Grid {
-    
+
     public Node[][] grid;
-    
-    public Grid(final Board board){
+
+    public Grid(final Board board) {
         this.grid = (Node[][]) Array.newInstance(Node.class, BOARD_SIZE_TILES, BOARD_SIZE_TILES);
         for (int x = 0; x < BOARD_SIZE_TILES; x++) {
             for (int y = 0; y < BOARD_SIZE_TILES; y++) {
-                final Tile t = board.getTile(x,y);
-                final boolean isPath = t instanceof PathTile;
-                grid[x][y] = new Node(isPath, new TilePos(x,y), null, 0, 0,0);
+                final Tile t = board.getTile(x, y);
+                final boolean isPath = t instanceof PathTile || t instanceof WizardHouseTile;
+                grid[x][y] = new Node(isPath, new TilePos(x, y), null, 0, 0, 0);
             }
         }
     }
 
-    public List<Node> GetNeighbours(Node node) {
+    public List<Node> getNeighbours(final Node node) {
         final List<Node> neighbours = new ArrayList<>();
 
         for (int x = -1; x <= 1; x++) {
