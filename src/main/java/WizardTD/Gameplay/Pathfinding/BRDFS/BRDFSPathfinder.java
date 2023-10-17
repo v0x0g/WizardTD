@@ -32,27 +32,35 @@ public class BRDFSPathfinder {
     }
 
     public @Nullable List<EnemyPath> findPaths(final Board board, final TilePos startPos, final TilePos endPos) {
+        /*
+        * ===== DEPTH FIRST SEARCH =====
+        */
+        final Vertex finalNode;
+        
         final Queue<Vertex> queue = new ArrayDeque<>();
         final Set<Vertex> explored = new HashSet<>();
         final Vertex root = new Vertex(board.getTile(startPos.getX(), startPos.getY()), null);
         queue.add(root);
+        
         while (!queue.isEmpty()) {
             final Vertex v = queue.remove();
             // If we have found the target end node
             if (v.tile.getPos().equals(endPos)) {
-                // Build up the path by going 
-                final Stack<TilePos> path = new Stack<>();
-                Vertex x = v;
-                while (x.parent != null) {
-                    path.push(x.tile.getPos());
-                    x = x.parent;
-                }
-                return Collections.singletonList(
-                        // Why the hell do I need to allocate a zero-sized array
-                        // Just so that the type is recognised
-                        // What the **** is wrong with this language
-                        new EnemyPath(path.toArray(new TilePos[0]))
-                );
+                finalNode = v;
+                break;
+//                // Build up the path by going 
+//                final Stack<TilePos> path = new Stack<>();
+//                Vertex x = v;
+//                while (x.parent != null) {
+//                    path.push(x.tile.getPos());
+//                    x = x.parent;
+//                }
+//                solutions.add(
+//                        // Why the hell do I need to allocate a zero-sized array
+//                        // Just so that the type is recognised
+//                        // What the **** is wrong with this language
+//                        new EnemyPath(path.toArray(new TilePos[0]))
+//                );
             }
             adjacentEdges(board, v)
                     .forEach(w -> {
@@ -64,7 +72,9 @@ public class BRDFSPathfinder {
                     });
             explored.add(v);
         }
-        return null;
+        
+        
+        return ;
     }
 
     /**
