@@ -25,6 +25,7 @@ public final class Wave {
      */
     public final double spawnRateMult;
     public final List<EnemyFactory<?>> enemyFactories;
+    public final long waveNumber;
 
     /**
      * Internal value used to keep track of how enemies to spawn.
@@ -33,15 +34,18 @@ public final class Wave {
      * e.g. a value of 2.31 indicates we have 2 enemy slots available
      */
     private double enemySpawnCounter = 0;
+    @Getter
     private double timer = 0;
 
     public Wave(
             final double duration, final double delayBeforeWave, final double spawnRateMult,
+            final long waveNumber,
             final List<EnemyFactory<?>> enemyFactories) {
         this.duration = duration;
         this.delayBeforeWave = delayBeforeWave;
         this.spawnRateMult = spawnRateMult;
         this.enemyFactories = enemyFactories;
+        this.waveNumber = waveNumber;
     }
 
     public void tick(final double deltaTime) {

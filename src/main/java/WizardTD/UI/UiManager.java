@@ -3,6 +3,7 @@ package WizardTD.UI;
 import WizardTD.Delegates.*;
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
+import WizardTD.Gameplay.Spawners.*;
 import WizardTD.Gameplay.Tiles.*;
 import WizardTD.Input.*;
 import WizardTD.Rendering.*;
@@ -142,11 +143,30 @@ public class UiManager {
                             waveIndicatorPos2,
                             ""
                     ),
-                    (text, game, ui) -> text.text = MessageFormat.format(
-                            "TODO: Wave {0,number,##} starts: {1,number,00.00} seconds",
-                            59 - PApplet.second(),
-                            PApplet.second() * 26 / (float) 1000
-                    )
+                    (text, game, ui) -> {
+                        final Wave wave = game.waves.isEmpty() ? null : game.waves.get(0);
+                        if (wave == null) {
+                            text.text = "No more waves remaining";
+                        }
+                        else if (wave.getWaveState() == Wave.WaveState.PRE_DELAY) {
+                            final double timeTillSpawn = -wave.getTimer() + wave.delayBeforeWave;
+                            text.text = MessageFormat.format(
+                                    "Wave {0,number,##} starts: {1,number,00.00} seconds",
+                                    wave.waveNumber,
+                                    timeTillSpawn
+                            );
+                        }
+                        else if (wave.getWaveState() == Wave.WaveState.SPAWNING) {
+                            text.text = MessageFormat.format("Wave {0,number,##} spawning now", wave.waveNumber);
+                        }
+                        else if (wave.getWaveState() == Wave.WaveState.COMPLETE) {
+                            text.text = MessageFormat.format("Wave {0,number,##} complete", wave.waveNumber);
+                        }
+                        else{
+                            text.text = "ERROR: WAVE GOOFED";
+                            Loggers.GAMEPLAY.warn("wave {} had invalid wave state", wave.waveNumber);
+                        }
+                    }
             ));
         }
 
@@ -159,7 +179,8 @@ public class UiManager {
                     "FF",
                     KeyCode.F,
                     (button, game, ui) -> Logger.debug("toggle fast forward = {}", game.fastForward ^= true),
-                    (button, game, ui) -> button.fillColour = game.fastForward ? Theme.BUTTON_ENABLED : Theme.BUTTON_DISABLED
+                    (button, game, ui) -> button.fillColour =
+                            game.fastForward ? Theme.BUTTON_ENABLED : Theme.BUTTON_DISABLED
             );
             addSidebarButton(
                     uiState,

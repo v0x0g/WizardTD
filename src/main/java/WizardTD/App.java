@@ -4,6 +4,8 @@ import WizardTD.Event.Event;
 import WizardTD.Event.*;
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
+import WizardTD.Gameplay.Pathfinding.*;
+import WizardTD.Gameplay.Tiles.*;
 import WizardTD.Input.*;
 import WizardTD.Rendering.*;
 import WizardTD.UI.Appearance.*;
@@ -16,6 +18,9 @@ import processing.event.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.stream.*;
+
+import static WizardTD.GameConfig.BOARD_SIZE_TILES;
 
 public final class App extends PApplet {
 
@@ -199,6 +204,27 @@ public final class App extends PApplet {
             this.textSize(16);
 
             this.text(str, x1, y1);
+
+
+            // Path
+            final List<Tile> wizards = new ArrayList<>();
+            final List<Tile> spawnPoints = new ArrayList<>();
+            Pathfinder.scanBoard(gameData.board, wizards, spawnPoints);
+
+            this.ellipseMode(PConstants.CENTER);
+            wizards.forEach(t -> {
+                final Vector2 pos = UiManager.tileToPixelCoords(t);
+                final float size = 10;
+                this.fill(Colour.RED.asInt());
+                this.ellipse((float) pos.x, (float) pos.y, size, size);
+            });
+
+            spawnPoints.forEach(t -> {
+                final Vector2 pos = UiManager.tileToPixelCoords(t);
+                final float size = 10;
+                this.fill(Colour.BLUE.asInt());
+                this.ellipse((float) pos.x, (float) pos.y, size, size);
+            });
         }
 
         Loggers.RENDER.debug("exit draw");

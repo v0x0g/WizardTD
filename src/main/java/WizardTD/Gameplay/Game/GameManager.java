@@ -17,6 +17,7 @@ import java.math.*;
 import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 import java.util.stream.*;
 
 import static WizardTD.Ext.JsonExt.*;
@@ -207,31 +208,22 @@ public class GameManager {
             // TODO: Refactor this shitty code
             final JSONArray jWaves = conf.getJSONArray("waves");
             // Iter all waves and map to Wave objects
+            AtomicLong waveNumber = new AtomicLong(1);
             waves = jsonArrayToStream(jWaves)
                     .map((j) -> {
                         trace("wave: {}", j);
                         final double duration = j.getDouble("duration");
                         final double preWavePause = j.getDouble("pre_wave_pause");
 
-                        final List<EnemyFactory<?>> factories = jsonArrayToStream(j.getJSONArray(
-                                "monsters"))
+                        final List<EnemyFactory<?>> factories = jsonArrayToStream(j.getJSONArray("monsters"))
                                 .map((m) -> {
                                     trace("\tmonster: {}", m);
-                                    final long qty = m.getLong(
-                                            "quantity",
-                                            0
-                                    );
-                                    final BigInteger qty_big = qty <=
-                                                               0 ? null : BigInteger.valueOf(
-                                            qty);
+                                    final long qty = m.getLong("quantity", 0);
+                                    final BigInteger qty_big = qty <=0 ? null : BigInteger.valueOf(qty);
                                     final double hp = m.getDouble("hp");
-                                    final double manaPerKill =
-                                            m.getDouble(
-                                                    "mana_gained_on_kill");
-                                    final double speed = m.getDouble(
-                                            "speed");
-                                    final double dmgMult = m.getDouble(
-                                            "armour");
+                                    final double manaPerKill =m.getDouble("mana_gained_on_kill");
+                                    final double speed = m.getDouble("speed");
+                                    final double dmgMult = m.getDouble("armour");
                                     // TODO: Refactor to abstract static method to parse from json?
                                     switch (m.getString("type")) {
                                         case "gremlin":
@@ -304,6 +296,7 @@ public class GameManager {
                                 duration,
                                 preWavePause,
                                 totalQuantity.doubleValue() / duration,
+                                waveNumber.getAndIncrement(),
                                 factories
                         );
                     })
@@ -359,6 +352,7 @@ public class GameManager {
         game.mana += gameDeltaTime * game.manaTrickle;
         game.mana = Math.min(game.mana, game.manaCap);
 
+        // Spawn Enemies
         while (!game.waves.isEmpty()) {
             final Wave wave = game.waves.get(0);
             wave.tick(gameDeltaTime);
