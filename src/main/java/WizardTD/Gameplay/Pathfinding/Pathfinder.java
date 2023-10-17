@@ -36,6 +36,7 @@ public class Pathfinder {
 
     }
 
+    // TODO: Currently this only returns ONE shortest path, not all of them. We might need to fix this
     public List<EnemyPath> findPath(final Grid grid, final Tile startTile, final Tile endTile) {
         final Node startNode = grid.grid[startTile.getPos().getX()][startTile.getPos().getY()];
         final Node targetNode = grid.grid[endTile.getPos().getX()][endTile.getPos().getY()];
@@ -88,6 +89,7 @@ public class Pathfinder {
             assert currentNode != null;
             currentNode = currentNode.parent;
         }
+        path.add(startNode);
         path = Lists.reverse(path);
 
         return path;

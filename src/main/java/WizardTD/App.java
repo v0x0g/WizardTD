@@ -245,7 +245,7 @@ public final class App extends PApplet {
                         Colour.BRIGHT_ORANGE,
                 };
                 final Colour colour = Colour.withAlpha(colours[i], 0.3);
-                for (double d = 0; d <= path.positions.length; d ++){
+                for (double d = 0; d <= path.positions.length; d += 0.4){
                     final Vector2 pos = UiManager.tileToPixelCoords(path.calculatePos(d));
                     final float size = 16;
                     this.fill(colour.asInt());
