@@ -38,7 +38,8 @@ public class AStarPathfinder {
     }
 
     // TODO: Currently this only returns ONE shortest path, not all of them. We might need to fix this
-    public List<EnemyPath> findPath(final Grid grid, final Tile startTile, final Tile endTile) {
+    public List<EnemyPath> findPath(final Board board, final Tile startTile, final Tile endTile) {
+        final Grid grid = new Grid(board);
         final Node startNode = grid.grid[startTile.getPos().getX()][startTile.getPos().getY()];
         final Node targetNode = grid.grid[endTile.getPos().getX()][endTile.getPos().getY()];
 
@@ -72,9 +73,7 @@ public class AStarPathfinder {
 
                     if (!openSet.contains(neighbour))
                         openSet.add(neighbour);
-//                    else {
-//                        openSet.UpdateItem(neighbour);
-//                    }
+                    else openSet.updateItem(neighbour);
                 }
             }
         }

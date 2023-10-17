@@ -225,13 +225,12 @@ public final class App extends PApplet {
                 this.ellipse((float) pos.x, (float) pos.y, size, size);
             });
 
-//            final Grid grid = new Grid(gameData.board);
-//            final List<EnemyPath> paths = AStarPathfinder.findPath(grid, spawnPoints.get(0), wizards.get(0));
-            final List<EnemyPath> paths = BRDFSPathfinder.findPaths(
-                    gameData.board,
-                    spawnPoints.get(0).getPos(),
-                    wizards.get(0).getPos()
-            );
+            final List<EnemyPath> paths = AStarPathfinder.findPath(gameData.board, spawnPoints.get(0), wizards.get(0));
+//            final List<EnemyPath> paths = BRDFSPathfinder.findPaths(
+//                    gameData.board,
+//                    spawnPoints.get(0).getPos(),
+//                    wizards.get(0).getPos()
+//            );
             if (paths != null) {
                 for (int i = 0; i < paths.size(); i++) {
                     final EnemyPath path = paths.get(i);
