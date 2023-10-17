@@ -2,9 +2,9 @@ package WizardTD.Gameplay.Game;
 
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Enemies.*;
-import WizardTD.Gameplay.Pathfinding.*;
 import WizardTD.Gameplay.Projectiles.*;
 import WizardTD.Gameplay.Spawners.*;
+import WizardTD.Gameplay.Spells.*;
 import WizardTD.Gameplay.Tiles.*;
 import lombok.experimental.*;
 import mikera.vectorz.*;
@@ -209,7 +209,7 @@ public class GameManager {
             // TODO: Refactor this shitty code
             final JSONArray jWaves = conf.getJSONArray("waves");
             // Iter all waves and map to Wave objects
-            AtomicLong waveNumber = new AtomicLong(1);
+            final AtomicLong waveNumber = new AtomicLong(1);
             waves = jsonArrayToStream(jWaves)
                     .map((j) -> {
                         trace("wave: {}", j);
@@ -322,13 +322,14 @@ public class GameManager {
         final List<Enemy> enemies = new ArrayList<>();
         final List<Wave> waves = desc.waves;
         final List<Projectile> projectiles = new ArrayList<>();
+        final GameSpells spells = new GameSpells(new ManaSpell(desc.config.spell.manaPool.initialCost));
 
         final double mana_ = desc.config.mana.initialManaValue;
         final double manaCap_ = desc.config.mana.initialManaCap;
         final double manaTrickle_ = desc.config.mana.initialManaTrickle;
 
         //TODO: Pathfinding
-        final GameData game = new GameData(board, enemies, projectiles, waves, new ArrayList<>(), desc.config);
+        final GameData game = new GameData(board, enemies, projectiles, waves, new ArrayList<>(), desc.config, spells);
         game.mana = mana_;
         game.manaCap = manaCap_;
         game.manaTrickle = manaTrickle_;
@@ -370,7 +371,7 @@ public class GameManager {
                 game.enemies.add(enemy);
                 final ThreadLocalRandom rng = ThreadLocalRandom.current();
                 // Choose a random path for the enemy to go along
-                enemy.path = game.enemyPaths.get(ThreadLocalRandom.current().nextInt(game.enemyPaths.size()));
+                enemy.path = game.enemyPaths.get(rng.nextInt(game.enemyPaths.size()));
             }
 
             break;

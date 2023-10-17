@@ -1,4 +1,7 @@
 package WizardTD.Gameplay.Spells;
 
-public class Spell {
+import WizardTD.Gameplay.Game.*;
+
+public abstract class Spell {
+    public abstract void cast(final GameData game);
 }

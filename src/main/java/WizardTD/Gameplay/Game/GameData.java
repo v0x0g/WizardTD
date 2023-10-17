@@ -27,6 +27,8 @@ public final class GameData {
     public @NonNull List<EnemyPath> enemyPaths;
 
     public @NonNull GameDataConfig config;
+    
+    public @NonNull GameSpells spells;
 
     /**
      * Flags for controlling the speed of the game

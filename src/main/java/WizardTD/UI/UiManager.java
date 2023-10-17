@@ -214,8 +214,9 @@ public class UiManager {
                     "M",
                     KeyCode.M,
                     (button, game, ui) -> {
-                        Logger.debug("mana pool!");
+                        Loggers.GAMEPLAY.debug("cast mana pool");
                         button.fillColour = Theme.MANA;
+                        game.spells.manaSpell.cast(game);
                     },
                     // Nice little fade out animation
                     (button, game, ui) -> {
