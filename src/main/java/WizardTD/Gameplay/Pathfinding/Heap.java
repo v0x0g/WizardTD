@@ -1,6 +1,9 @@
 package WizardTD.Gameplay.Pathfinding;
 
+import WizardTD.*;
 import lombok.*;
+
+import static WizardTD.GameConfig.BOARD_SIZE_TILES;
 
 public class Heap {
 
@@ -14,8 +17,8 @@ public class Heap {
     @Getter
     int count;
 
-    public Heap(final int maxHeapSize) {
-        items = new Node[maxHeapSize];
+    public Heap() {
+        items = new Node[BOARD_SIZE_TILES * BOARD_SIZE_TILES];
     }
 
     /**

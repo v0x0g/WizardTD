@@ -2,9 +2,13 @@ package WizardTD.Gameplay.Pathfinding;
 
 import WizardTD.Gameplay.Tiles.*;
 import lombok.*;
+import lombok.NonNull;
+import org.checkerframework.checker.nullness.qual.*;
 
 @ToString
 @EqualsAndHashCode
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class Node implements Comparable<Node> {
     /**
      * Is this tile a valid path that can be walked upon (traversed)
@@ -13,11 +17,11 @@ public class Node implements Comparable<Node> {
     /**
      * Position of this node in Tiles
      */
-    public TilePos pos;
+    public @NonNull TilePos pos;
     /**
      * Parent node of this node (since we have a heap/tree structure)
      */
-    public Node parent;
+    public @Nullable Node parent;
     /**
      * Numeric index of this node in the heap
      */
