@@ -25,7 +25,7 @@ public class EnemyPath {
      * @return A vector position in tile coordinates for where along the path the point it
      */
     public Vector2 calculatePos(double distance){
-        distance = Math.min(0, Math.max(distance, positions.length)); // clamp
+        distance = Math.max(0, Math.min(distance, positions.length)); // clamp
         final int idxLow = (int)Math.floor(distance); // Index for the rounded down position
         final int idxHigh = (int)Math.ceil(distance); // Index for the rounded up position
         final double interpolation = distance - idxLow; // How far between (high and low) we are

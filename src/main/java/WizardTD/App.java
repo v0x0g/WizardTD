@@ -225,6 +225,17 @@ public final class App extends PApplet {
                 this.fill(Colour.BLUE.asInt());
                 this.ellipse((float) pos.x, (float) pos.y, size, size);
             });
+            
+            EnemyPath path = new EnemyPath(new TilePos[]{
+                new TilePos(0,0),
+                    new TilePos(10,10)
+            });
+            for (double d = 0; d <= 1; d += 0.1){
+                final Vector2 pos = UiManager.tileToPixelCoords(path.calculatePos(d));
+                final float size = 16;
+                this.fill(Colour.withAlpha(Colour.BLUE, 0.3).asInt());
+                this.ellipse((float) pos.x, (float) pos.y, size, size);
+            }
         }
 
         Loggers.RENDER.debug("exit draw");
