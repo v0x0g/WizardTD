@@ -368,6 +368,8 @@ public class GameManager {
                 Loggers.GAMEPLAY.trace("spawn enemy {}", enemy);
                 game.enemies.add(enemy);
                 final ThreadLocalRandom rng = ThreadLocalRandom.current();
+                // Choose a random path for the enemy to go along
+                
                 enemy.position = new Vector2(rng.nextDouble(BOARD_SIZE_TILES), rng.nextDouble(BOARD_SIZE_TILES));
             }
 

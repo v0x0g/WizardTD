@@ -44,12 +44,6 @@ public class UiManager {
     }
 
     public @Nullable Tile pixelCoordsToTile(final Vector2 coords, final GameData gameData) {
-        return pixelCoordsToTile(coords, gameData, new Ref<>(0), new Ref<>(0));
-    }
-
-    public @Nullable Tile pixelCoordsToTile(
-            final Vector2 coords, final GameData gameData,
-            final Ref<Integer> outX, final Ref<Integer> outY) {
         // Use inverse lerp to extract the tile coordinates from the mouse pos
         final double x = Numerics.inverseLerp(coords.x, BOARD_POS_X, BOARD_POS_X + (CELL_SIZE_PX * BOARD_SIZE_TILES));
         final double y = Numerics.inverseLerp(coords.y, BOARD_POS_Y, BOARD_POS_Y + (CELL_SIZE_PX * BOARD_SIZE_TILES));
@@ -58,10 +52,7 @@ public class UiManager {
         final int tileX = (int) (Math.floor(x * BOARD_SIZE_TILES));
         final int tileY = (int) (Math.floor(y * BOARD_SIZE_TILES));
 
-        final Tile tile = gameData.board.maybeGetTile(tileX, tileY);
-        outX.value = tileX;
-        outY.value = tileY;
-        return tile;
+        return gameData.board.maybeGetTile(tileX, tileY);
     }
 
     public Vector2 tileToPixelCoords(final Tile tile) {
@@ -162,7 +153,7 @@ public class UiManager {
                         else if (wave.getWaveState() == Wave.WaveState.COMPLETE) {
                             text.text = MessageFormat.format("Wave {0,number,##} complete", wave.waveNumber);
                         }
-                        else{
+                        else {
                             text.text = "ERROR: WAVE GOOFED";
                             Loggers.GAMEPLAY.warn("wave {} had invalid wave state", wave.waveNumber);
                         }
@@ -283,15 +274,17 @@ public class UiManager {
     public void mouseEvent(
             final PApplet app, final GameData gameData, final UiState uiState,
             final MousePress press) {
-        final Ref<Integer> tileX = new Ref<>(0);
-        final Ref<Integer> tileY = new Ref<>(0);
-        final @Nullable Tile tile = UiManager.pixelCoordsToTile(
-                new Vector2(press.coords.x, press.coords.y),
-                gameData,
-                tileX,
-                tileY
-        );
-        Loggers.INPUT.debug("mouse event: {}; [{}, {}]: {}", press, tileX, tileY, tile);
+        final @Nullable Tile tile = UiManager.pixelCoordsToTile(new Vector2(press.coords.x, press.coords.y), gameData);
+        if (tile != null)
+            Loggers.INPUT.debug(
+                    "mouse event: {}; [{}, {}]: {}",
+                    press,
+                    tile.getPos().getX(),
+                    tile.getPos().getY(),
+                    tile
+            );
+        else
+            Loggers.INPUT.debug("mouse event: {}; [{}, {}]: null}", press);
 
         getClickableElements(uiState.uiElements)
                 .forEach(elem -> {
