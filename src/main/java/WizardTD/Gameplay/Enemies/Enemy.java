@@ -38,7 +38,7 @@ public abstract class Enemy extends Renderable {
     public double manaGainedOnKill;
 
     public EnemyPath path;
-    private double pathProgress;
+    public double pathProgress;
 
     protected Enemy(
             final double health, final Vector2 position, final double speed, final double damageMultiplier, final double manaGainedOnKill) {
@@ -61,6 +61,7 @@ public abstract class Enemy extends Renderable {
     }
 
     public void tick(final GameData game, final double visualDeltaTime, final double gameDeltaTime) {
+        // Move along the path
         this.pathProgress += gameDeltaTime * this.speed;
         this.position = this.path.calculatePos(this.pathProgress);
     }
