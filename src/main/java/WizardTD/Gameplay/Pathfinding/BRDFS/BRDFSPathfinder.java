@@ -9,15 +9,21 @@ import org.checkerframework.checker.nullness.qual.*;
 
 import java.util.*;
 
+import static java.lang.Math.*;
+
 @UtilityClass
 public class BRDFSPathfinder {
 
+    /**
+     * Returns a list of all the adjacent edges to a given vertex
+     */
     List<Vertex> adjacentEdges(final Board board, final Vertex vertex) {
         final List<Vertex> list = new ArrayList<>();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 final Tile tile = board.maybeGetTile(vertex.tile.getPos().getX() + i, vertex.tile.getPos().getY() + j);
-                if (i == 0 && j == 0) continue; // Don't connect to self
+                // Don't connect to self, only want sides not corners
+                if (abs(i) + abs(j) != 1) continue;
                 final boolean isValid = tile instanceof PathTile || tile instanceof WizardHouseTile;
                 if (isValid) list.add(new Vertex(tile, vertex));
             }
@@ -30,7 +36,6 @@ public class BRDFSPathfinder {
         final Set<Vertex> explored = new HashSet<>();
         final Vertex root = new Vertex(board.getTile(startPos.getX(), startPos.getY()), null);
         queue.add(root);
-//        explored.add(root);
         while (!queue.isEmpty()) {
             final Vertex v = queue.remove();
             // If we have found the target end node
@@ -57,10 +62,15 @@ public class BRDFSPathfinder {
                             queue.add(w);
                         }
                     });
-//            explored.add(v);
+            explored.add(v);
         }
         return null;
     }
+
+    /**
+     * Structure for a node in a BFS/DFS Graph.
+     * Holds a tile and a parent node
+     */
     @ToString
     @EqualsAndHashCode(exclude = "parent")
     @AllArgsConstructor
