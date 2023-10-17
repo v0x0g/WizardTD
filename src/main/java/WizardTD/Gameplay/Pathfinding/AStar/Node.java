@@ -1,4 +1,4 @@
-package WizardTD.Gameplay.Pathfinding;
+package WizardTD.Gameplay.Pathfinding.AStar;
 
 import WizardTD.Gameplay.Tiles.*;
 import lombok.*;

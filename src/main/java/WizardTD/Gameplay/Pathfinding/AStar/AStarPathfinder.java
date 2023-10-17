@@ -1,6 +1,7 @@
-package WizardTD.Gameplay.Pathfinding;
+package WizardTD.Gameplay.Pathfinding.AStar;
 
 import WizardTD.Gameplay.Game.*;
+import WizardTD.Gameplay.Pathfinding.*;
 import WizardTD.Gameplay.Tiles.*;
 import com.google.common.collect.*;
 import lombok.experimental.*;
@@ -13,7 +14,7 @@ import static WizardTD.GameConfig.*;
  * Helper class that does pathfinding
  */
 @UtilityClass
-public class Pathfinder {
+public class AStarPathfinder {
 
     /**
      * Scans the board to find all the wizard houses and valid spawn points

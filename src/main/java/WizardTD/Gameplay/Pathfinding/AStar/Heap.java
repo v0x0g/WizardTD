@@ -1,6 +1,5 @@
-package WizardTD.Gameplay.Pathfinding;
+package WizardTD.Gameplay.Pathfinding.AStar;
 
-import WizardTD.*;
 import lombok.*;
 
 import static WizardTD.GameConfig.BOARD_SIZE_TILES;

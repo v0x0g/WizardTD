@@ -5,6 +5,7 @@ import WizardTD.Event.*;
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Gameplay.Pathfinding.*;
+import WizardTD.Gameplay.Pathfinding.AStar.*;
 import WizardTD.Gameplay.Tiles.*;
 import WizardTD.Input.*;
 import WizardTD.Rendering.*;
@@ -18,9 +19,6 @@ import processing.event.*;
 
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.stream.*;
-
-import static WizardTD.GameConfig.BOARD_SIZE_TILES;
 
 public final class App extends PApplet {
 
@@ -209,7 +207,7 @@ public final class App extends PApplet {
             // Path
             final List<Tile> wizards = new ArrayList<>();
             final List<Tile> spawnPoints = new ArrayList<>();
-            Pathfinder.scanBoard(gameData.board, wizards, spawnPoints);
+            AStarPathfinder.scanBoard(gameData.board, wizards, spawnPoints);
 
             this.ellipseMode(PConstants.CENTER);
             wizards.forEach(t -> {
@@ -227,7 +225,7 @@ public final class App extends PApplet {
             });
             
             final Grid grid = new Grid(gameData.board);
-            final List<EnemyPath> paths = Pathfinder.findPath(grid, spawnPoints.get(0), wizards.get(0));
+            final List<EnemyPath> paths = AStarPathfinder.findPath(grid, spawnPoints.get(0), wizards.get(0));
 //            EnemyPath path = new EnemyPath(new TilePos[]{
 //                new TilePos(0,0),
 //                    new TilePos(10,10)
