@@ -2,6 +2,7 @@ package WizardTD.Gameplay.Game;
 
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Enemies.*;
+import WizardTD.Gameplay.Pathfinding.*;
 import WizardTD.Gameplay.Projectiles.*;
 import WizardTD.Gameplay.Spawners.*;
 import WizardTD.Gameplay.Tiles.*;
@@ -369,8 +370,7 @@ public class GameManager {
                 game.enemies.add(enemy);
                 final ThreadLocalRandom rng = ThreadLocalRandom.current();
                 // Choose a random path for the enemy to go along
-                
-                enemy.position = new Vector2(rng.nextDouble(BOARD_SIZE_TILES), rng.nextDouble(BOARD_SIZE_TILES));
+                enemy.path = game.enemyPaths.get(ThreadLocalRandom.current().nextInt(game.enemyPaths.size()));
             }
 
             break;

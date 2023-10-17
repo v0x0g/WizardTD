@@ -1,5 +1,7 @@
 package WizardTD.Gameplay.Enemies;
 
+import WizardTD.Gameplay.Game.*;
+import WizardTD.Gameplay.Pathfinding.*;
 import WizardTD.Rendering.*;
 import lombok.*;
 import mikera.vectorz.*;
@@ -35,9 +37,14 @@ public abstract class Enemy extends Renderable {
      * How much mana the wizard will gain upon killing this enemy
      */
     public double manaGainedOnKill;
+    
+    public EnemyPath path;
+    private double pathProgress = 0.0;
 
     @Override
     public RenderOrder getRenderOrder() {
         return RenderOrder.ENTITY;
     }
+    
+    public abstract void tick(final GameData game);
 }

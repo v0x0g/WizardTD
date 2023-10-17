@@ -231,6 +231,7 @@ public final class App extends PApplet {
 //                    spawnPoints.get(0).getPos(),
 //                    wizards.get(0).getPos()
 //            );
+            gameData.enemyPaths = paths;
             if (paths != null) {
                 for (int i = 0; i < paths.size(); i++) {
                     final EnemyPath path = paths.get(i);
