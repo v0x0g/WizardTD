@@ -8,7 +8,6 @@ import mikera.vectorz.*;
 
 @ToString
 @EqualsAndHashCode(callSuper = false)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Enemy extends Renderable {
 //TODO: Render
     /**
@@ -37,14 +36,32 @@ public abstract class Enemy extends Renderable {
      * How much mana the wizard will gain upon killing this enemy
      */
     public double manaGainedOnKill;
-    
+
     public EnemyPath path;
-    private double pathProgress = 0.0;
+    private double pathProgress;
+
+    protected Enemy(
+            final double health, final Vector2 position, final double speed, final double damageMultiplier, final double manaGainedOnKill) {
+        this.health = health;
+        this.position = position;
+        this.speed = speed;
+        this.damageMultiplier = damageMultiplier;
+        this.manaGainedOnKill = manaGainedOnKill;
+        // We are setting to null even though it should never be null
+        // This is because we assume the enemy is always given a path immediately after being spawned
+        //TODO: Maybe don't do null and give enemy the path in the ctor?
+        //noinspection AssignmentToNull
+        this.path = null;
+        this.pathProgress = 0.0;
+    }
 
     @Override
     public RenderOrder getRenderOrder() {
         return RenderOrder.ENTITY;
     }
-    
-    public abstract void tick(final GameData game);
+
+    public void tick(final GameData game, final double visualDeltaTime, final double gameDeltaTime) {
+        this.pathProgress += gameDeltaTime * this.speed;
+        this.position = this.path.calculatePos(this.pathProgress);
+    }
 }

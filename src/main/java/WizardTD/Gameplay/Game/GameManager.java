@@ -375,5 +375,8 @@ public class GameManager {
 
             break;
         }
+        
+        // Update all enemies
+        game.enemies.forEach(e -> e.tick(game,visualDeltaTime,gameDeltaTime));
     }
 }
