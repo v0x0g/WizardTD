@@ -8,7 +8,7 @@ import lombok.experimental.*;
 
 import java.util.*;
 
-import static WizardTD.GameConfig.BOARD_SIZE_TILES;
+import static WizardTD.GameConfig.*;
 import static java.lang.Math.*;
 
 @UtilityClass
@@ -53,53 +53,65 @@ public class TestPathfinder {
         return list;
     }
 
-    public List<EnemyPath> findPaths(final Board board, final TilePos startPos, final TilePos endPos) {
-        final Queue<Vertex> queue = new ArrayDeque<>();
-        final Set<Vertex> explored = new HashSet<>();
+    public List<EnemyPath> findPaths(final Board board, final List<Tile> wizardHouses, final List<Tile> spawnPoints) {
+        // List of paths we've found
+        final List<EnemyPath> foundPaths = new ArrayList<>();
 
-        // We use this to keep track of the depth at which our end node was found
-        // Since it's BFS, the first depth we hit our end node at is going to be the shortest depth
-        // We keep track of this depth here
-        int foundDepth = Integer.MAX_VALUE;
-        
-        // Start with initial root node
-        queue.add(new Vertex(board.getTile(startPos.getX(), startPos.getY()), null, 0));
+        // Iterate over the cartesian product of spawn points and wizard houses
+        for (final Tile wizardHouse : wizardHouses) {
+            for (final Tile spawnPoint : spawnPoints) {
+                
+                final TilePos startPos = spawnPoint.getPos();
+                final TilePos endPos = wizardHouse.getPos();
 
-        final List<EnemyPath> solutions = new ArrayList<>();
-        while (!queue.isEmpty()) {
-            final Vertex v = queue.remove();
-            explored.add(v);
+                final Queue<Vertex> queue = new ArrayDeque<>();
+                final Set<Vertex> explored = new HashSet<>();
 
-            // If we're at a node that is deeper than our depth
-            if (v.depth > foundDepth) continue;
+                // We use this to keep track of the depth at which our end node was found
+                // Since it's BFS, the first depth we hit our end node at is going to be the shortest depth
+                // We keep track of this depth here
+                int foundDepth = Integer.MAX_VALUE;
 
-            // If we have found the target end node
-            if (v.tile.getPos().equals(endPos)) {
-                foundDepth = v.depth;
-                // Build up the path by going backwards up the tree
-                final List<TilePos> path = new ArrayList<>();
-                Vertex x = v;
-                while (x != null) {
-                    path.add(x.tile.getPos());
-                    x = x.parent;
+                // Start with initial root node
+                queue.add(new Vertex(board.getTile(startPos.getX(), startPos.getY()), null, 0));
+
+                while (!queue.isEmpty()) {
+                    final Vertex v = queue.remove();
+                    explored.add(v);
+
+                    // If we're at a node that is deeper than our depth
+                    if (v.depth > foundDepth) continue;
+
+                    // If we have found the target end node
+                    if (v.tile.getPos().equals(endPos)) {
+                        foundDepth = v.depth;
+                        // Build up the path by going backwards up the tree
+                        final List<TilePos> path = new ArrayList<>();
+                        Vertex x = v;
+                        while (x != null) {
+                            path.add(x.tile.getPos());
+                            x = x.parent;
+                        }
+                        // Since we initially added the deepest node (the wizard house),
+                        // and we finished on the root node (spawn tile)
+                        // we also need to reverse the list
+                        foundPaths.add(
+                                // RANT: Why the hell do I need to allocate a zero-sized array
+                                // Just so that the type is recognised
+                                // What the **** is wrong with this language
+                                new EnemyPath((path).toArray(new TilePos[0]))
+                        );
+                    }
+                    // Explore any adjacent vertices too
+                    adjacentEdges(board, v)
+                            .stream()
+                            .filter(w -> !explored.contains(w))
+                            .forEach(queue::add);
                 }
-                // Since we initially added the deepest node (the wizard house),
-                // and we finished on the root node (spawn tile)
-                // we also need to reverse the list
-                solutions.add(
-                        // RANT: Why the hell do I need to allocate a zero-sized array
-                        // Just so that the type is recognised
-                        // What the **** is wrong with this language
-                        new EnemyPath(Lists.reverse(path).toArray(new TilePos[0]))
-                );
             }
-            // Explore any adjacent vertices too
-            adjacentEdges(board, v)
-                    .stream()
-                    .filter(w -> !explored.contains(w))
-                    .forEach(queue::add);
         }
-        return solutions;
+
+        return foundPaths;
     }
 
     /**

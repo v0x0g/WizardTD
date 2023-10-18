@@ -226,8 +226,8 @@ public final class App extends PApplet {
 
             final List<EnemyPath> paths = TestPathfinder.findPaths(
                     gameData.board,
-                    spawnPoints.get(0).getPos(),
-                    wizards.get(0).getPos()
+                    spawnPoints,
+                    wizards
             );
             gameData.enemyPaths = paths;
             if (paths != null) {
