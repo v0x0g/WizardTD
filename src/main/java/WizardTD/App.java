@@ -238,7 +238,7 @@ public final class App extends PApplet {
                 for (int i = 0; i < size; i++) {
                     final EnemyPath path = paths.get(i);
                     final Vector2 offset = new Vector2(i - (size/2.0), i - (size/2.0));
-                    offset.multiply(8);
+                    offset.multiply(4);
                     final Colour[] colours = new Colour[]{
                             Colour.RED,
                             Colour.BLUE,
@@ -252,7 +252,7 @@ public final class App extends PApplet {
                     final Colour colour = colours[i];
                     for (double d = 0; d <= path.positions.length; d += 0.5) {
                         final Vector2 pos = UiManager.tileToPixelCoords(path.calculatePos(d));
-                        final float size2 = 12;
+                        final float size2 = 8;
                         this.fill(Colour.withAlpha(colour, Numerics.lerp(0.7, 0.2, d / path.positions.length)).asInt());
                         this.ellipse((float) (pos.x + offset.x), (float) (pos.y  + offset.y), size2, size2);
                     }

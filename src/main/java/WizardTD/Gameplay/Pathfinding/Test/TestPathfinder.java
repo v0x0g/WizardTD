@@ -3,6 +3,7 @@ package WizardTD.Gameplay.Pathfinding.BRDFS;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Gameplay.Pathfinding.*;
 import WizardTD.Gameplay.Tiles.*;
+import com.google.common.collect.*;
 import lombok.*;
 import lombok.experimental.*;
 
@@ -23,6 +24,7 @@ public class TestPathfinder {
                 final Tile tile = board.maybeGetTile(vertex.tile.getPos().getX() + i, vertex.tile.getPos().getY() + j);
                 // Don't connect to self, only want sides not corners
                 if (abs(i) + abs(j) != 1) continue;
+                // Paths and Wizard Houses are considered valid connected tiles
                 final boolean isValid = tile instanceof PathTile || tile instanceof WizardHouseTile;
                 if (isValid) list.add(new Vertex(tile, vertex, vertex.depth + 1));
             }
@@ -54,26 +56,27 @@ public class TestPathfinder {
             if (v.tile.getPos().equals(endPos)) {
                 foundDepth = v.depth;
                 // Build up the path by going backwards up the tree
-                final Stack<TilePos> path = new Stack<>();
+                final List<TilePos> path = new ArrayList<>();
                 Vertex x = v;
-                while (x.parent != null) {
-                    path.push(x.tile.getPos());
+                while (x != null) {
+                    path.add(x.tile.getPos());
                     x = x.parent;
                 }
+                // Since we initially added the deepest node (the wizard house),
+                // and we finished on the root node (spawn tile)
+                // we also need to reverse the list
                 solutions.add(
-                        // Why the hell do I need to allocate a zero-sized array
+                        // RANT: Why the hell do I need to allocate a zero-sized array
                         // Just so that the type is recognised
                         // What the **** is wrong with this language
-                        new EnemyPath(path.toArray(new TilePos[0]))
+                        new EnemyPath(Lists.reverse(path).toArray(new TilePos[0]))
                 );
             }
-            // Explore any adjacent vertices
+            // Explore any adjacent vertices too
             adjacentEdges(board, v)
-                    .forEach(w -> {
-                        if (!explored.contains(w)) {
-                            queue.add(w);
-                        }
-                    });
+                    .stream()
+                    .filter(w -> !explored.contains(w))
+                    .forEach(queue::add);
         }
         return solutions;
     }
