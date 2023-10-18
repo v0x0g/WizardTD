@@ -2,7 +2,6 @@ package WizardTD.Gameplay.Pathfinding;
 
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Gameplay.Tiles.*;
-import com.google.common.collect.*;
 import lombok.*;
 import lombok.experimental.*;
 
@@ -38,15 +37,17 @@ public class TestPathfinder {
     /**
      * Returns a list of all the adjacent edges to a given vertex
      */
-    List<Vertex> adjacentEdges(final Board board, final Vertex vertex) {
+    List<Vertex> adjacentEdges(final Board board, final Vertex vertex, final Tile endNode) {
         final List<Vertex> list = new ArrayList<>();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 final Tile tile = board.maybeGetTile(vertex.tile.getPos().getX() + i, vertex.tile.getPos().getY() + j);
                 // Don't connect to self, only want sides not corners
                 if (abs(i) + abs(j) != 1) continue;
-                // Paths and Wizard Houses are considered valid connected tiles
-                final boolean isValid = tile instanceof PathTile || tile instanceof WizardHouseTile;
+                // Paths and the target Wizard Houses are considered valid connected tiles
+                // We take in a reference to the end node so that we don't try and path-find
+                // through one wizard house, towards another
+                final boolean isValid = tile instanceof PathTile || tile == endNode;
                 if (isValid) list.add(new Vertex(tile, vertex, vertex.depth + 1));
             }
         }
@@ -103,7 +104,7 @@ public class TestPathfinder {
                         );
                     }
                     // Explore any adjacent vertices too
-                    adjacentEdges(board, v)
+                    adjacentEdges(board, v, wizardHouse)
                             .stream()
                             .filter(w -> !explored.contains(w))
                             .forEach(queue::add);
