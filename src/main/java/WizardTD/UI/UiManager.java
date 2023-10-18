@@ -170,8 +170,7 @@ public class UiManager {
                     "FF",
                     KeyCode.F,
                     (button, game, ui) -> Logger.debug("toggle fast forward = {}", game.fastForward ^= true),
-                    (button, game, ui) -> button.fillColour =
-                            game.fastForward ? Theme.BUTTON_ENABLED : Theme.BUTTON_DISABLED
+                    (button, game, ui) -> button.fillColour = Theme.buttonColour(game.fastForward, button.isHovered)
             );
             addSidebarButton(
                     uiState,
@@ -179,7 +178,7 @@ public class UiManager {
                     "P",
                     KeyCode.P,
                     (button, game, ui) -> Logger.debug("toggle pause = {}", game.paused ^= true),
-                    (button, game, ui) -> button.fillColour = game.paused ? Theme.BUTTON_ENABLED : Theme.BUTTON_DISABLED
+                    (button, game, ui) -> button.fillColour = Theme.buttonColour(game.paused, button.isHovered)
             );
             addSidebarButton(
                     uiState,
@@ -187,8 +186,7 @@ public class UiManager {
                     "U1",
                     KeyCode.NUM_1,
                     (button, game, ui) -> Logger.debug("toggle upgrade range = {}", ui.wantsUpgradeRange ^= true),
-                    (button, game, ui) -> button.fillColour =
-                            ui.wantsUpgradeRange ? Theme.BUTTON_ENABLED : Theme.BUTTON_DISABLED
+                    (button, game, ui) -> button.fillColour = Theme.buttonColour(ui.wantsUpgradeRange, button.isHovered)
             );
             addSidebarButton(
                     uiState,
@@ -196,8 +194,7 @@ public class UiManager {
                     "U2",
                     KeyCode.NUM_2,
                     (button, game, ui) -> Logger.debug("toggle upgrade speed = {}", ui.wantsUpgradeSpeed ^= true),
-                    (button, game, ui) -> button.fillColour =
-                            ui.wantsUpgradeSpeed ? Theme.BUTTON_ENABLED : Theme.BUTTON_DISABLED
+                    (button, game, ui) -> button.fillColour = Theme.buttonColour(ui.wantsUpgradeSpeed, button.isHovered)
             );
             addSidebarButton(
                     uiState,
@@ -206,7 +203,7 @@ public class UiManager {
                     KeyCode.NUM_3,
                     (button, game, ui) -> Logger.debug("toggle upgrade damage = {}", ui.wantsUpgradeDamage ^= true),
                     (button, game, ui) -> button.fillColour =
-                            ui.wantsUpgradeDamage ? Theme.BUTTON_ENABLED : Theme.BUTTON_DISABLED
+                            Theme.buttonColour(ui.wantsUpgradeDamage, button.isHovered)
             );
             addSidebarButton(
                     uiState,
@@ -299,7 +296,7 @@ public class UiManager {
         }
 
         getInteractiveElements(uiState.uiElements)
-                .forEach(elem -> elem.hovering(elem.isMouseOver(press.coords), gameData, uiState));
+                .forEach(elem -> elem.isHovered = elem.isMouseOver(press.coords));
     }
 
     public void keyEvent(

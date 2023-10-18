@@ -10,6 +10,7 @@ import mikera.vectorz.*;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
+@NoArgsConstructor
 public abstract class InteractiveElement extends UiElement {
 //    /**
 //     * Top left corner of the object
@@ -44,8 +45,7 @@ public abstract class InteractiveElement extends UiElement {
     public abstract void activate(GameData gameData, UiState uiState);
 
     /**
-     * Called each frame, to update whether the object is being hovered or not
-     * @param isHovering Is the mouse currently hovering over this object
+     * Boolean for whether the element is currently being hovered over. Will be se by {@link UiManager}
      */
-    public void hovering(final boolean isHovering, final GameData gameData, final UiState uiState){}
+    public boolean isHovered = false;
 }
