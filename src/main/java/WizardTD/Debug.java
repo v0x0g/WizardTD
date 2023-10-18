@@ -33,28 +33,8 @@ public class Debug {
                 Colour.BRIGHT_PURPLE,
         };
         
-        final List<Tile> wizards = new ArrayList<>();
-        final List<Tile> spawnPoints = new ArrayList<>();
-        Pathfinder.scanBoard(game.board, wizards, spawnPoints);
 
-        app.ellipseMode(PConstants.CENTER);
-        wizards.forEach(t -> {
-            final Vector2 pos = UiManager.tileToPixelCoords(t);
-            app.fill(Colour.BLACK.asInt());
-            app.ellipse((float) pos.x, (float) pos.y, CIRCLE_SIZE, CIRCLE_SIZE);
-        });
-
-        spawnPoints.forEach(t -> {
-            final Vector2 pos = UiManager.tileToPixelCoords(t);
-            app.fill(Colour.BLUE.asInt());
-            app.ellipse((float) pos.x, (float) pos.y, CIRCLE_SIZE, CIRCLE_SIZE);
-        });
-
-        final List<EnemyPath> paths = Pathfinder.findPaths(
-                game.board,
-                spawnPoints,
-                wizards
-        );
+        final List<EnemyPath> paths = Pathfinder.findPaths(game.board);
         game.enemyPaths = paths;
         if (paths != null) {
             for (int i = 0; i < paths.size(); i++) {

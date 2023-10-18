@@ -2,10 +2,12 @@ package WizardTD.Gameplay.Pathfinding;
 
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Gameplay.Tiles.*;
+import com.google.common.collect.*;
 import lombok.*;
 import lombok.experimental.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 import static WizardTD.GameConfig.*;
 import static java.lang.Math.*;
@@ -15,27 +17,6 @@ import static java.lang.Math.*;
  */
 @UtilityClass
 public class Pathfinder {
-
-    /**
-     * Scans the board to find all the wizard houses and valid spawn points
-     *
-     * @param spawnPoints  The destination list to add the wizard houses to
-     * @param wizardHouses The destination list to add the spawn points to
-     */
-    public void scanBoard(final Board board, final List<Tile> wizardHouses, final List<Tile> spawnPoints) {
-        board.stream()
-             .filter(tile -> tile instanceof WizardHouseTile)
-             .forEach(wizardHouses::add);
-
-        board.stream()
-             .filter(t -> (t.getPos().getX() == 0)
-                          || (t.getPos().getY() == 0)
-                          || (t.getPos().getX() == BOARD_SIZE_TILES)
-                          || (t.getPos().getY() == BOARD_SIZE_TILES))
-             .filter(tile -> tile instanceof PathTile)
-             .forEach(spawnPoints::add);
-
-    }
 
     /**
      * Returns a list of all the adjacent edges to a given vertex
@@ -57,14 +38,30 @@ public class Pathfinder {
         return list;
     }
 
-    public List<EnemyPath> findPaths(final Board board, final List<Tile> wizardHouses, final List<Tile> spawnPoints) {
+    public List<EnemyPath> findPaths(final Board board) {
+        // Find all the spawn points and wizard houses
+        final List<Tile> wizardHouses =
+                board.stream()
+                     .filter(tile -> tile instanceof WizardHouseTile)
+                     .collect(Collectors.toList());
+
+        final List<Tile> spawnPoints =
+                board.stream()
+                     // Filter by checking they are on the edge
+                     .filter(t -> (t.getPos().getX() == 0)
+                                  || (t.getPos().getY() == 0)
+                                  || (t.getPos().getX() == BOARD_SIZE_TILES)
+                                  || (t.getPos().getY() == BOARD_SIZE_TILES))
+                     .filter(tile -> tile instanceof PathTile)
+                     .collect(Collectors.toList());
+
         // List of paths we've found
         final List<EnemyPath> foundPaths = new ArrayList<>();
 
         // Iterate over the cartesian product of spawn points and wizard houses
         for (final Tile wizardHouse : wizardHouses) {
             for (final Tile spawnPoint : spawnPoints) {
-                
+
                 final TilePos startPos = spawnPoint.getPos();
                 final TilePos endPos = wizardHouse.getPos();
 
@@ -103,7 +100,7 @@ public class Pathfinder {
                                 // RANT: Why the hell do I need to allocate a zero-sized array
                                 // Just so that the type is recognised
                                 // What the **** is wrong with this language
-                                new EnemyPath((path).toArray(new TilePos[0]))
+                                new EnemyPath(Lists.reverse(path).toArray(new TilePos[0]))
                         );
                     }
                     // Explore any adjacent vertices too
