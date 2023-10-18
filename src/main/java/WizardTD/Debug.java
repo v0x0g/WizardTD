@@ -18,7 +18,7 @@ public class Debug {
     public void drawPathfindingOverlay(final App app, final GameData game){
         final List<Tile> wizards = new ArrayList<>();
         final List<Tile> spawnPoints = new ArrayList<>();
-        TestPathfinder.scanBoard(game.board, wizards, spawnPoints);
+        Pathfinder.scanBoard(game.board, wizards, spawnPoints);
 
         app.ellipseMode(PConstants.CENTER);
         wizards.forEach(t -> {
@@ -35,7 +35,7 @@ public class Debug {
             app.ellipse((float) pos.x, (float) pos.y, size, size);
         });
 
-        final List<EnemyPath> paths = TestPathfinder.findPaths(
+        final List<EnemyPath> paths = Pathfinder.findPaths(
                 game.board,
                 spawnPoints,
                 wizards

@@ -10,8 +10,11 @@ import java.util.*;
 import static WizardTD.GameConfig.*;
 import static java.lang.Math.*;
 
+/**
+ * Helper class for pathfinding stuff
+ */
 @UtilityClass
-public class TestPathfinder {
+public class Pathfinder {
 
     /**
      * Scans the board to find all the wizard houses and valid spawn points
