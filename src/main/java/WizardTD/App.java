@@ -4,10 +4,8 @@ import WizardTD.Event.Event;
 import WizardTD.Event.*;
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
-import WizardTD.Gameplay.Pathfinding.AStar.*;
-import WizardTD.Gameplay.Pathfinding.BRDFS.*;
 import WizardTD.Gameplay.Pathfinding.*;
-import WizardTD.Gameplay.Pathfinding.BRDFS.TestPathfinder;
+import WizardTD.Gameplay.Pathfinding.TestPathfinder;
 import WizardTD.Gameplay.Tiles.*;
 import WizardTD.Input.*;
 import WizardTD.Rendering.*;
@@ -209,24 +207,23 @@ public final class App extends PApplet {
             // Path
             final List<Tile> wizards = new ArrayList<>();
             final List<Tile> spawnPoints = new ArrayList<>();
-            AStarPathfinder.scanBoard(gameData.board, wizards, spawnPoints);
+            TestPathfinder.scanBoard(gameData.board, wizards, spawnPoints);
 
-//            this.ellipseMode(PConstants.CENTER);
-//            wizards.forEach(t -> {
-//                final Vector2 pos = UiManager.tileToPixelCoords(t);
-//                final float size = 40;
-//                this.fill(Colour.BLACK.asInt());
-//                this.ellipse((float) pos.x, (float) pos.y, size, size);
-//            });
-//
-//            spawnPoints.forEach(t -> {
-//                final Vector2 pos = UiManager.tileToPixelCoords(t);
-//                final float size = 40;
-//                this.fill(Colour.BLUE.asInt());
-//                this.ellipse((float) pos.x, (float) pos.y, size, size);
-//            });
+            this.ellipseMode(PConstants.CENTER);
+            wizards.forEach(t -> {
+                final Vector2 pos = UiManager.tileToPixelCoords(t);
+                final float size = 40;
+                this.fill(Colour.BLACK.asInt());
+                this.ellipse((float) pos.x, (float) pos.y, size, size);
+            });
 
-//            final List<EnemyPath> paths = AStarPathfinder.findPath(gameData.board, spawnPoints.get(0), wizards.get(0));
+            spawnPoints.forEach(t -> {
+                final Vector2 pos = UiManager.tileToPixelCoords(t);
+                final float size = 40;
+                this.fill(Colour.BLUE.asInt());
+                this.ellipse((float) pos.x, (float) pos.y, size, size);
+            });
+
             final List<EnemyPath> paths = TestPathfinder.findPaths(
                     gameData.board,
                     spawnPoints.get(0).getPos(),

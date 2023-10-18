@@ -1,7 +1,6 @@
-package WizardTD.Gameplay.Pathfinding.BRDFS;
+package WizardTD.Gameplay.Pathfinding;
 
 import WizardTD.Gameplay.Game.*;
-import WizardTD.Gameplay.Pathfinding.*;
 import WizardTD.Gameplay.Tiles.*;
 import com.google.common.collect.*;
 import lombok.*;
@@ -9,10 +8,32 @@ import lombok.experimental.*;
 
 import java.util.*;
 
+import static WizardTD.GameConfig.BOARD_SIZE_TILES;
 import static java.lang.Math.*;
 
 @UtilityClass
 public class TestPathfinder {
+
+    /**
+     * Scans the board to find all the wizard houses and valid spawn points
+     *
+     * @param spawnPoints  The destination list to add the wizard houses to
+     * @param wizardHouses The destination list to add the spawn points to
+     */
+    public void scanBoard(final Board board, final List<Tile> wizardHouses, final List<Tile> spawnPoints) {
+        board.stream()
+             .filter(tile -> tile instanceof WizardHouseTile)
+             .forEach(wizardHouses::add);
+
+        board.stream()
+             .filter(t -> (t.getPos().getX() == 0)
+                          || (t.getPos().getY() == 0)
+                          || (t.getPos().getX() == BOARD_SIZE_TILES)
+                          || (t.getPos().getY() == BOARD_SIZE_TILES))
+             .filter(tile -> tile instanceof PathTile)
+             .forEach(spawnPoints::add);
+
+    }
 
     /**
      * Returns a list of all the adjacent edges to a given vertex
@@ -33,24 +54,24 @@ public class TestPathfinder {
     }
 
     public List<EnemyPath> findPaths(final Board board, final TilePos startPos, final TilePos endPos) {
-        // 
         final Queue<Vertex> queue = new ArrayDeque<>();
         final Set<Vertex> explored = new HashSet<>();
-        final Vertex root = new Vertex(board.getTile(startPos.getX(), startPos.getY()), null, 0);
 
         // We use this to keep track of the depth at which our end node was found
         // Since it's BFS, the first depth we hit our end node at is going to be the shortest depth
         // We keep track of this depth here
         int foundDepth = Integer.MAX_VALUE;
-        queue.add(root);
+        
+        // Start with initial root node
+        queue.add(new Vertex(board.getTile(startPos.getX(), startPos.getY()), null, 0));
 
         final List<EnemyPath> solutions = new ArrayList<>();
         while (!queue.isEmpty()) {
             final Vertex v = queue.remove();
             explored.add(v);
-            
+
             // If we're at a node that is deeper than our depth
-            if(v.depth > foundDepth) continue;
+            if (v.depth > foundDepth) continue;
 
             // If we have found the target end node
             if (v.tile.getPos().equals(endPos)) {
@@ -97,29 +118,12 @@ public class TestPathfinder {
          * The parent vertex for this vertex.
          * May be null if this a root vertex
          */
-        @EqualsAndHashCode.Exclude public Vertex parent;
+        @EqualsAndHashCode.Exclude
+        public Vertex parent;
         /**
          * How deep in the tree we are.
          */
-        @EqualsAndHashCode.Exclude public int depth;
-
-//        public boolean equals(final Object o) {
-//            if (o == this) return true;
-//            if (!(o instanceof Vertex)) return false;
-//            final Vertex other = (Vertex) o;
-//            if (!Objects.equals(this.tile, other.tile)) return false;
-//            if(this.parent != other.parent) return false;
-////            return this.depth == other.depth;
-//            return true;
-//        }
-//
-//        public int hashCode() {
-//            final int PRIME = 59;
-//            int result = 1;
-//            final Object $tile = this.tile;
-//            result = result * PRIME + ($tile == null ? 43 : $tile.hashCode());
-////            result = result * PRIME + this.depth;
-//            return result;
-//        }
+        @EqualsAndHashCode.Exclude
+        public int depth;
     }
 }
