@@ -1,4 +1,4 @@
-package WizardTD.UI.ClickableElements;
+package WizardTD.UI.InteractableElements;
 
 import WizardTD.Delegates.*;
 import WizardTD.Ext.*;
@@ -11,9 +11,14 @@ import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.*;
 import processing.core.*;
 
+import java.util.*;
+
 @ToString
 @EqualsAndHashCode(callSuper = true)
-public class ButtonElement extends ClickableElement {
+public class ButtonElement extends InteractiveElement {
+
+    public final Vector2 corner1, corner2;
+    public final @Nullable KeyPress activationKey;
 
     public final UiAction<ButtonElement> click;
     public Colour fillColour;
@@ -35,7 +40,8 @@ public class ButtonElement extends ClickableElement {
             final Colour fillColour, final Colour outlineColour,
             @Nullable final KeyPress activationKey,
             final UiAction<ButtonElement> click) {
-        super(corner1, corner2, activationKey);
+        this.corner1 = corner1;
+        this.corner2 = corner2;
         this.click = click;
         this.fillColour = fillColour;
         this.outlineColour = outlineColour;
@@ -67,5 +73,16 @@ public class ButtonElement extends ClickableElement {
     public void activate(final GameData gameData, final UiState uiState) {
         Loggers.UI.debug("activate button {}", this);
         this.click.invoke(this, gameData, uiState);
+    }
+
+    @Override
+    public boolean isMouseOver(final Vector2 coords) {
+        return coords.x >= this.corner1.x && coords.y >= this.corner1.y &&
+               coords.x <= this.corner2.x && coords.y <= this.corner2.y;
+    }
+
+    @Override
+    public boolean keyMatches(final KeyPress keyPress) {
+        return Objects.equals(keyPress, this.activationKey);
     }
 }

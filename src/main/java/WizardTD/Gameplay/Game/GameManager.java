@@ -2,6 +2,7 @@ package WizardTD.Gameplay.Game;
 
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Enemies.*;
+import WizardTD.Gameplay.Pathfinding.*;
 import WizardTD.Gameplay.Projectiles.*;
 import WizardTD.Gameplay.Spawners.*;
 import WizardTD.Gameplay.Spells.*;
@@ -333,6 +334,9 @@ public class GameManager {
         game.mana = mana_;
         game.manaCap = manaCap_;
         game.manaTrickle = manaTrickle_;
+        
+        updatePathfinding(game);
+        
         return game;
     }
 
@@ -391,5 +395,14 @@ public class GameManager {
                 game.mana -= e.health;
             }
         });
+    }
+
+    /**
+     * Updates the pathfinding for the board (rescans the board)
+     */
+    public void updatePathfinding(final GameData game){
+        Loggers.GAMEPLAY.info("updating pathfinding");
+        game.enemyPaths = Pathfinder.findPaths(game.board);
+        Loggers.GAMEPLAY.info("pathfinding done");
     }
 }

@@ -8,8 +8,8 @@ import WizardTD.Gameplay.Tiles.*;
 import WizardTD.Input.*;
 import WizardTD.Rendering.*;
 import WizardTD.UI.Appearance.*;
-import WizardTD.UI.ClickableElements.*;
 import WizardTD.UI.Elements.*;
+import WizardTD.UI.InteractableElements.*;
 import com.google.errorprone.annotations.*;
 import lombok.experimental.*;
 import lombok.*;
@@ -287,16 +287,19 @@ public class UiManager {
         else
             Loggers.INPUT.debug("mouse event: {}; [{}, {}]: null}", press);
 
-        getClickableElements(uiState.uiElements)
-                .forEach(elem -> {
-                    Loggers.INPUT.trace("elem {}", elem);
-                    if (press.coords.x >= elem.corner1.x && press.coords.y >= elem.corner1.y &&
-                        press.coords.x <= elem.corner2.x && press.coords.y <= elem.corner2.y &&
-                        press.action == MouseAction.CLICK) {
+        // Click any elements that matched on hovering
+        // Hopefully this only clicks one element at a time
+        if (press.action == MouseAction.CLICK) {
+            getInteractiveElements(uiState.uiElements)
+                    .filter(elem -> elem.isMouseOver(press.coords))
+                    .forEach(elem -> {
                         Loggers.INPUT.debug("activate element {}", elem);
                         elem.activate(gameData, uiState);
-                    }
-                });
+                    });
+        }
+
+        getInteractiveElements(uiState.uiElements)
+                .forEach(elem -> elem.hovering(elem.isMouseOver(press.coords), gameData, uiState));
     }
 
     public void keyEvent(
@@ -305,18 +308,17 @@ public class UiManager {
         // Pass on any key-presses to the UI elements
         Loggers.INPUT.debug("key event: {}", press);
 
-        getClickableElements(uiState.uiElements)
+        // Hopefully this only clicks one element at a time
+        getInteractiveElements(uiState.uiElements)
+                .filter(elem -> elem.keyMatches(press))
                 .forEach(elem -> {
-                    Loggers.INPUT.trace("elem {}", elem);
-                    if (press.equals(elem.activationKey)) {
-                        Loggers.INPUT.debug("activate element {}", elem);
-                        elem.activate(gameData, uiState);
-                    }
+                    Loggers.INPUT.debug("activate element {}", elem);
+                    elem.activate(gameData, uiState);
                 });
     }
 
     @SuppressWarnings("unchecked")
-    public static Stream<ClickableElement> getClickableElements(
+    public static Stream<InteractiveElement> getInteractiveElements(
             final Collection<UiElement> uiElements) {
         /*
          SAFETY: This does use unchecked casting, however the objects are validated
@@ -330,13 +332,13 @@ public class UiManager {
         return uiElements.stream()
                          .map(elem -> {
                              // Try cast it to a clickable element type
-                             if (elem instanceof ClickableElement) {
-                                 return (ClickableElement) elem;
+                             if (elem instanceof InteractiveElement) {
+                                 return (InteractiveElement) elem;
                              }
                              // Also see if it's a DynamicWrapperElement
                              else if ((elem instanceof DynamicWrapperElement) &&
-                                      (((DynamicWrapperElement<UiElement>) elem).element instanceof ClickableElement)) {
-                                 return (ClickableElement) ((DynamicWrapperElement<UiElement>) elem).element;
+                                      (((DynamicWrapperElement<UiElement>) elem).element instanceof InteractiveElement)) {
+                                 return (InteractiveElement) ((DynamicWrapperElement<UiElement>) elem).element;
                              }
                              // Couldn't cast, skip it
                              else {
