@@ -37,8 +37,7 @@ public class UiManager {
      */
     public PImage loadImage(final PApplet app, @CompileTimeConstant final String path) {
         Loggers.UI.debug("loading image at {}", path);
-        //noinspection LocalCanBeFinal
-        val img = app.loadImage(path);
+        final PImage img = app.loadImage(path);
         Loggers.UI.debug("loaded image at {}: {} (valid={})", path, img, ImageExt.isValidImage(img));
         return img;
     }
@@ -69,6 +68,9 @@ public class UiManager {
         return new Vector2(middlePosX, middlePosY);
     }
 
+    /**
+     * Initialises the UI, by creating all the UI elements
+     */
     public void initUi(final UiState uiState) {
         //Background
         {
