@@ -181,29 +181,29 @@ public final class App extends PApplet {
         Renderer.render(this, this.gameData, this.uiState);
 
         {
-            final String SEP = "=====";
-            final String str = String.format(
-                    "%s FRAMES %s\n" +
-                    "P.frameRate=%03.1f, P.frameCount=%05d\n" +
-                    "lastTick=%08.3f, thisTick=%08.3f, deltaTime=%.4f, fps=%03.1f\n",
-                    SEP, SEP,
-                    this.frameRate, this.frameCount,
-                    lastTick, thisTick, deltaTime, 1 / deltaTime
-            );
-
-            final float x1 = 16, y1 = 40 + 16,
-                    x2 = 608, y2 = 420;
-            //noinspection MagicNumber
-            this.fill(Colour.withAlpha(Colour.DARK_GREY, 0.5).asInt());
-            this.rectMode(PConstants.CORNER);
-            this.rect(x1, y1, x2, y2);
-
-            this.fill(Theme.TEXT.asInt());
-            this.textAlign(PConstants.LEFT, PConstants.TOP);
-            //noinspection MagicNumber
-            this.textSize(16);
-
-            this.text(str, x1, y1);
+//            final String SEP = "=====";
+//            final String str = String.format(
+//                    "%s FRAMES %s\n" +
+//                    "P.frameRate=%03.1f, P.frameCount=%05d\n" +
+//                    "lastTick=%08.3f, thisTick=%08.3f, deltaTime=%.4f, fps=%03.1f\n",
+//                    SEP, SEP,
+//                    this.frameRate, this.frameCount,
+//                    lastTick, thisTick, deltaTime, 1 / deltaTime
+//            );
+//
+//            final float x1 = 16, y1 = 40 + 16,
+//                    x2 = 608, y2 = 420;
+//            //noinspection MagicNumber
+//            this.fill(Colour.withAlpha(Colour.DARK_GREY, 0.5).asInt());
+//            this.rectMode(PConstants.CORNER);
+//            this.rect(x1, y1, x2, y2);
+//
+//            this.fill(Theme.TEXT.asInt());
+//            this.textAlign(PConstants.LEFT, PConstants.TOP);
+//            //noinspection MagicNumber
+//            this.textSize(16);
+//
+//            this.text(str, x1, y1);
 
 
             // Path
@@ -234,8 +234,11 @@ public final class App extends PApplet {
             );
             gameData.enemyPaths = paths;
             if (paths != null) {
-                for (int i = 0; i < paths.size(); i++) {
+                final int size = paths.size();
+                for (int i = 0; i < size; i++) {
                     final EnemyPath path = paths.get(i);
+                    final Vector2 offset = new Vector2(i - (size/2.0), i - (size/2.0));
+                    offset.multiply(8);
                     final Colour[] colours = new Colour[]{
                             Colour.RED,
                             Colour.BLUE,
@@ -249,11 +252,10 @@ public final class App extends PApplet {
                     final Colour colour = colours[i];
                     for (double d = 0; d <= path.positions.length; d += 0.5) {
                         final Vector2 pos = UiManager.tileToPixelCoords(path.calculatePos(d));
-                        final float size = 12;
+                        final float size2 = 12;
                         this.fill(Colour.withAlpha(colour, Numerics.lerp(0.7, 0.2, d / path.positions.length)).asInt());
-                        this.ellipse((float) pos.x, (float) pos.y, size, size);
+                        this.ellipse((float) (pos.x + offset.x), (float) (pos.y  + offset.y), size2, size2);
                     }
-
                 }
             }
         }

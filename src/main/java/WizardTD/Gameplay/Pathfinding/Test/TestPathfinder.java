@@ -83,8 +83,8 @@ public class TestPathfinder {
      * Holds a tile and a parent node
      */
     @ToString
-    @EqualsAndHashCode
     @AllArgsConstructor
+    @EqualsAndHashCode
     public static class Vertex {
         /**
          * The corresponding tile for this vertex
@@ -94,10 +94,29 @@ public class TestPathfinder {
          * The parent vertex for this vertex.
          * May be null if this a root vertex
          */
-        public Vertex parent;
+        @EqualsAndHashCode.Exclude public Vertex parent;
         /**
          * How deep in the tree we are.
          */
-        public int depth;
+        @EqualsAndHashCode.Exclude public int depth;
+
+//        public boolean equals(final Object o) {
+//            if (o == this) return true;
+//            if (!(o instanceof Vertex)) return false;
+//            final Vertex other = (Vertex) o;
+//            if (!Objects.equals(this.tile, other.tile)) return false;
+//            if(this.parent != other.parent) return false;
+////            return this.depth == other.depth;
+//            return true;
+//        }
+//
+//        public int hashCode() {
+//            final int PRIME = 59;
+//            int result = 1;
+//            final Object $tile = this.tile;
+//            result = result * PRIME + ($tile == null ? 43 : $tile.hashCode());
+////            result = result * PRIME + this.depth;
+//            return result;
+//        }
     }
 }
