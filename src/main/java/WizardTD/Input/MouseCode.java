@@ -13,6 +13,7 @@ public enum MouseCode {
     LMB(37),
     RMB(39),
     MMB(3),
+    MOVE(0)
     ;
 
     public final int code;

@@ -116,7 +116,8 @@ public final class App extends PApplet {
     protected void handleMouseEvent(final MouseEvent evt) {
         final MouseCode mouseCode = MouseCode.fromInt(evt.getButton());
         final MouseAction mouseAction = MouseAction.fromInt(evt.getAction());
-        if (mouseCode == null && mouseAction == MouseAction.MOVE) return; // Code is null when we move the mouse, ignore
+        // Cursor enters or exits the app window
+        if (mouseCode == null && (mouseAction == MouseAction.EXIT || mouseAction == MouseAction.ENTER)) return;
         if (mouseAction == null || mouseCode == null) {
             Loggers.INPUT.warn(
                     "didn't recognise input action={}({}) button={}({})",
@@ -125,12 +126,13 @@ public final class App extends PApplet {
                     evt.getButton(),
                     mouseCode
             );
-            return;
         }
-        UiManager.mouseEvent(
-                this, gameData, uiState,
-                new MousePress(new Vector2(evt.getX(), evt.getY()), mouseCode, evt.getCount(), mouseAction)
-        );
+        else {
+            UiManager.mouseEvent(
+                    this, gameData, uiState,
+                    new MousePress(new Vector2(evt.getX(), evt.getY()), mouseCode, evt.getCount(), mouseAction)
+            );
+        }
     }
 
     // endregion

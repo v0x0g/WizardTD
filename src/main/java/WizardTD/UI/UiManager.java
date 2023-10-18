@@ -220,7 +220,7 @@ public class UiManager {
                         final double ANIM_SPEED = 0.03;
                         button.fillColour = Colour.lerp(
                                 button.fillColour,
-                                Theme.BUTTON_DISABLED,
+                                button.isHovered ? Theme.BUTTON_HOVERED : Theme.BUTTON_DISABLED,
                                 ANIM_SPEED
                         );
                     }
@@ -282,7 +282,7 @@ public class UiManager {
                     tile
             );
         else
-            Loggers.INPUT.debug("mouse event: {}; [{}, {}]: null}", press);
+            Loggers.INPUT.debug("mouse event: {}; no tile", press);
 
         // Click any elements that matched on hovering
         // Hopefully this only clicks one element at a time
