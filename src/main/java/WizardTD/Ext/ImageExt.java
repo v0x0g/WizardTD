@@ -1,5 +1,6 @@
 package WizardTD.Ext;
 
+import WizardTD.UI.Appearance.*;
 import lombok.experimental.*;
 import org.checkerframework.checker.nullness.qual.*;
 import processing.core.*;
@@ -55,14 +56,14 @@ public class ImageExt {
 
     public PImage generatePattern(
             final int w, final int h, final int thickness, final int spacing, final ImagePattern pattern,
-            final int col1, final int col2) {
+            final Colour col1, final Colour col2) {
         final PImage img = new PImage(w, h);
         for (int x = 0; x < w; x++) {
             for (int y = 0; y < h; y++) {
                 final int a = (x / thickness % spacing);
                 final int b = (y / thickness % spacing);
                 final int v = pattern.calculate(a, b);
-                img.set(x, y, v != 0 ? col1 : col2);
+                img.set(x, y, v != 0 ? col1.asInt() : col2.asInt());
             }
         }
         return img;
@@ -120,6 +121,9 @@ public class ImageExt {
             int calculate(final int a, final int b) {
                 return a;
             }
+        }, TRIANGLE_FRACTAL {
+            @Override
+            int calculate(final int a, final int b) {return a & b;}
         };
 
         abstract int calculate(final int a, final int b);

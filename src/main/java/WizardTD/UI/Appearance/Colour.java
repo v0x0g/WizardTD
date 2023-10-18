@@ -40,10 +40,6 @@ public final class Colour {
         this.a = a;
     }
 
-    public static Colour withAlpha(final Colour colour, final double alpha) {
-        return new Colour(colour.r, colour.g, colour.b, alpha);
-    }
-
     public static Colour lerp(final Colour c1, final Colour c2, final double lerp) {
         return new Colour(
                 Numerics.lerp(c1.r, c2.r, lerp),
@@ -67,6 +63,10 @@ public final class Colour {
     public static double intToDouble(final int val) {
         //noinspection MagicNumber
         return (val / 255.0);
+    }
+
+    public Colour withAlpha(final double alpha) {
+        return new Colour(r, g, b, alpha);
     }
 
     @SuppressWarnings("all")

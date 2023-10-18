@@ -22,11 +22,11 @@ public class Renderer {
     public final PImage missingTextureImage = ImageExt.generatePattern(
             GuiConfig.CELL_SIZE_PX,
             GuiConfig.CELL_SIZE_PX,
-            CELL_SIZE_PX >> 2,
+            CELL_SIZE_PX / 2,
             2,
             ImageExt.ImagePattern.CHECKERS,
-            Colour.BRIGHT_PURPLE.asInt(),
-            Colour.BLACK.asInt()
+            Colour.BRIGHT_PURPLE,
+            Colour.BLACK
     );
     private static final ThreadLocal<ConcurrentHashMap<RenderOrder, List<Renderable>>> renderOrderMaps =
             ThreadLocal.withInitial(ConcurrentHashMap::new);

@@ -12,12 +12,12 @@ import WizardTD.UI.Elements.*;
 import WizardTD.UI.InteractableElements.*;
 import com.google.errorprone.annotations.*;
 import lombok.experimental.*;
-import lombok.*;
 import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.tinylog.*;
 import processing.core.*;
 
+import java.security.*;
 import java.text.*;
 import java.util.*;
 import java.util.stream.*;
@@ -72,7 +72,7 @@ public class UiManager {
      * Initialises the UI, by creating all the UI elements
      */
     public void initUi(final UiState uiState) {
-        //Background
+        // ===== BACKGROUND =====
         {
             uiState.uiElements.add(new RectElement(
                     new Vector2(0, 0),
@@ -87,7 +87,7 @@ public class UiManager {
             });
         }
 
-        // Mana bar
+        // ===== MANA BAR =====
         {
             final Vector2 manaBarPos1 = new Vector2(320, 10);
             final Vector2 manaBarPos2 = new Vector2(640, 30);
@@ -126,7 +126,8 @@ public class UiManager {
                     )
             ));
         }
-        // Next wave indicator
+        
+        // ===== NEXT WAVE INDICATOR =====
         {
             final Vector2 waveIndicatorPos1 = new Vector2(0, 10);
             final Vector2 waveIndicatorPos2 = new Vector2(320, 30);
@@ -164,6 +165,7 @@ public class UiManager {
         }
 
 
+        // ===== SIDEBAR BUTTONS =====
         {
             final Vector2 buttonPos = new Vector2(640 + 16, 40 + 16);
             addSidebarButton(
@@ -228,6 +230,15 @@ public class UiManager {
                     }
             );
         }
+        
+        // ===== HACK: TOWER SELECTION =====
+        uiState.uiElements.add(
+                new KeyboardElement(
+                        new KeyPress(KeyCode.T, false, KeyAction.PRESS),
+                        ($_, game, ui) -> {
+                            
+                        })
+        );
     }
 
     /**

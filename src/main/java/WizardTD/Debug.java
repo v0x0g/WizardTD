@@ -3,10 +3,13 @@ package WizardTD;
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Gameplay.Pathfinding.*;
+import WizardTD.Gameplay.Tiles.*;
+import WizardTD.Rendering.*;
 import WizardTD.UI.Appearance.*;
 import WizardTD.UI.*;
 import lombok.experimental.*;
 import mikera.vectorz.*;
+import processing.core.*;
 
 import java.util.*;
 
@@ -14,10 +17,20 @@ import static WizardTD.UI.Appearance.GuiConfig.*;
 
 @UtilityClass
 public class Debug {
+    // TODO: Fix this overlay image
+    static final PImage tileHoverImage =
+            ImageExt.generatePattern(
+                    CELL_SIZE_PX, CELL_SIZE_PX,
+                    1, 1,
+                    ImageExt.ImagePattern.CHECKERS,
+                    Colour.BLACK.withAlpha(0.5),
+                    Colour.WHITE.withAlpha(0.5)
+                    );
+
     /**
      * Draws a pathfinding overlay for the game to assist with debugging
      */
-    public void drawPathfindingOverlay(final App app, final GameData game){
+    public void drawPathfindingOverlay(final App app, final GameData game) {
         final float LINE_THICKNESS = 2.0f;
         final Colour[] DRAW_COLOURS = new Colour[]{
                 Colour.BLACK,
@@ -33,7 +46,7 @@ public class Debug {
                 Colour.DEEP_PURPLE,
                 Colour.BRIGHT_PURPLE,
         };
-        
+
 
         final List<EnemyPath> paths = game.enemyPaths;
         for (int i = 0; i < paths.size(); i++) {
@@ -55,5 +68,15 @@ public class Debug {
                 );
             }
         }
+    }
+
+    /**
+     * Draws a small overlay for which tile is currently hovered
+     */
+    public void drawHoveredTileOverlay(final PApplet app, final GameData game) {
+        final Vector2 mousePos = new Vector2(app.mouseX, app.mouseY);
+        final Tile tile = UiManager.pixelCoordsToTile(mousePos, game);
+        if (tile == null) return;
+        Renderer.renderSimpleTile(app, tileHoverImage,UiManager.tileToPixelCoords(tile));
     }
 }
