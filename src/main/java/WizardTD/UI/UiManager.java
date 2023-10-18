@@ -110,7 +110,7 @@ public class UiManager {
                         rectElement.pos2.x = Numerics.lerp(
                                 manaBarPos1.x,
                                 manaBarPos2.x,
-                                gameData.mana / gameData.manaCap
+                                Math.max(0, gameData.mana / gameData.manaCap) // Don't go -ve
                         );
                         rectElement.pos2.y = manaBarPos2.y;
                     }
