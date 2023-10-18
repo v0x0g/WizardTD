@@ -204,57 +204,7 @@ public final class App extends PApplet {
 //            this.text(str, x1, y1);
 
 
-            // Path
-            final List<Tile> wizards = new ArrayList<>();
-            final List<Tile> spawnPoints = new ArrayList<>();
-            TestPathfinder.scanBoard(gameData.board, wizards, spawnPoints);
-
-            this.ellipseMode(PConstants.CENTER);
-            wizards.forEach(t -> {
-                final Vector2 pos = UiManager.tileToPixelCoords(t);
-                final float size = 40;
-                this.fill(Colour.BLACK.asInt());
-                this.ellipse((float) pos.x, (float) pos.y, size, size);
-            });
-
-            spawnPoints.forEach(t -> {
-                final Vector2 pos = UiManager.tileToPixelCoords(t);
-                final float size = 40;
-                this.fill(Colour.BLUE.asInt());
-                this.ellipse((float) pos.x, (float) pos.y, size, size);
-            });
-
-            final List<EnemyPath> paths = TestPathfinder.findPaths(
-                    gameData.board,
-                    spawnPoints,
-                    wizards
-            );
-            gameData.enemyPaths = paths;
-            if (paths != null) {
-                final int size = paths.size();
-                for (int i = 0; i < size; i++) {
-                    final EnemyPath path = paths.get(i);
-                    final Vector2 offset = new Vector2(i - (size/2.0), i - (size/2.0));
-                    offset.multiply(4);
-                    final Colour[] colours = new Colour[]{
-                            Colour.RED,
-                            Colour.BLUE,
-                            Colour.GREEN,
-                            Colour.WHITE,
-                            Colour.DEEP_PURPLE,
-                            Colour.BRIGHT_PURPLE,
-                            Colour.LIGHT_BLUE,
-                            Colour.BRIGHT_ORANGE,
-                    };
-                    final Colour colour = colours[i];
-                    for (double d = 0; d <= path.positions.length; d += 0.5) {
-                        final Vector2 pos = UiManager.tileToPixelCoords(path.calculatePos(d));
-                        final float size2 = 8;
-                        this.fill(Colour.withAlpha(colour, Numerics.lerp(0.7, 0.2, d / path.positions.length)).asInt());
-                        this.ellipse((float) (pos.x + offset.x), (float) (pos.y  + offset.y), size2, size2);
-                    }
-                }
-            }
+            Debug.drawPathfindingOverlay(this,gameData);
         }
 
         Loggers.RENDER.debug("exit draw");
