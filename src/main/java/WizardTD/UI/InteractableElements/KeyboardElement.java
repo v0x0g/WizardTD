@@ -25,12 +25,10 @@ public class KeyboardElement extends InteractiveElement {
     }
 
     @Override
-    public void render(PApplet app, GameData gameData, UiState uiState) {
-
-    }
+    public void render(final PApplet app, final GameData gameData, final UiState uiState) { /* empty */}
 
     @Override
-    public boolean isMouseOver(Vector2 mousePos) {
+    public boolean isMouseOver(final Vector2 mousePos) {
         return false;
     }
 
@@ -40,8 +38,8 @@ public class KeyboardElement extends InteractiveElement {
     }
 
     @Override
-    public void activate(GameData gameData, UiState uiState) {
+    public void activate(final PApplet app, final GameData gameData, final UiState uiState) {
         Loggers.UI.debug("activate button {}", this);
-        this.click.invoke(this, gameData, uiState);
+        this.click.invoke(this, app, gameData, uiState);
     }
 }

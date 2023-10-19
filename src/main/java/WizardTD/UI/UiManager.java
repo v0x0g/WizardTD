@@ -17,7 +17,6 @@ import org.checkerframework.checker.nullness.qual.*;
 import org.tinylog.*;
 import processing.core.*;
 
-import java.security.*;
 import java.text.*;
 import java.util.*;
 import java.util.stream.*;
@@ -106,27 +105,27 @@ public class UiManager {
                             Theme.MANA,
                             Theme.OUTLINE
                     ),
-                    (rectElement, gameData, ui) -> {
+                    (rectElement, app, game, ui) -> {
                         // Each frame, update the position of the mana bar to reflect the
                         // fraction of how much mana the wizard has, compared to the max
                         rectElement.pos2.x = Numerics.lerp(
                                 manaBarPos1.x,
                                 manaBarPos2.x,
-                                Math.max(0, gameData.mana / gameData.manaCap) // Don't go -ve
+                                Math.max(0, game.mana / game.manaCap) // Don't go -ve
                         );
                         rectElement.pos2.y = manaBarPos2.y;
                     }
             ));
             uiState.uiElements.add(new DynamicWrapperElement<>(
                     new TextElement(manaBarPos1, manaBarPos2, ""),
-                    (text, data, ui) -> text.text = MessageFormat.format(
+                    (text, app, game, ui) -> text.text = MessageFormat.format(
                             "Mana: {0,number,integer}/{1,number,integer}",
-                            data.mana,
-                            data.manaCap
+                            game.mana,
+                            game.manaCap
                     )
             ));
         }
-        
+
         // ===== NEXT WAVE INDICATOR =====
         {
             final Vector2 waveIndicatorPos1 = new Vector2(0, 10);
@@ -137,7 +136,7 @@ public class UiManager {
                             waveIndicatorPos2,
                             ""
                     ),
-                    (text, game, ui) -> {
+                    (text, app, game, ui) -> {
                         final Wave wave = game.waves.isEmpty() ? null : game.waves.get(0);
                         if (wave == null) {
                             text.text = "No more waves remaining";
@@ -173,40 +172,46 @@ public class UiManager {
                     buttonPos,
                     "FF",
                     KeyCode.F,
-                    (button, game, ui) -> Logger.debug("toggle fast forward = {}", game.fastForward ^= true),
-                    (button, game, ui) -> button.fillColour = Theme.buttonColour(game.fastForward, button.isHovered)
+                    (button, app, game, ui) -> Logger.debug("toggle fast forward = {}", game.fastForward ^= true),
+                    (button, app, game, ui) -> button.fillColour =
+                            Theme.buttonColour(game.fastForward, button.isHovered)
             );
             addSidebarButton(
                     uiState,
                     buttonPos,
                     "P",
                     KeyCode.P,
-                    (button, game, ui) -> Logger.debug("toggle pause = {}", game.paused ^= true),
-                    (button, game, ui) -> button.fillColour = Theme.buttonColour(game.paused, button.isHovered)
+                    (button, app, game, ui) -> Logger.debug("toggle pause = {}", game.paused ^= true),
+                    (button, app, game, ui) -> button.fillColour = Theme.buttonColour(game.paused, button.isHovered)
             );
             addSidebarButton(
                     uiState,
                     buttonPos,
                     "U1",
                     KeyCode.NUM_1,
-                    (button, game, ui) -> Logger.debug("toggle upgrade range = {}", ui.wantsUpgradeRange ^= true),
-                    (button, game, ui) -> button.fillColour = Theme.buttonColour(ui.wantsUpgradeRange, button.isHovered)
+                    (button, app, game, ui) -> Logger.debug("toggle upgrade range = {}", ui.wantsUpgradeRange ^= true),
+                    (button, app, game, ui) -> button.fillColour =
+                            Theme.buttonColour(ui.wantsUpgradeRange, button.isHovered)
             );
             addSidebarButton(
                     uiState,
                     buttonPos,
                     "U2",
                     KeyCode.NUM_2,
-                    (button, game, ui) -> Logger.debug("toggle upgrade speed = {}", ui.wantsUpgradeSpeed ^= true),
-                    (button, game, ui) -> button.fillColour = Theme.buttonColour(ui.wantsUpgradeSpeed, button.isHovered)
+                    (button, app, game, ui) -> Logger.debug("toggle upgrade speed = {}", ui.wantsUpgradeSpeed ^= true),
+                    (button, app, game, ui) -> button.fillColour =
+                            Theme.buttonColour(ui.wantsUpgradeSpeed, button.isHovered)
             );
             addSidebarButton(
                     uiState,
                     buttonPos,
                     "U3",
                     KeyCode.NUM_3,
-                    (button, game, ui) -> Logger.debug("toggle upgrade damage = {}", ui.wantsUpgradeDamage ^= true),
-                    (button, game, ui) -> button.fillColour =
+                    (button, app, game, ui) -> Logger.debug(
+                            "toggle upgrade damage = {}",
+                            ui.wantsUpgradeDamage ^= true
+                    ),
+                    (button, app, game, ui) -> button.fillColour =
                             Theme.buttonColour(ui.wantsUpgradeDamage, button.isHovered)
             );
             addSidebarButton(
@@ -214,13 +219,13 @@ public class UiManager {
                     buttonPos,
                     "M",
                     KeyCode.M,
-                    (button, game, ui) -> {
+                    (button, app, game, ui) -> {
                         Loggers.GAMEPLAY.debug("cast mana pool");
                         button.fillColour = Theme.MANA;
                         game.spells.manaSpell.cast(game);
                     },
                     // Nice little fade out animation
-                    (button, game, ui) -> {
+                    (button, app, game, ui) -> {
                         final double ANIM_SPEED = 0.03;
                         button.fillColour = Colour.lerp(
                                 button.fillColour,
@@ -230,14 +235,20 @@ public class UiManager {
                     }
             );
         }
-        
+
         // ===== HACK: TOWER SELECTION =====
         uiState.uiElements.add(
                 new KeyboardElement(
                         new KeyPress(KeyCode.T, false, KeyAction.PRESS),
-                        ($_, game, ui) -> {
-                            
-                        })
+                        (_elem, app, game, ui) -> {
+                            // Find which tile is hovered
+                            final Tile tile = UiManager.pixelCoordsToTile(
+                                    new Vector2(app.mouseX, app.mouseY),
+                                    game
+                            );
+                            Logger.info("Tower {}", tile);
+                        }
+                )
         );
     }
 
@@ -304,7 +315,7 @@ public class UiManager {
                     .filter(elem -> elem.isMouseOver(press.coords))
                     .forEach(elem -> {
                         Loggers.INPUT.debug("activate element {}", elem);
-                        elem.activate(gameData, uiState);
+                        elem.activate(app, gameData, uiState);
                     });
         }
 
@@ -323,7 +334,7 @@ public class UiManager {
                 .filter(elem -> elem.keyMatches(press))
                 .forEach(elem -> {
                     Loggers.INPUT.debug("activate element {}", elem);
-                    elem.activate(gameData, uiState);
+                    elem.activate(app, gameData, uiState);
                 });
     }
 

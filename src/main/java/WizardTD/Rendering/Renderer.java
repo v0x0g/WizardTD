@@ -80,7 +80,6 @@ public class Renderer {
      */
     public void renderSimpleTile(
             final PApplet app, @Nullable PImage img, final Vector2 centre) {
-        Loggers.RENDER.trace("tile [{00}}, {00}]: render img {}", centre.x, centre.y, img);
         if (!ImageExt.isValidImage(img)) {
             img = missingTextureImage;
             Loggers.RENDER.debug("tile [{00}, {00}]: missing texture", centre.x, centre.y);
@@ -98,7 +97,6 @@ public class Renderer {
      */
     public void renderSimpleEnemy(
             final PApplet app, @Nullable PImage img, final Vector2 pos) {
-        Loggers.RENDER.trace("entity ({0}, {0): render img {}", pos.x, pos.y, img);
         if (!ImageExt.isValidImage(img)) {
             img = missingTextureImage;
             Loggers.RENDER.debug("entity ({0}, {0): missing texture", pos.x, pos.y);

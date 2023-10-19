@@ -2,6 +2,7 @@ package WizardTD.Delegates;
 
 import WizardTD.Gameplay.Game.*;
 import WizardTD.UI.*;
+import processing.core.*;
 
 /**
  * Delegate type for UI actions
@@ -10,4 +11,4 @@ import WizardTD.UI.*;
  */
 @FunctionalInterface
 @SuppressWarnings("unused")
-public interface UiAction<TElement> extends Action3<TElement, GameData, UiState> {}
+public interface UiAction<TElement> extends Action4<TElement, PApplet, GameData, UiState> {}

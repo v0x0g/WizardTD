@@ -70,9 +70,9 @@ public class ButtonElement extends InteractiveElement {
     }
 
     @Override
-    public void activate(final GameData gameData, final UiState uiState) {
+    public void activate(final PApplet app, final GameData gameData, final UiState uiState) {
         Loggers.UI.debug("activate button {}", this);
-        this.click.invoke(this, gameData, uiState);
+        this.click.invoke(this, app, gameData, uiState);
     }
 
     @Override
