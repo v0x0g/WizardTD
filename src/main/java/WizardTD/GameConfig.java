@@ -1,14 +1,13 @@
 package WizardTD;
 
-import lombok.*;
+import lombok.experimental.*;
 
 /**
  * Class that configures the program.
  * <p>
  * All of these are compile-time constants
  */
-@ToString
-@EqualsAndHashCode
+@UtilityClass
 public class GameConfig {
 
     /**

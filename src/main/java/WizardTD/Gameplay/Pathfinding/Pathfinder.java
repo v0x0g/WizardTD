@@ -103,6 +103,7 @@ public class Pathfinder {
                                 new EnemyPath(Lists.reverse(path).toArray(new TilePos[0]))
                         );
                     }
+
                     // Explore any adjacent vertices too
                     adjacentEdges(board, v, wizardHouse)
                             .stream()

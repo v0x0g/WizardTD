@@ -241,12 +241,13 @@ public class UiManager {
                 new KeyboardElement(
                         new KeyPress(KeyCode.T, false, KeyAction.PRESS),
                         (_elem, app, game, ui) -> {
+                            Loggers.INPUT.info("place tower interaction");
                             // Find which tile is hovered
                             final Tile tile = UiManager.pixelCoordsToTile(
                                     new Vector2(app.mouseX, app.mouseY),
                                     game
                             );
-                            Logger.info("Tower {}", tile);
+                            GameManager.tryPlaceTower(app, game,tile);
                         }
                 )
         );

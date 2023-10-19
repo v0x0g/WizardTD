@@ -11,6 +11,7 @@ import lombok.experimental.*;
 import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
+import org.tinylog.*;
 import processing.core.*;
 import processing.data.*;
 
@@ -221,9 +222,9 @@ public class GameManager {
                                 .map((m) -> {
                                     trace("\tmonster: {}", m);
                                     final long qty = m.getLong("quantity", 0);
-                                    final BigInteger qty_big = qty <=0 ? null : BigInteger.valueOf(qty);
+                                    final BigInteger qty_big = qty <= 0 ? null : BigInteger.valueOf(qty);
                                     final double hp = m.getDouble("hp");
-                                    final double manaPerKill =m.getDouble("mana_gained_on_kill");
+                                    final double manaPerKill = m.getDouble("mana_gained_on_kill");
                                     final double speed = m.getDouble("speed");
                                     final double dmgMult = m.getDouble("armour");
                                     // TODO: Refactor to abstract static method to parse from json?
@@ -334,9 +335,9 @@ public class GameManager {
         game.mana = mana_;
         game.manaCap = manaCap_;
         game.manaTrickle = manaTrickle_;
-        
+
         updatePathfinding(game);
-        
+
         return game;
     }
 
@@ -351,6 +352,7 @@ public class GameManager {
         final double visualDeltaTime = deltaTime;
         final double gameDeltaTime;
 
+        // TODO: Sub tick when fast-forward
         if (game.paused) gameDeltaTime = 0;
         else if (game.fastForward) gameDeltaTime = deltaTime * FAST_FORWARD_SPEED;
         else gameDeltaTime = deltaTime;
@@ -380,16 +382,16 @@ public class GameManager {
 
             break;
         }
-        
+
         // Update all enemies
-        game.enemies.forEach(e -> e.tick(game,visualDeltaTime,gameDeltaTime));
-        
+        game.enemies.forEach(e -> e.tick(game, visualDeltaTime, gameDeltaTime));
+
         // Check if enemies have reached harry potter
-        game.enemies.forEach(e-> {
+        game.enemies.forEach(e -> {
             // If the enemy is closer than this threshold, they have reached the house
             // Banish them
             final double DISTANCE_THRESHOLD = 1.0;
-            if(Math.abs(e.pathProgress - e.path.positions.length) < DISTANCE_THRESHOLD){
+            if (Math.abs(e.pathProgress - e.path.positions.length) < DISTANCE_THRESHOLD) {
                 Loggers.GAMEPLAY.debug("enemy {} reached end of path (wizard)", e);
                 e.pathProgress = 0.0;
                 game.mana -= e.health;
@@ -400,9 +402,37 @@ public class GameManager {
     /**
      * Updates the pathfinding for the board (rescans the board)
      */
-    public void updatePathfinding(final GameData game){
+    public void updatePathfinding(final GameData game) {
         Loggers.GAMEPLAY.info("updating pathfinding");
         game.enemyPaths = Pathfinder.findPaths(game.board);
         Loggers.GAMEPLAY.info("pathfinding done");
+    }
+
+    public void tryPlaceTower(final PApplet app, final GameData game, final Tile tile) {
+
+        final TowerTile tower;
+        if(tile instanceof TowerTile){
+            // Already existing tower
+            tower = (TowerTile) tile;
+        }
+        else if (tile instanceof GrassTile) {
+            // Can place a tower there
+            if (game.mana > game.config.tower.towerCost) {
+                game.mana -= game.config.tower.towerCost;
+                tower = new TowerTile();
+                game.board.setTile(tile.getPos().getX(), tile.getPos().getY(), tower);
+            }
+            else {
+                // Want to place tile but no mana
+                Loggers.GAMEPLAY.debug("insufficient mana to place tile");
+                return;
+            }
+        }
+        else {
+            Loggers.GAMEPLAY.debug("tile not grass or tower, ignoring");
+            return;
+        }
+
+        Logger.info("Tower {}->{}", tile, tower);
     }
 }

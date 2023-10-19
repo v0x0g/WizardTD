@@ -103,7 +103,7 @@ public final class App extends PApplet {
     @Override
     protected void handleKeyEvent(final KeyEvent evt) {
         super.handleKeyEvent(evt);
-        
+
         final KeyCode keyCode = KeyCode.fromInt(evt.getKeyCode());
         final KeyAction keyAction = KeyAction.fromInt(evt.getAction());
         if (evt.getKeyCode() == 0) return; // Processing does this sometimes
@@ -117,7 +117,7 @@ public final class App extends PApplet {
     @Override
     protected void handleMouseEvent(final MouseEvent evt) {
         super.handleMouseEvent(evt);
-        
+
         final MouseCode mouseCode = MouseCode.fromInt(evt.getButton());
         final MouseAction mouseAction = MouseAction.fromInt(evt.getAction());
         // Cursor enters or exits the app window
