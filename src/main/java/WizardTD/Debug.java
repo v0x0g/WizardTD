@@ -25,7 +25,7 @@ public class Debug {
                     ImageExt.ImagePattern.CHECKERS,
                     Colour.BLACK.withAlpha(0.5),
                     Colour.WHITE.withAlpha(0.5)
-                    );
+            );
 
     /**
      * Draws a pathfinding overlay for the game to assist with debugging
@@ -77,6 +77,6 @@ public class Debug {
         final Vector2 mousePos = new Vector2(app.mouseX, app.mouseY);
         final Tile tile = UiManager.pixelCoordsToTile(mousePos, game);
         if (tile == null) return;
-        Renderer.renderSimpleTile(app, tileHoverImage,UiManager.tileToPixelCoords(tile));
+        Renderer.renderSimpleTile(app, tileHoverImage, UiManager.tileToPixelCoords(tile));
     }
 }
