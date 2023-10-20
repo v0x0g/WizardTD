@@ -330,7 +330,6 @@ public class GameManager {
         final double manaCap_ = desc.config.mana.initialManaCap;
         final double manaTrickle_ = desc.config.mana.initialManaTrickle;
 
-        //TODO: Pathfinding
         final GameData game = new GameData(board, enemies, projectiles, waves, new ArrayList<>(), desc.config, spells);
         game.mana = mana_;
         game.manaCap = manaCap_;
@@ -342,21 +341,49 @@ public class GameManager {
     }
 
     /**
-     * Ticks (updates) the game
+     * Ticks (updates) the game.
+     * <p>
+     * It ticks would be too large, will split them up into smaller sub-ticks
      *
      * @param app       The app instance
      * @param game      The object storing the game data
      * @param deltaTime Time between the last frame start and the current frame start
      */
-    public static void tickGame(final PApplet app, final GameData game, final double deltaTime) {
-        final double visualDeltaTime = deltaTime;
-        final double gameDeltaTime;
+    public static void tickGameWithSubtick(final PApplet app, final GameData game, final double deltaTime) {
+        /*
+         * If the tick takes too long, split it up into multiple smaller sub-ticks
+         * This should keep everything accurate, since we aren't making massive long ticks
+         * No simulation errors, yay!
+         *
+         * This essentially calculates how many ticks (`numTicks`) we need to have each tick be under the threshold
+         * and does that many ticks, with each tick being (`deltaTime/numTicks`)
+         */
 
-        // TODO: Sub tick when fast-forward
-        if (game.paused) gameDeltaTime = 0;
-        else if (game.fastForward) gameDeltaTime = deltaTime * FAST_FORWARD_SPEED;
-        else gameDeltaTime = deltaTime;
+        final double speedMultiplier = game.fastForward ? FAST_FORWARD_SPEED : 1.0;
 
+        final int numTicks = (int)Math.ceil(deltaTime * speedMultiplier / SUB_TICK_THRESHOLD);
+        Logger.trace("deltaTime = {}, thresh = {}, mult = {}, numTicks = {}", deltaTime, SUB_TICK_THRESHOLD, speedMultiplier, numTicks);
+
+        for (int i = 0; i < numTicks; i++) {
+            final double gameDelta = game.paused ? 0.0 : deltaTime * speedMultiplier / numTicks;
+            final double visualDelta = deltaTime * speedMultiplier / numTicks;
+
+            Logger.trace("subtick: game={}; visual={}", gameDelta, visualDelta);
+            internalTickGame(app, game, gameDelta, visualDelta);
+        }
+    }
+
+    /**
+     * Ticks (updates) the game.
+     * Will not sub-tick, hence it's internal
+     *
+     * @param app             The app instance
+     * @param game            The object storing the game data
+     * @param gameDeltaTime   Time between the last frame start and the current frame start (aka delta-time).
+     * @param visualDeltaTime Delta-time used for visual purposes, such as animations and UI
+     */
+    private static void internalTickGame(
+            final PApplet app, final GameData game, final double gameDeltaTime, final double visualDeltaTime) {
         // Absorb mana through the atmosphere using mana accumulators
         game.mana += gameDeltaTime * game.manaTrickle;
         game.mana = Math.min(game.mana, game.manaCap);
@@ -411,7 +438,7 @@ public class GameManager {
     public void tryPlaceTower(final PApplet app, final GameData game, final Tile tile) {
 
         final TowerTile tower;
-        if(tile instanceof TowerTile){
+        if (tile instanceof TowerTile) {
             // Already existing tower
             tower = (TowerTile) tile;
         }

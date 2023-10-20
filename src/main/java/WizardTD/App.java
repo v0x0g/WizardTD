@@ -157,20 +157,7 @@ public final class App extends PApplet {
         Loggers.RENDER.trace("background");
         background(Colour.DEEP_PURPLE.asInt());
 
-        // If the tick takes too long, split it up into multiple smaller sub-ticks
-        // This should keep everything accurate, since we aren't making massive long ticks
-        // No simulation errors, yay!
-        if (deltaTime <= GameConfig.SUB_TICK_THRESHOLD) {
-            GameManager.tickGame(this, this.gameData, deltaTime);
-        }
-        else {
-            double dt = deltaTime;
-            while (dt > GameConfig.SUB_TICK_THRESHOLD) {
-                GameManager.tickGame(this, this.gameData, GameConfig.SUB_TICK_THRESHOLD);
-                dt -= GameConfig.SUB_TICK_THRESHOLD;
-            }
-            GameManager.tickGame(this, this.gameData, dt);
-        }
+        GameManager.tickGameWithSubtick(this, this.gameData, deltaTime);
 
         // TODO: Dirtying logic
         Loggers.RENDER.trace("dirty");

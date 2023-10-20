@@ -2,6 +2,7 @@
   <dictionary name="win">
     <words>
       <w>init'ed</w>
+      <w>subtick</w>
     </words>
   </dictionary>
 </component>
