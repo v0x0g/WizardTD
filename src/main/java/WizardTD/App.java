@@ -154,7 +154,7 @@ public final class App extends PApplet {
         final double deltaTime = thisTick - lastTick;
         this.lastFrameTime = thisTick;
 
-        Loggers.RENDER.trace("background");
+         Loggers.RENDER.trace("background");
         background(Colour.DEEP_PURPLE.asInt());
 
         GameManager.tickGameWithSubtick(this, this.gameData, deltaTime);
@@ -193,7 +193,7 @@ public final class App extends PApplet {
             this.text(str, x1, y1);
 
 
-            Debug.drawPathfindingOverlay(this, gameData);
+//            Debug.drawPathfindingOverlay(this, gameData);
             Debug.drawHoveredTileOverlay(this, gameData);
         }
 
