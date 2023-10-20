@@ -76,8 +76,8 @@ public class Pathfinder {
         final List<EnemyPath> foundPaths = new ArrayList<>();
 
         // Iterate over the cartesian product of spawn points and wizard houses
-        for (final TilePos startPos : wizardHouses) {
-            for (final TilePos endPos : spawnPoints) {
+        for (final TilePos endPos : wizardHouses) {
+            for (final TilePos startPos : spawnPoints) {
 
                 final Queue<Vertex> queue = new ArrayDeque<>();
                 final Set<Vertex> explored = new HashSet<>();

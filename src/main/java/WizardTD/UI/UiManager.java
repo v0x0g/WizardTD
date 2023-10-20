@@ -24,6 +24,7 @@ import java.util.stream.*;
 import static WizardTD.GameConfig.*;
 import static WizardTD.UI.Appearance.GuiConfig.*;
 import static WizardTD.UI.Appearance.GuiConfig.UiPositions.*;
+import static WizardTD.UI.Appearance.GuiConfig.Window.*;
 
 @UtilityClass
 public class UiManager {
@@ -43,8 +44,8 @@ public class UiManager {
 
     public @Nullable Tile pixelCoordsToTile(final Vector2 coords, final GameData gameData) {
         // Use inverse lerp to extract the tile coordinates from the mouse pos
-        final double x = Numerics.inverseLerp(coords.x, BOARD_POS_X, BOARD_POS_X + (CELL_SIZE_PX * BOARD_SIZE_TILES));
-        final double y = Numerics.inverseLerp(coords.y, BOARD_POS_Y, BOARD_POS_Y + (CELL_SIZE_PX * BOARD_SIZE_TILES));
+        final double x = Numerics.inverseLerp(coords.x, BOARD_X_PX, BOARD_X_PX + (CELL_SIZE_PX * BOARD_SIZE_TILES));
+        final double y = Numerics.inverseLerp(coords.y, BOARD_Y_PX, BOARD_Y_PX + (CELL_SIZE_PX * BOARD_SIZE_TILES));
 
         // Floor to avoid small negatives rounding to zero
         final int tileX = (int) (Math.floor(x * BOARD_SIZE_TILES));
@@ -62,8 +63,8 @@ public class UiManager {
      */
     public Vector2 tileToPixelCoords(final Vector2 tilePos) {
         // Offset by the tile's coordinates, and then half a tile extra to move to the centre 
-        final double middlePosX = BOARD_POS_X + (tilePos.x * CELL_SIZE_PX) + (CELL_SIZE_PX / 2.0);
-        final double middlePosY = BOARD_POS_Y + (tilePos.y * CELL_SIZE_PX) + (CELL_SIZE_PX / 2.0);
+        final double middlePosX = BOARD_X_PX + (tilePos.x * CELL_SIZE_PX) + (CELL_SIZE_PX / 2.0);
+        final double middlePosY = BOARD_Y_PX + (tilePos.y * CELL_SIZE_PX) + (CELL_SIZE_PX / 2.0);
         return new Vector2(middlePosX, middlePosY);
     }
 
@@ -74,8 +75,19 @@ public class UiManager {
         // ===== BACKGROUND =====
         {
             uiState.uiElements.add(new RectElement(
-                    new Vector2(0, 0),
-                    new Vector2(Window.WINDOW_WIDTH_PX, Window.WINDOW_HEIGHT_PX),
+                    new Vector2(TOP_BAR_X_PX, TOP_BAR_Y_PX),
+                    new Vector2(WINDOW_WIDTH_PX, TOP_BAR_HEIGHT_PX),
+                    Theme.APP_BACKGROUND,
+                    Colour.NONE
+            ) {
+                @Override
+                public RenderOrder getRenderOrder() {
+                    return RenderOrder.BACKGROUND;
+                }
+            });
+            uiState.uiElements.add(new RectElement(
+                    new Vector2(SIDEBAR_X_PX, SIDEBAR_Y_PX),
+                    new Vector2(WINDOW_WIDTH_PX, WINDOW_HEIGHT_PX),
                     Theme.APP_BACKGROUND,
                     Colour.NONE
             ) {
@@ -166,7 +178,7 @@ public class UiManager {
 
         // ===== SIDEBAR BUTTONS =====
         {
-            final Vector2 buttonPos = new Vector2(640 + 16, 40 + 16);
+            final Vector2 buttonPos = new Vector2(SIDEBAR_X_PX + 16, SIDEBAR_Y_PX + 16);
             addSidebarButton(
                     uiState,
                     buttonPos,

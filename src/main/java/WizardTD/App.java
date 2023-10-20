@@ -154,7 +154,7 @@ public final class App extends PApplet {
         final double deltaTime = thisTick - lastTick;
         this.lastFrameTime = thisTick;
 
-         Loggers.RENDER.trace("background");
+        Loggers.RENDER.trace("background");
         background(Colour.DEEP_PURPLE.asInt());
 
         GameManager.tickGameWithSubtick(this, this.gameData, deltaTime);
