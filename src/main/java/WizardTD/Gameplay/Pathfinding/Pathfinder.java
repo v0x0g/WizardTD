@@ -26,7 +26,7 @@ public class Pathfinder {
         final List<Vertex> list = new ArrayList<>();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                final Tile tile = board.maybeGetTile(vertex.tile.getPos().getX() + i, vertex.tile.getPos().getY() + j);
+                final Tile tile = board.maybeGetTile(vertex.pos.getX() + i, vertex.pos.getY() + j);
                 // Don't connect to self, only want sides not corners
                 if (abs(i) + abs(j) != 1) continue;
                 // Paths and the target Wizard Houses are considered valid connected tiles
@@ -49,6 +49,7 @@ public class Pathfinder {
         Loggers.GAMEPLAY.debug("wizard houses: {}", wizardHouses.stream().map(t -> t.getPos().toString())
                                                                 .collect(Collectors.joining(", ")));
 
+        // What we actually do here
         final List<Tile> spawnPoints =
                 board.stream()
                      // Filter by checking they are on the edge

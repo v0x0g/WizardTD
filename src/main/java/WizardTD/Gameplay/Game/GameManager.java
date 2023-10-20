@@ -7,6 +7,7 @@ import WizardTD.Gameplay.Projectiles.*;
 import WizardTD.Gameplay.Spawners.*;
 import WizardTD.Gameplay.Spells.*;
 import WizardTD.Gameplay.Tiles.*;
+import com.google.common.collect.*;
 import lombok.experimental.*;
 import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.*;
@@ -400,11 +401,13 @@ public class GameManager {
 
             Enemy enemy;
             while (null != (enemy = wave.getEnemy())) {
-                Loggers.GAMEPLAY.trace("spawn enemy {}", enemy);
                 game.enemies.add(enemy);
                 final ThreadLocalRandom rng = ThreadLocalRandom.current();
                 // Choose a random path for the enemy to go along
-                enemy.path = game.enemyPaths.get(rng.nextInt(game.enemyPaths.size()));
+                final int pathIdx = rng.nextInt(game.enemyPaths.size());
+                final EnemyPath path =game.enemyPaths.get(pathIdx);
+                Loggers.GAMEPLAY.trace("spawn enemy {}; path = [{}]: {}", enemy, pathIdx, path);
+                enemy.path = path;
             }
 
             break;
@@ -432,6 +435,8 @@ public class GameManager {
     public void updatePathfinding(final GameData game) {
         Loggers.GAMEPLAY.info("updating pathfinding");
         game.enemyPaths = Pathfinder.findPaths(game.board);
+        // Randomise the ordering of the list, to make it a little spicier
+        for (int i = 0; i < 10; i++) Collections.shuffle(game.enemyPaths);
         Loggers.GAMEPLAY.info("pathfinding done");
     }
 
