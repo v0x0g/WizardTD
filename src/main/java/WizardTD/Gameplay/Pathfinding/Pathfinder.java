@@ -22,7 +22,7 @@ public class Pathfinder {
     /**
      * Returns a list of all the adjacent edges to a given vertex
      */
-    List<Vertex> adjacentEdges(final Board board, final Vertex vertex, final Tile endNode) {
+    List<Vertex> adjacentEdges(final Board board, final Vertex vertex, final TilePos endNodePos) {
         final List<Vertex> list = new ArrayList<>();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
@@ -32,8 +32,8 @@ public class Pathfinder {
                 // Paths and the target Wizard Houses are considered valid connected tiles
                 // We take in a reference to the end node so that we don't try and path-find
                 // through one wizard house, towards another
-                final boolean isValid = tile instanceof PathTile || tile == endNode;
-                if (isValid) list.add(new Vertex(tile, vertex, vertex.depth + 1));
+                final boolean isValid = tile != null && (tile instanceof PathTile || tile.getPos() == endNodePos);
+                if (isValid) list.add(new Vertex(tile.getPos(), vertex, vertex.depth + 1));
             }
         }
         return list;
@@ -41,38 +41,43 @@ public class Pathfinder {
 
     public List<EnemyPath> findPaths(final Board board) {
         // Find all the spawn points and wizard houses
-        final List<Tile> wizardHouses =
+        final List<TilePos> wizardHouses =
                 board.stream()
-                     .filter(tile -> tile instanceof WizardHouseTile)
+                     .filter(WizardHouseTile.class::isInstance)
+                     .map(Tile::getPos)
                      .collect(Collectors.toList());
 
-        Loggers.GAMEPLAY.debug("wizard houses: {}", wizardHouses.stream().map(t -> t.getPos().toString())
-                                                                .collect(Collectors.joining(", ")));
+        Loggers.GAMEPLAY.debug(
+                "wizard houses: {}",
+                wizardHouses.stream().map(TilePos::toString).collect(Collectors.joining(", "))
+        );
 
-        // What we actually do here
-        final List<Tile> spawnPoints =
-                board.stream()
-                     // Filter by checking they are on the edge
-                     .filter(t -> (t.getPos().getX() == 0)
-                                  || (t.getPos().getY() == 0)
-                                  || (t.getPos().getX() == BOARD_SIZE_TILES - 1)
-                                  || (t.getPos().getY() == BOARD_SIZE_TILES - 1))
-                     .filter(tile -> tile instanceof PathTile)
-                     .collect(Collectors.toList());
+        // What we actually do here is find the square/ring of tiles that are just
+        // outside the board. These are considered our spawn points,
+        // since it makes the monsters walk from the outer edge of the map
+        final List<TilePos> spawnPoints = new ArrayList<>();
+        for (int i = -1; i <= BOARD_SIZE_TILES; i++) {
+            for (int j = -1; j <= BOARD_SIZE_TILES; j++) {
+                // If we are on a tile that is on the 'edge of the edge'
+                if (i == -1 || i == BOARD_SIZE_TILES
+                    || j == -1 || j == BOARD_SIZE_TILES) {
+                    spawnPoints.add(new TilePos(i,j));
+                }
+            }
+        }
 
-        Loggers.GAMEPLAY.debug("spawn points: {}", spawnPoints.stream().map(t -> t.getPos().toString())
-                                                                .collect(Collectors.joining(", ")));
+        Loggers.GAMEPLAY.debug(
+                "spawn points: {}",
+                spawnPoints.stream().map(TilePos::toString).collect(Collectors.joining(", "))
+        );
 
 
         // List of paths we've found
         final List<EnemyPath> foundPaths = new ArrayList<>();
 
         // Iterate over the cartesian product of spawn points and wizard houses
-        for (final Tile wizardHouse : wizardHouses) {
-            for (final Tile spawnPoint : spawnPoints) {
-
-                final TilePos startPos = spawnPoint.getPos();
-                final TilePos endPos = wizardHouse.getPos();
+        for (final TilePos startPos : wizardHouses) {
+            for (final TilePos endPos : spawnPoints) {
 
                 final Queue<Vertex> queue = new ArrayDeque<>();
                 final Set<Vertex> explored = new HashSet<>();
@@ -83,7 +88,7 @@ public class Pathfinder {
                 int foundDepth = Integer.MAX_VALUE;
 
                 // Start with initial root node
-                queue.add(new Vertex(board.getTile(startPos.getX(), startPos.getY()), null, 0));
+                queue.add(new Vertex(startPos, null, 0));
 
                 while (!queue.isEmpty()) {
                     final Vertex v = queue.remove();
@@ -93,13 +98,13 @@ public class Pathfinder {
                     if (v.depth > foundDepth) continue;
 
                     // If we have found the target end node
-                    if (v.tile.getPos().equals(endPos)) {
+                    if (v.pos.equals(endPos)) {
                         foundDepth = v.depth;
                         // Build up the path by going backwards up the tree
                         final List<TilePos> path = new ArrayList<>();
                         Vertex x = v;
                         while (x != null) {
-                            path.add(x.tile.getPos());
+                            path.add(x.pos);
                             x = x.parent;
                         }
 
@@ -108,7 +113,7 @@ public class Pathfinder {
                         // What the **** is wrong with this language
                         final EnemyPath enemyPath = new EnemyPath(Lists.reverse(path).toArray(new TilePos[0]));
                         Loggers.GAMEPLAY.debug("found enemy path {}", enemyPath);
-                        
+
                         // Since we initially added the deepest node (the wizard house),
                         // and we finished on the root node (spawn tile)
                         // we also need to reverse the list
@@ -116,7 +121,7 @@ public class Pathfinder {
                     }
 
                     // Explore any adjacent vertices too
-                    adjacentEdges(board, v, wizardHouse)
+                    adjacentEdges(board, v, endPos)
                             .stream()
                             .filter(w -> !explored.contains(w))
                             .forEach(queue::add);
@@ -136,9 +141,9 @@ public class Pathfinder {
     @EqualsAndHashCode
     public static class Vertex {
         /**
-         * The corresponding tile for this vertex
+         * The corresponding tile position for this vertex
          */
-        public Tile tile;
+        public TilePos pos;
         /**
          * The parent vertex for this vertex.
          * May be null if this a root vertex

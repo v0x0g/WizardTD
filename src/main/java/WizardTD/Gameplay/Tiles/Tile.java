@@ -10,7 +10,7 @@ import java.util.*;
 @EqualsAndHashCode(callSuper = true)
 public abstract class Tile extends Renderable {
 
-    @Getter private final TilePos pos = new TilePos(0,0);
+    @Getter @NonNull private final TilePos pos = new TilePos(0,0);
     
     /**
      * Parses a char as a Tile
