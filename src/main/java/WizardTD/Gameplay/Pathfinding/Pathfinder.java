@@ -1,5 +1,6 @@
 package WizardTD.Gameplay.Pathfinding;
 
+import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Gameplay.Tiles.*;
 import com.google.common.collect.*;
@@ -45,15 +46,22 @@ public class Pathfinder {
                      .filter(tile -> tile instanceof WizardHouseTile)
                      .collect(Collectors.toList());
 
+        Loggers.GAMEPLAY.debug("wizard houses: {}", wizardHouses.stream().map(t -> t.getPos().toString())
+                                                                .collect(Collectors.joining(", ")));
+
         final List<Tile> spawnPoints =
                 board.stream()
                      // Filter by checking they are on the edge
                      .filter(t -> (t.getPos().getX() == 0)
                                   || (t.getPos().getY() == 0)
-                                  || (t.getPos().getX() == BOARD_SIZE_TILES)
-                                  || (t.getPos().getY() == BOARD_SIZE_TILES))
+                                  || (t.getPos().getX() == BOARD_SIZE_TILES - 1)
+                                  || (t.getPos().getY() == BOARD_SIZE_TILES - 1))
                      .filter(tile -> tile instanceof PathTile)
                      .collect(Collectors.toList());
+
+        Loggers.GAMEPLAY.debug("spawn points: {}", spawnPoints.stream().map(t -> t.getPos().toString())
+                                                                .collect(Collectors.joining(", ")));
+
 
         // List of paths we've found
         final List<EnemyPath> foundPaths = new ArrayList<>();
@@ -93,15 +101,17 @@ public class Pathfinder {
                             path.add(x.tile.getPos());
                             x = x.parent;
                         }
+
+                        // RANT: Why the hell do I need to allocate a zero-sized array
+                        // Just so that the type is recognised
+                        // What the **** is wrong with this language
+                        final EnemyPath enemyPath = new EnemyPath(Lists.reverse(path).toArray(new TilePos[0]));
+                        Loggers.GAMEPLAY.debug("found enemy path {}", enemyPath);
+                        
                         // Since we initially added the deepest node (the wizard house),
                         // and we finished on the root node (spawn tile)
                         // we also need to reverse the list
-                        foundPaths.add(
-                                // RANT: Why the hell do I need to allocate a zero-sized array
-                                // Just so that the type is recognised
-                                // What the **** is wrong with this language
-                                new EnemyPath(Lists.reverse(path).toArray(new TilePos[0]))
-                        );
+                        foundPaths.add(enemyPath);
                     }
 
                     // Explore any adjacent vertices too
