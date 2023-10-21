@@ -262,7 +262,7 @@ public class UiManager {
             uiState.uiElements.add(new ButtonElement(
                     new Vector2(BOARD_X_PX, BOARD_Y_PX),
                     new Vector2(SIDEBAR_X_PX, WINDOW_HEIGHT_PX),
-                    "", 0, Colour.NONE, Colour.NONE, null,
+                    null, 0, Colour.NONE, Colour.NONE, null,
                     (button, app, game, ui) -> {
                         Loggers.GAMEPLAY.debug("board clicked");
 
