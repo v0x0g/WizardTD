@@ -40,6 +40,7 @@ public final class TowerTile extends Tile {
         /*
          * NOTE: Due to tile rendering order, the upgrades might get cut off by other tiles
          * This is only an issue at stupid upgrade levels, so it's not really considered 
+         * You need an upgrade of level 20+ which is dumb
          */
         
         // Tower

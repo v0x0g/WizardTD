@@ -21,6 +21,7 @@ public abstract class UiElement extends Renderable {
         else app.fill(fill.asInt());
         if (outline == Colour.NONE) app.noStroke();
         else app.stroke((float) outline.r, (float) outline.g, (float) outline.b, (float) outline.a);
+        app.strokeWeight(2);
     }
 
     // TODO: Refactor this?
