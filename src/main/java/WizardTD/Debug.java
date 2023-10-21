@@ -17,6 +17,11 @@ import static WizardTD.UI.Appearance.GuiConfig.*;
 
 @UtilityClass
 public class Debug {
+    public static boolean
+        pathfindingOverlayEnabled = false,
+        tileHoverOverlayEnabled = true,
+        towerUpgradeOverlayEnabled = false;
+    
     // TODO: Fix this overlay image
     static final PImage tileHoverImage =
             ImageExt.generatePattern(
@@ -31,6 +36,8 @@ public class Debug {
      * Draws a pathfinding overlay for the game to assist with debugging
      */
     public void drawPathfindingOverlay(final PApplet app, final GameData game) {
+        if(!pathfindingOverlayEnabled) return;
+        
         final float LINE_THICKNESS = 2.0f;
         final Colour[] DRAW_COLOURS = new Colour[]{
                 Colour.BLACK,
@@ -53,7 +60,7 @@ public class Debug {
             // Give each line a slight offset, so they don't all overlap
             final double offsetVal = Numerics.lerp(-CELL_SIZE_PX / 2.0, CELL_SIZE_PX / 2.0, (double) i / paths.size());
             final Vector2 offset = new Vector2(offsetVal, offsetVal);
-            final Colour colour = DRAW_COLOURS[i % DRAW_COLOURS.length].withAlpha(0.01);
+            final Colour colour = DRAW_COLOURS[i % DRAW_COLOURS.length].withAlpha(0.5);
             // Lerp along the path and draw lines/dots to visualise
             for (double d = 0; d <= path.positions.length; d += 1) {
                 final Vector2 pos1 = UiManager.tileToPixelCoords(path.calculatePos(d));
@@ -73,6 +80,8 @@ public class Debug {
      * Draws a small overlay for which tile is currently hovered
      */
     public void drawHoveredTileOverlay(final PApplet app, final GameData game) {
+        if(!tileHoverOverlayEnabled) return;
+
         final Vector2 mousePos = new Vector2(app.mouseX, app.mouseY);
         final Tile tile = UiManager.pixelCoordsToTile(mousePos, game);
         if (tile == null) return;
@@ -80,6 +89,8 @@ public class Debug {
     }
 
     public void showTowerUpgradeOverlay(final PApplet app, final GameData game) {
+        if(!towerUpgradeOverlayEnabled) return;
+
         game.board.stream()
                   .filter(TowerTile.class::isInstance)
                   .map(TowerTile.class::cast)

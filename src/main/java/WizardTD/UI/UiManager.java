@@ -1,5 +1,6 @@
 package WizardTD.UI;
 
+import WizardTD.*;
 import WizardTD.Delegates.*;
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
@@ -177,11 +178,11 @@ public class UiManager {
 
 
         // ===== SIDEBAR BUTTONS =====
+        final Vector2 sidebarButtonPos = new Vector2(SIDEBAR_X_PX + 16, SIDEBAR_Y_PX + 16);
         {
-            final Vector2 buttonPos = new Vector2(SIDEBAR_X_PX + 16, SIDEBAR_Y_PX + 16);
             addSidebarButton(
                     uiState,
-                    buttonPos,
+                    sidebarButtonPos,
                     "FF",
                     KeyCode.F,
                     (button, app, game, ui) -> Logger.debug("toggle fast forward = {}", game.fastForward ^= true),
@@ -190,7 +191,7 @@ public class UiManager {
             );
             addSidebarButton(
                     uiState,
-                    buttonPos,
+                    sidebarButtonPos,
                     "P",
                     KeyCode.P,
                     (button, app, game, ui) -> Logger.debug("toggle pause = {}", game.paused ^= true),
@@ -198,7 +199,7 @@ public class UiManager {
             );
             addSidebarButton(
                     uiState,
-                    buttonPos,
+                    sidebarButtonPos,
                     "T",
                     KeyCode.T,
                     (button, app, game, ui) -> Logger.debug("toggle tower = {}", ui.wantsPlaceTower ^= true),
@@ -207,37 +208,32 @@ public class UiManager {
             );
             addSidebarButton(
                     uiState,
-                    buttonPos,
+                    sidebarButtonPos,
                     "U1",
                     KeyCode.NUM_1,
-                    (button, app, game, ui) -> Logger.debug("toggle upgrade range = {}", ui.wantsUpgradeRange ^= true),
-                    (button, app, game, ui) -> button.fillColour =
-                            Theme.buttonColour(ui.wantsUpgradeRange, button.isHovered)
+                    (button, app, game, ui) -> Logger.debug("toggle upgrade range = {}", ui.upgradeRange ^= true),
+                    (button, app, game, ui) -> button.fillColour = Theme.buttonColour(ui.upgradeRange, button.isHovered)
             );
             addSidebarButton(
                     uiState,
-                    buttonPos,
+                    sidebarButtonPos,
                     "U2",
                     KeyCode.NUM_2,
-                    (button, app, game, ui) -> Logger.debug("toggle upgrade speed = {}", ui.wantsUpgradeSpeed ^= true),
-                    (button, app, game, ui) -> button.fillColour =
-                            Theme.buttonColour(ui.wantsUpgradeSpeed, button.isHovered)
+                    (button, app, game, ui) -> Logger.debug("toggle upgrade speed = {}", ui.upgradeSpeed ^= true),
+                    (button, app, game, ui) -> button.fillColour = Theme.buttonColour(ui.upgradeSpeed, button.isHovered)
             );
             addSidebarButton(
                     uiState,
-                    buttonPos,
+                    sidebarButtonPos,
                     "U3",
                     KeyCode.NUM_3,
-                    (button, app, game, ui) -> Logger.debug(
-                            "toggle upgrade damage = {}",
-                            ui.wantsUpgradeDamage ^= true
-                    ),
+                    (button, app, game, ui) -> Logger.debug("toggle upgrade damage = {}", ui.upgradeDamage ^= true),
                     (button, app, game, ui) -> button.fillColour =
-                            Theme.buttonColour(ui.wantsUpgradeDamage, button.isHovered)
+                            Theme.buttonColour(ui.upgradeDamage, button.isHovered)
             );
             addSidebarButton(
                     uiState,
-                    buttonPos,
+                    sidebarButtonPos,
                     "M",
                     KeyCode.M,
                     (button, app, game, ui) -> {
@@ -276,12 +272,46 @@ public class UiManager {
 
                         GameManager.placeOrUpgradeTower(
                                 app, game, tile,
-                                ui.wantsUpgradeRange,
-                                ui.wantsUpgradeSpeed,
-                                ui.wantsUpgradeDamage
+                                ui.upgradeRange,
+                                ui.upgradeSpeed,
+                                ui.upgradeDamage
                         );
                     }
             ));
+        }
+
+        // ===== DEBUG STUFF =====
+        {
+            addSidebarButton(
+                    uiState,
+                    sidebarButtonPos,
+                    "H",
+                    KeyCode.H,
+                    (button, app, game, ui) ->
+                            Logger.debug("toggle tile hover overlay = {}", Debug.tileHoverOverlayEnabled ^= true),
+                    (button, app, game, ui) -> button.fillColour =
+                            Theme.buttonColour(Debug.tileHoverOverlayEnabled, button.isHovered)
+            );
+            addSidebarButton(
+                    uiState,
+                    sidebarButtonPos,
+                    "P",
+                    KeyCode.P,
+                    (button, app, game, ui) ->
+                            Logger.debug("toggle path overlay = {}", Debug.pathfindingOverlayEnabled ^= true),
+                    (button, app, game, ui) -> button.fillColour =
+                            Theme.buttonColour(Debug.pathfindingOverlayEnabled, button.isHovered)
+            );
+            addSidebarButton(
+                    uiState,
+                    sidebarButtonPos,
+                    "U",
+                    KeyCode.U,
+                    (button, app, game, ui) ->
+                            Logger.debug("toggle tower upgrade overlay = {}", Debug.towerUpgradeOverlayEnabled ^= true),
+                    (button, app, game, ui) -> button.fillColour =
+                            Theme.buttonColour(Debug.towerUpgradeOverlayEnabled, button.isHovered)
+            );
         }
     }
 
@@ -305,7 +335,7 @@ public class UiManager {
         final Vector2 pos1 = buttonPos.clone();
         final Vector2 pos2 = buttonPos.clone();
         pos2.add(buttonSize);
-        buttonPos.y += buttonSize.y;
+        buttonPos.y += buttonSize.y + 8;
 
         uiState.uiElements.add(new DynamicWrapperElement<>(new ButtonElement(
                 pos1,

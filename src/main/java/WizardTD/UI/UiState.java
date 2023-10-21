@@ -19,8 +19,8 @@ public final class UiState {
      * Flags for what upgrades the user has currently selected
      */
     public boolean
-            wantsUpgradeRange = false,
-            wantsUpgradeSpeed = false,
-            wantsUpgradeDamage = false,
+            upgradeRange = false,
+            upgradeSpeed = false,
+            upgradeDamage = false,
             wantsPlaceTower = false;
 }
