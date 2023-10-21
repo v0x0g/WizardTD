@@ -7,7 +7,6 @@ import WizardTD.Gameplay.Projectiles.*;
 import WizardTD.Gameplay.Spawners.*;
 import WizardTD.Gameplay.Spells.*;
 import WizardTD.Gameplay.Tiles.*;
-import com.google.common.collect.*;
 import lombok.experimental.*;
 import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.*;
@@ -329,12 +328,10 @@ public class GameManager {
 
         final double mana_ = desc.config.mana.initialManaValue;
         final double manaCap_ = desc.config.mana.initialManaCap;
-        final double manaTrickle_ = desc.config.mana.initialManaTrickle;
 
         final GameData game = new GameData(board, enemies, projectiles, waves, new ArrayList<>(), desc.config, spells);
         game.mana = mana_;
         game.manaCap = manaCap_;
-        game.manaTrickle = manaTrickle_;
 
         updatePathfinding(game);
 
@@ -362,8 +359,14 @@ public class GameManager {
 
         final double speedMultiplier = game.fastForward ? FAST_FORWARD_SPEED : 1.0;
 
-        final int numTicks = (int)Math.ceil(deltaTime * speedMultiplier / SUB_TICK_THRESHOLD);
-        Logger.trace("deltaTime = {}, thresh = {}, mult = {}, numTicks = {}", deltaTime, SUB_TICK_THRESHOLD, speedMultiplier, numTicks);
+        final int numTicks = (int) Math.ceil(deltaTime * speedMultiplier / SUB_TICK_THRESHOLD);
+        Logger.trace(
+                "deltaTime = {}, thresh = {}, mult = {}, numTicks = {}",
+                deltaTime,
+                SUB_TICK_THRESHOLD,
+                speedMultiplier,
+                numTicks
+        );
 
         for (int i = 0; i < numTicks; i++) {
             final double gameDelta = game.paused ? 0.0 : deltaTime * speedMultiplier / numTicks;
@@ -386,7 +389,7 @@ public class GameManager {
     private static void internalTickGame(
             final PApplet app, final GameData game, final double gameDeltaTime, final double visualDeltaTime) {
         // Absorb mana through the atmosphere using mana accumulators
-        game.mana += gameDeltaTime * game.manaTrickle;
+        game.mana += gameDeltaTime * game.config.mana.initialManaTrickle * game.manaGainMultiplier;
         game.mana = Math.min(game.mana, game.manaCap);
 
         // Spawn Enemies
@@ -405,7 +408,7 @@ public class GameManager {
                 final ThreadLocalRandom rng = ThreadLocalRandom.current();
                 // Choose a random path for the enemy to go along
                 final int pathIdx = rng.nextInt(game.enemyPaths.size());
-                final EnemyPath path =game.enemyPaths.get(pathIdx);
+                final EnemyPath path = game.enemyPaths.get(pathIdx);
                 Loggers.GAMEPLAY.trace("spawn enemy {}; path = [{}]: {}", enemy, pathIdx, path);
                 enemy.path = path;
             }

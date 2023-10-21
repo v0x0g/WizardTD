@@ -86,11 +86,12 @@ public final class PathTile extends Tile {
 
     /**
      * Calculates whether a certain side of this path tile should be considered connected
-     * 
-     * @param board Board data, holds the tiles
+     *
+     * @param board   Board data, holds the tiles
      * @param offsetX X offset from this tile
-     * @param offsetY
-     * @return
+     * @param offsetY Y offset from this tile
+     *
+     * @return Whether that given side should be considered connected or not
      */
     private boolean sideConnected(final Board board, final int offsetX, final int offsetY) {
         final int x = this.getPos().getX() + offsetX;

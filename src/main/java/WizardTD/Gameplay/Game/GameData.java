@@ -46,7 +46,7 @@ public final class GameData {
      */
     public double manaCap;
     /**
-     * Mana gain per second
+     * Multiplier for how much mana is gained per kill, and via mana trickle
      */
-    public double manaTrickle;
+    public double manaGainMultiplier = 1.0;
 }
