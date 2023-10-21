@@ -1,13 +1,19 @@
 package WizardTD.Gameplay.Tiles;
 
+import WizardTD.*;
 import WizardTD.Event.*;
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Rendering.*;
 import WizardTD.UI.*;
+import WizardTD.UI.Appearance.*;
 import lombok.*;
+import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.*;
 import processing.core.*;
+
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 @ToString
 @EqualsAndHashCode(callSuper = true)
@@ -31,7 +37,30 @@ public final class TowerTile extends Tile {
 
     @Override
     public void render(final PApplet app, final GameData gameData, final UiState uiState) {
-        Renderer.renderSimpleTile(app, tileLevel0, UiManager.tileToPixelCoords(this));
+        /*
+         * NOTE: Due to tile rendering order, the upgrades might get cut off by other tiles
+         * This is only an issue at stupid upgrade levels, so it's not really considered 
+         */
+        
+        // Tower
+        final long towerLevel = min(min(this.damageUpgrades, this.rangeUpgrades), this.damageUpgrades);
+        final long cappedTowerLevel = min(2, towerLevel);
+        
+        final PImage tileImage = cappedTowerLevel == 0 ? tileLevel0 :
+                                 cappedTowerLevel == 1 ? tileLevel1 :
+                                 tileLevel2;
+
+        Renderer.renderSimpleTile(app, tileImage, UiManager.tileToPixelCoords(this));
+        final Vector2 pixelPos = UiManager.tileToPixelCoords(this);
+        
+        // Render speed upgrade
+        final float SPEED_INDICATOR_RADIUS = 20.0f;
+        app.rectMode(PConstants.CENTER);
+        app.noFill();
+        app.stroke(Theme.TOWER_UPGRADE_SPEED.asInt());
+        final float speedIndicatorStrength = (this.speedUpgrades - cappedTowerLevel);
+        app.strokeWeight(speedIndicatorStrength);
+        app.rect((float) pixelPos.x, (float)pixelPos.y, SPEED_INDICATOR_RADIUS, SPEED_INDICATOR_RADIUS);
     }
 
     public void upgradeIfPossible(
