@@ -159,7 +159,6 @@ public final class App extends PApplet {
 
         GameManager.tickGameWithSubtick(this, this.gameData, deltaTime);
 
-        // TODO: Dirtying logic
         Loggers.RENDER.trace("tick tiles");
         this.gameData.board
                 .stream()
@@ -169,6 +168,13 @@ public final class App extends PApplet {
         Renderer.render(this, this.gameData, this.uiState);
 
         {
+            Debug.Stats.Frames.deltaTime = deltaTime;
+            Debug.Stats.Frames.fps = 1/deltaTime;
+            Debug.Stats.Frames.avgFps = this.frameRate;
+            Debug.Stats.Frames.frameCount++;
+            Debug.Stats.Frames.lastTick = lastTick;
+            Debug.Stats.Frames.thisTick = thisTick;
+            
             Debug.drawPathfindingOverlay(this, gameData);
             Debug.drawHoveredTileOverlay(this, gameData);
             Debug.showTowerUpgradeOverlay(this, gameData);

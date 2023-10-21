@@ -17,12 +17,6 @@ import static WizardTD.UI.Appearance.GuiConfig.*;
 
 @UtilityClass
 public class Debug {
-    public static boolean
-        pathfindingOverlayEnabled = false,
-        tileHoverOverlayEnabled = true,
-        f3OverlayEnabled = true,
-        towerUpgradeOverlayEnabled = false;
-    
     // TODO: Fix app overlay image
     static final PImage tileHoverImage =
             ImageExt.generatePattern(
@@ -32,13 +26,18 @@ public class Debug {
                     Colour.BLACK.withAlpha(0.5),
                     Colour.WHITE.withAlpha(0.5)
             );
+    public static boolean
+            pathfindingOverlayEnabled = false,
+            tileHoverOverlayEnabled = true,
+            f3OverlayEnabled = false,
+            towerUpgradeOverlayEnabled = false;
 
     /**
      * Draws a pathfinding overlay for the game to assist with debugging
      */
     public void drawPathfindingOverlay(final PApplet app, final GameData game) {
-        if(!pathfindingOverlayEnabled) return;
-        
+        if (!pathfindingOverlayEnabled) return;
+
         final float LINE_THICKNESS = 2.0f;
         final Colour[] DRAW_COLOURS = new Colour[]{
                 Colour.BLACK,
@@ -81,7 +80,7 @@ public class Debug {
      * Draws a small overlay for which tile is currently hovered
      */
     public void drawHoveredTileOverlay(final PApplet app, final GameData game) {
-        if(!tileHoverOverlayEnabled) return;
+        if (!tileHoverOverlayEnabled) return;
 
         final Vector2 mousePos = new Vector2(app.mouseX, app.mouseY);
         final Tile tile = UiManager.pixelCoordsToTile(mousePos, game);
@@ -90,7 +89,7 @@ public class Debug {
     }
 
     public void showTowerUpgradeOverlay(final PApplet app, final GameData game) {
-        if(!towerUpgradeOverlayEnabled) return;
+        if (!towerUpgradeOverlayEnabled) return;
 
         game.board.stream()
                   .filter(TowerTile.class::isInstance)
@@ -105,19 +104,42 @@ public class Debug {
                       app.textSize(Theme.TEXT_SIZE_NORMAL);
                       app.textLeading(Theme.TEXT_SIZE_NORMAL * 0.6f);
                       final Vector2 pos = UiManager.tileToPixelCoords(t);
-                      app.text(str, (float)pos.x, (float)pos.y);
+                      app.text(str, (float) pos.x, (float) pos.y);
                   });
     }
-    
-    public void showF3Overlay(final PApplet app, final GameData game, final UiState ui){
-        final String SEP = "=====";
+
+    public void showF3Overlay(final PApplet app, final GameData game, final UiState ui) {
+        if(!f3OverlayEnabled) return;
+        
         final String str = String.format(
-                "%s FRAMES %s\n" +
-                "P.frameRate=%03.1f, P.frameCount=%05d\n" +
-                "lastTick=%08.3f, appTick=%08.3f, deltaTime=%.4f, fps=%03.1f\n",
-                SEP, SEP,
-                app.frameRate, app.frameCount,
-                lastTick, appTick, deltaTime, 1 / deltaTime
+                "\n" +
+                "===== FRAMES =====\n" +
+                "avgFps=%03.1f, fps=%03.1f, frameCount=%05d\n" +
+                "lastTick=%08.3f, appTick=%08.3f, deltaTime=%.4f\n" +
+                "uiElements=%02d\n" +
+                
+                "\n" +
+                "===== PATHFINDING =====\n" +
+                "pathCount=%03d, length=%02d\n" +
+                
+                "\n" +
+                "===== ENTITIES =====\n" +
+                "enemies=%03d, projectiles=%03d\n" +
+                
+                "\n" +
+                "===== MANA =====\n" +
+                "trickle=%03.2f (%03.2f), mult=%03.02f",
+
+                Stats.Frames.avgFps, Stats.Frames.fps, Stats.Frames.frameCount,
+                Stats.Frames.lastTick, Stats.Frames.thisTick, Stats.Frames.deltaTime,
+                ui.uiElements.size(),
+
+                game.enemyPaths.size(), game.enemyPaths.isEmpty() ? -1 : game.enemyPaths.get(0).positions.length,
+                
+                game.enemies.size(), game.projectiles.size(),
+                
+                game.config.mana.initialManaTrickle, game.config.mana.initialManaTrickle * game.manaGainMultiplier, game.manaGainMultiplier
+                
         );
 
         final float x1 = 16, y1 = 40 + 16;
@@ -127,5 +149,17 @@ public class Debug {
         app.textSize(Theme.TEXT_SIZE_NORMAL);
 
         app.text(str, x1, y1);
+    }
+    /**
+     * Class containing statistics for debugging purposes
+     */
+    @UtilityClass
+    public class Stats {
+        @UtilityClass
+        public class Frames{
+                public double fps, avgFps;
+                public double lastTick, thisTick, deltaTime;
+                public long frameCount;
+        }
     }
 }

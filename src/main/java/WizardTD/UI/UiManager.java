@@ -332,7 +332,7 @@ public class UiManager {
             addSidebarButton(
                     uiState,
                     sidebarButtonPos,
-                    "UF3", "Upgrade Overlay",
+                    "F3", "Upgrade Overlay",
                     KeyCode.FUNCTION_3,
                     (button, app, game, ui) ->
                             Logger.debug("toggle f3 overlay = {}", Debug.f3OverlayEnabled ^= true),
