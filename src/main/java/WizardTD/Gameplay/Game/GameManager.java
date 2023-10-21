@@ -1,5 +1,6 @@
 package WizardTD.Gameplay.Game;
 
+import WizardTD.*;
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Enemies.*;
 import WizardTD.Gameplay.Pathfinding.*;
@@ -368,13 +369,19 @@ public class GameManager {
                 numTicks
         );
 
-        for (int i = 0; i < numTicks; i++) {
-            final double gameDelta = game.paused ? 0.0 : deltaTime * speedMultiplier / numTicks;
-            final double visualDelta = deltaTime * speedMultiplier / numTicks;
+        final double gameDelta = game.paused ? 0.0 : deltaTime * speedMultiplier / numTicks;
+        final double visualDelta = deltaTime * speedMultiplier / numTicks;
 
+        for (int i = 0; i < numTicks; i++) {
             Logger.trace("subtick: game={}; visual={}", gameDelta, visualDelta);
             internalTickGame(app, game, gameDelta, visualDelta);
         }
+
+        Debug.Stats.Tick.numTicks = numTicks;
+        Debug.Stats.Tick.subTickThresh = SUB_TICK_THRESHOLD;
+        Debug.Stats.Tick.speedMultiplier = speedMultiplier;
+        Debug.Stats.Tick.gameDelta = gameDelta;
+        Debug.Stats.Tick.visualDelta = visualDelta;
     }
 
     /**
@@ -446,8 +453,9 @@ public class GameManager {
     /**
      * Places a tower at the given tile, or upgrades it if there is one present.
      */
-    public void placeOrUpgradeTower(final PApplet app, final GameData game, final Tile tile,
-                                    final boolean upgradeRange, final boolean upgradeSpeed, final boolean upgradeDamage) {
+    public void placeOrUpgradeTower(
+            final PApplet app, final GameData game, final Tile tile,
+            final boolean upgradeRange, final boolean upgradeSpeed, final boolean upgradeDamage) {
         final TowerTile tower;
         if (tile instanceof TowerTile) {
             // Already existing tower
@@ -472,7 +480,7 @@ public class GameManager {
             Loggers.GAMEPLAY.debug("tile not grass or tower, ignoring");
             return;
         }
-        
+
         // Now apply upgrades, if possible
         tower.upgradeIfPossible(game, upgradeRange, upgradeSpeed, upgradeDamage);
 

@@ -119,6 +119,11 @@ public class Debug {
                 "uiElements=%02d\n" +
                 
                 "\n" +
+                "===== TICK =====\n" +
+                "subTickThresh=%03.1f, numTicks=%02d, speedMult=%03.1f\n" +
+                "gameDelta=%01.4f, visualDelta=%01.4f\n" +
+                
+                "\n" +
                 "===== PATHFINDING =====\n" +
                 "pathCount=%03d, length=%02d\n" +
                 
@@ -134,10 +139,13 @@ public class Debug {
                 Stats.Frames.lastTick, Stats.Frames.thisTick, Stats.Frames.deltaTime,
                 ui.uiElements.size(),
 
+                Stats.Tick.subTickThresh, Stats.Tick.numTicks, Stats.Tick.speedMultiplier,
+                Stats.Tick.gameDelta, Stats.Tick.visualDelta,
+
                 game.enemyPaths.size(), game.enemyPaths.isEmpty() ? -1 : game.enemyPaths.get(0).positions.length,
-                
+
                 game.enemies.size(), game.projectiles.size(),
-                
+
                 game.config.mana.initialManaTrickle, game.config.mana.initialManaTrickle * game.manaGainMultiplier, game.manaGainMultiplier
                 
         );
@@ -160,6 +168,12 @@ public class Debug {
                 public double fps, avgFps;
                 public double lastTick, thisTick, deltaTime;
                 public long frameCount;
+        }
+        @UtilityClass
+        public class Tick{
+                public double subTickThresh, speedMultiplier;
+                public double gameDelta, visualDelta;
+                public long numTicks;
         }
     }
 }
