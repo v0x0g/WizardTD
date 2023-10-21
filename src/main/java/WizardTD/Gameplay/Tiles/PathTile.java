@@ -69,6 +69,9 @@ public final class PathTile extends Tile {
     @SuppressWarnings("LocalCanBeFinal")
     @Override
     public void tick(final GameData game) {
+        // Don't recalculate every frame
+        if(!this.connectedPathSides.isEmpty()) return;
+        
         // Update what sides are connected.
         boolean left = sideConnected(game.board, -1, 0);
         boolean right = sideConnected(game.board, +1, 0);
