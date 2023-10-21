@@ -44,6 +44,7 @@ public class Renderer {
         final ConcurrentHashMap<RenderOrder, List<Renderable>> renderOrderMap = renderOrderMaps.get();
 
         renderOrderMap.clear(); // Reset the mapping
+        
         Streams.concat(game.enemies.stream(), game.projectiles.stream(), game.board.stream(), ui.uiElements.stream())
                .forEach(obj -> // Get the set for this render order, or create if missing
                                 renderOrderMap

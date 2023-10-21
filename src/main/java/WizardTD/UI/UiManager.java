@@ -199,6 +199,15 @@ public class UiManager {
             addSidebarButton(
                     uiState,
                     buttonPos,
+                    "T",
+                    KeyCode.T,
+                    (button, app, game, ui) -> Logger.debug("toggle tower = {}", ui.wantsPlaceTower ^= true),
+                    (button, app, game, ui) -> button.fillColour =
+                            Theme.buttonColour(ui.wantsPlaceTower, button.isHovered)
+            );
+            addSidebarButton(
+                    uiState,
+                    buttonPos,
                     "U1",
                     KeyCode.NUM_1,
                     (button, app, game, ui) -> Logger.debug("toggle upgrade range = {}", ui.wantsUpgradeRange ^= true),
@@ -248,21 +257,27 @@ public class UiManager {
             );
         }
 
-        // ===== HACK: TOWER SELECTION =====
-        uiState.uiElements.add(
-                new KeyboardElement(
-                        new KeyPress(KeyCode.T, false, KeyAction.PRESS),
-                        (_elem, app, game, ui) -> {
-                            Loggers.INPUT.info("place tower interaction");
-                            // Find which tile is hovered
-                            final Tile tile = UiManager.pixelCoordsToTile(
-                                    new Vector2(app.mouseX, app.mouseY),
-                                    game
-                            );
-                            GameManager.tryPlaceTower(app, game,tile);
-                        }
-                )
-        );
+        // ===== BOARD CLICK HANDLER =====
+        {
+            uiState.uiElements.add(new ButtonElement(
+                    new Vector2(BOARD_X_PX, BOARD_Y_PX),
+                    new Vector2(SIDEBAR_X_PX, WINDOW_HEIGHT_PX),
+                    "", 0, Colour.NONE, Colour.NONE, null,
+                    (button, app, game, ui) -> {
+                        Loggers.GAMEPLAY.debug("board clicked");
+
+                        if (!ui.wantsPlaceTower) return;
+                        
+                        Loggers.INPUT.info("place tower interaction");
+                        // Find which tile is hovered
+                        final Tile tile = UiManager.pixelCoordsToTile(
+                                new Vector2(app.mouseX, app.mouseY),
+                                game
+                        );
+                        GameManager.tryPlaceTower(app, game, tile);
+                    }
+            ));
+        }
     }
 
     /**

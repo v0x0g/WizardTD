@@ -193,7 +193,7 @@ public final class App extends PApplet {
             this.text(str, x1, y1);
 
 
-//            Debug.drawPathfindingOverlay(this, gameData);
+            Debug.drawPathfindingOverlay(this, gameData);
             Debug.drawHoveredTileOverlay(this, gameData);
         }
 

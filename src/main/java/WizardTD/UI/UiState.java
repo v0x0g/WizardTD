@@ -14,13 +14,13 @@ public final class UiState {
      * List of all the UI elements that should be rendered
      */
     public final List<UiElement> uiElements = new ArrayList<>();
+
     /**
      * Flags for what upgrades the user has currently selected
      */
     public boolean
             wantsUpgradeRange = false,
             wantsUpgradeSpeed = false,
-            wantsUpgradeDamage = false;
-    public boolean buildTower = false;
-    public boolean manaPool = false;
+            wantsUpgradeDamage = false,
+            wantsPlaceTower = false;
 }
