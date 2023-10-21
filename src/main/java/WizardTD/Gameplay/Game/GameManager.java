@@ -478,6 +478,4 @@ public class GameManager {
 
         Logger.info("Tower {}->{}", tile, tower);
     }
-    
-    private void towerClicked(final GameData game, )
 }

@@ -68,12 +68,12 @@ public final class PathTile extends Tile {
      */
     @SuppressWarnings("LocalCanBeFinal")
     @Override
-    public void boardDirty(Board board) {
+    public void tick(final GameData game) {
         // Update what sides are connected.
-        boolean left = sideConnected(board, -1, 0);
-        boolean right = sideConnected(board, +1, 0);
-        boolean up = sideConnected(board, 0, -1);
-        boolean down = sideConnected(board, 0, +1);
+        boolean left = sideConnected(game.board, -1, 0);
+        boolean right = sideConnected(game.board, +1, 0);
+        boolean up = sideConnected(game.board, 0, -1);
+        boolean down = sideConnected(game.board, 0, +1);
 
         EnumSet<TileSides> sides = EnumSet.noneOf(TileSides.class);
         if (left) sides.add(LEFT);

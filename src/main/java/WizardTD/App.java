@@ -160,10 +160,10 @@ public final class App extends PApplet {
         GameManager.tickGameWithSubtick(this, this.gameData, deltaTime);
 
         // TODO: Dirtying logic
-        Loggers.RENDER.trace("dirty");
+        Loggers.RENDER.trace("tick tiles");
         this.gameData.board
                 .stream()
-                .forEach(t -> t.boardDirty(this.gameData.board));
+                .forEach(t -> t.tick(this.gameData));
 
         Loggers.RENDER.trace("render gameData");
         Renderer.render(this, this.gameData, this.uiState);
@@ -179,22 +179,18 @@ public final class App extends PApplet {
                     lastTick, thisTick, deltaTime, 1 / deltaTime
             );
 
-            final float x1 = 16, y1 = 40 + 16, x2 = 608, y2 = 420;
-            //noinspection MagicNumber
-            this.fill(Colour.DARK_GREY.withAlpha(0.5).asInt());
-            this.rectMode(PConstants.CORNER);
-            this.rect(x1, y1, x2, y2);
-
+            final float x1 = 16, y1 = 40 + 16;
+            
             this.fill(Theme.TEXT.asInt());
             this.textAlign(PConstants.LEFT, PConstants.TOP);
-            //noinspection MagicNumber
-            this.textSize(16);
+            this.textSize(Theme.TEXT_SIZE_NORMAL);
 
             this.text(str, x1, y1);
 
 
             Debug.drawPathfindingOverlay(this, gameData);
             Debug.drawHoveredTileOverlay(this, gameData);
+            Debug.showTowerUpgradeOverlay(this, gameData);
         }
 
         Loggers.RENDER.debug("exit draw");

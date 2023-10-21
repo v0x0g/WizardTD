@@ -34,8 +34,6 @@ public final class TowerTile extends Tile {
         Renderer.renderSimpleTile(app, tileLevel0, UiManager.tileToPixelCoords(this));
     }
 
-    
-
     public void upgradeIfPossible(
             final GameData game,
             final boolean upgradeRange, final boolean upgradeSpeed, final boolean upgradeDamage) {

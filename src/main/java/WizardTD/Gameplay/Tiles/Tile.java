@@ -39,8 +39,7 @@ public abstract class Tile extends Renderable {
     }
 
     /**
-     * Method to be called whenever something changes on the board,
-     * and the tile should be updated to reflect this
+     * Called every tick, you can update the tiles here
      */
-    public void boardDirty(final Board board) {}
+    public void tick(final GameData game) {}
 }

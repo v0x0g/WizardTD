@@ -30,7 +30,7 @@ public class Debug {
     /**
      * Draws a pathfinding overlay for the game to assist with debugging
      */
-    public void drawPathfindingOverlay(final App app, final GameData game) {
+    public void drawPathfindingOverlay(final PApplet app, final GameData game) {
         final float LINE_THICKNESS = 2.0f;
         final Colour[] DRAW_COLOURS = new Colour[]{
                 Colour.BLACK,
@@ -46,26 +46,27 @@ public class Debug {
                 Colour.DEEP_PURPLE,
                 Colour.BRIGHT_PURPLE,
         };
-//        final List<EnemyPath> paths = game.enemyPaths;
-//        for (int i = 0; i < paths.size(); i++) {
-//            final EnemyPath path = paths.get(i);
-//            // Give each line a slight offset, so they don't all overlap
-//            final double offsetVal = Numerics.lerp(-CELL_SIZE_PX / 2.0, CELL_SIZE_PX / 2.0, (double) i / paths.size());
-//            final Vector2 offset = new Vector2(offsetVal, offsetVal);
-//            final Colour colour = DRAW_COLOURS[i % DRAW_COLOURS.length].withAlpha(0.01);
-//            // Lerp along the path and draw lines/dots to visualise
-//            for (double d = 0; d <= path.positions.length; d += 1) {
-//                final Vector2 pos1 = UiManager.tileToPixelCoords(path.calculatePos(d));
-//                final Vector2 pos2 = UiManager.tileToPixelCoords(path.calculatePos(d + 1));
-//
-//                app.fill(colour.asInt());
-//                app.stroke(colour.asInt());
-//                app.strokeWeight(LINE_THICKNESS);
-//                app.line((float) (pos1.x + offset.x), (float) (pos1.y + offset.y),
-//                         (float) (pos2.x + offset.x), (float) (pos2.y + offset.y)
-//                );
-//            }
-//        }
+
+        final List<EnemyPath> paths = game.enemyPaths;
+        for (int i = 0; i < paths.size(); i++) {
+            final EnemyPath path = paths.get(i);
+            // Give each line a slight offset, so they don't all overlap
+            final double offsetVal = Numerics.lerp(-CELL_SIZE_PX / 2.0, CELL_SIZE_PX / 2.0, (double) i / paths.size());
+            final Vector2 offset = new Vector2(offsetVal, offsetVal);
+            final Colour colour = DRAW_COLOURS[i % DRAW_COLOURS.length].withAlpha(0.01);
+            // Lerp along the path and draw lines/dots to visualise
+            for (double d = 0; d <= path.positions.length; d += 1) {
+                final Vector2 pos1 = UiManager.tileToPixelCoords(path.calculatePos(d));
+                final Vector2 pos2 = UiManager.tileToPixelCoords(path.calculatePos(d + 1));
+
+                app.fill(colour.asInt());
+                app.stroke(colour.asInt());
+                app.strokeWeight(LINE_THICKNESS);
+                app.line((float) (pos1.x + offset.x), (float) (pos1.y + offset.y),
+                         (float) (pos2.x + offset.x), (float) (pos2.y + offset.y)
+                );
+            }
+        }
     }
 
     /**
@@ -76,5 +77,23 @@ public class Debug {
         final Tile tile = UiManager.pixelCoordsToTile(mousePos, game);
         if (tile == null) return;
         Renderer.renderSimpleTile(app, tileHoverImage, UiManager.tileToPixelCoords(tile));
+    }
+
+    public void showTowerUpgradeOverlay(final PApplet app, final GameData game) {
+        game.board.stream()
+                  .filter(TowerTile.class::isInstance)
+                  .map(TowerTile.class::cast)
+                  .forEach(t -> {
+                      final String str = "r: " + t.rangeUpgrades + "\n" +
+                                         "s: " + t.speedUpgrades + "\n" +
+                                         "d: " + t.damageUpgrades;
+
+                      app.fill(Colour.BLACK.asInt());
+                      app.textAlign(PConstants.CENTER, PConstants.CENTER);
+                      app.textSize(Theme.TEXT_SIZE_NORMAL);
+                      app.textLeading(Theme.TEXT_SIZE_NORMAL * 0.6f);
+                      final Vector2 pos = UiManager.tileToPixelCoords(t);
+                      app.text(str, (float)pos.x, (float)pos.y);
+                  });
     }
 }
