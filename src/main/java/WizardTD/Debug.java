@@ -99,7 +99,7 @@ public class Debug {
                                          "s: " + t.speedUpgrades + "\n" +
                                          "d: " + t.damageUpgrades;
 
-                      app.fill(Colour.BLACK.asInt());
+                      app.fill(Colour.RED.asInt());
                       app.textAlign(PConstants.CENTER, PConstants.CENTER);
                       app.textSize(Theme.TEXT_SIZE_NORMAL);
                       app.textLeading(Theme.TEXT_SIZE_NORMAL * 0.6f);

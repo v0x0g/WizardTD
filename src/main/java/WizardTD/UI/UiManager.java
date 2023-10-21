@@ -178,12 +178,12 @@ public class UiManager {
 
 
         // ===== SIDEBAR BUTTONS =====
-        final Vector2 sidebarButtonPos = new Vector2(SIDEBAR_X_PX + 16, SIDEBAR_Y_PX + 16);
+        final Vector2 sidebarButtonPos = new Vector2(SIDEBAR_X_PX + 8, SIDEBAR_Y_PX + 8);
         {
             addSidebarButton(
                     uiState,
                     sidebarButtonPos,
-                    "FF",
+                    "FF", "Fast Forward",
                     KeyCode.F,
                     (button, app, game, ui) -> Logger.debug("toggle fast forward = {}", game.fastForward ^= true),
                     (button, app, game, ui) -> button.fillColour =
@@ -192,7 +192,7 @@ public class UiManager {
             addSidebarButton(
                     uiState,
                     sidebarButtonPos,
-                    "P",
+                    "P", "Pause",
                     KeyCode.P,
                     (button, app, game, ui) -> Logger.debug("toggle pause = {}", game.paused ^= true),
                     (button, app, game, ui) -> button.fillColour = Theme.buttonColour(game.paused, button.isHovered)
@@ -200,7 +200,7 @@ public class UiManager {
             addSidebarButton(
                     uiState,
                     sidebarButtonPos,
-                    "T",
+                    "T", "Build Tower",
                     KeyCode.T,
                     (button, app, game, ui) -> Logger.debug("toggle tower = {}", ui.wantsPlaceTower ^= true),
                     (button, app, game, ui) -> button.fillColour =
@@ -209,7 +209,7 @@ public class UiManager {
             addSidebarButton(
                     uiState,
                     sidebarButtonPos,
-                    "U1",
+                    "U1", "Upgrade Range",
                     KeyCode.NUM_1,
                     (button, app, game, ui) -> Logger.debug("toggle upgrade range = {}", ui.upgradeRange ^= true),
                     (button, app, game, ui) -> button.fillColour = Theme.buttonColour(ui.upgradeRange, button.isHovered)
@@ -217,7 +217,7 @@ public class UiManager {
             addSidebarButton(
                     uiState,
                     sidebarButtonPos,
-                    "U2",
+                    "U2", "Upgrade Speed",
                     KeyCode.NUM_2,
                     (button, app, game, ui) -> Logger.debug("toggle upgrade speed = {}", ui.upgradeSpeed ^= true),
                     (button, app, game, ui) -> button.fillColour = Theme.buttonColour(ui.upgradeSpeed, button.isHovered)
@@ -225,7 +225,7 @@ public class UiManager {
             addSidebarButton(
                     uiState,
                     sidebarButtonPos,
-                    "U3",
+                    "U3", "Upgrade Damage",
                     KeyCode.NUM_3,
                     (button, app, game, ui) -> Logger.debug("toggle upgrade damage = {}", ui.upgradeDamage ^= true),
                     (button, app, game, ui) -> button.fillColour =
@@ -234,14 +234,14 @@ public class UiManager {
             addSidebarButton(
                     uiState,
                     sidebarButtonPos,
-                    "M",
+                    "M", "Mana Pool",
                     KeyCode.M,
+                    // Nice little fade out animation
                     (button, app, game, ui) -> {
                         Loggers.GAMEPLAY.debug("cast mana pool");
                         button.fillColour = Theme.MANA;
                         game.spells.manaSpell.cast(game);
                     },
-                    // Nice little fade out animation
                     (button, app, game, ui) -> {
                         final double ANIM_SPEED = 0.03;
                         button.fillColour = Colour.lerp(
@@ -249,6 +249,23 @@ public class UiManager {
                                 button.isHovered ? Theme.BUTTON_HOVERED : Theme.BUTTON_DISABLED,
                                 ANIM_SPEED
                         );
+                        // A slight hack to modify the text that shows the cost of the spell
+                        // Don't really have a good way to access the text
+                        // It would be pointless to refactor addSidebarButton() for one use case
+                        final TextElement text = ui.uiElements.stream()
+                                .filter(TextElement.class::isInstance)
+                                .map(TextElement.class::cast)
+                                .filter(t -> t.text.startsWith("Mana Pool"))
+                                .findAny().orElse(null);
+                        if (text == null){
+                            Loggers.UI.warn("couldn't find the text element for the mana pool description");
+                        }
+                        else{
+                            text.text = MessageFormat.format(
+                                    "Mana Pool:\nCost: {0,number,####}",
+                                    game.spells.manaSpell.currentCost
+                            );
+                        }
                     }
             );
         }
@@ -258,7 +275,7 @@ public class UiManager {
             uiState.uiElements.add(new ButtonElement(
                     new Vector2(BOARD_X_PX, BOARD_Y_PX),
                     new Vector2(SIDEBAR_X_PX, WINDOW_HEIGHT_PX),
-                    null, 0, Colour.NONE, Colour.NONE, null,
+                    null, Colour.NONE, Colour.NONE, null,
                     (button, app, game, ui) -> {
                         Loggers.GAMEPLAY.debug("board clicked");
 
@@ -285,32 +302,32 @@ public class UiManager {
             addSidebarButton(
                     uiState,
                     sidebarButtonPos,
-                    "H",
+                    "H", "Hover Overlay",
                     KeyCode.H,
                     (button, app, game, ui) ->
                             Logger.debug("toggle tile hover overlay = {}", Debug.tileHoverOverlayEnabled ^= true),
                     (button, app, game, ui) -> button.fillColour =
-                            Theme.buttonColour(Debug.tileHoverOverlayEnabled, button.isHovered)
+                    Theme.buttonColour(Debug.tileHoverOverlayEnabled, button.isHovered)
             );
             addSidebarButton(
                     uiState,
                     sidebarButtonPos,
-                    "P",
+                    "P", "Path Overlay",
                     KeyCode.P,
                     (button, app, game, ui) ->
                             Logger.debug("toggle path overlay = {}", Debug.pathfindingOverlayEnabled ^= true),
                     (button, app, game, ui) -> button.fillColour =
-                            Theme.buttonColour(Debug.pathfindingOverlayEnabled, button.isHovered)
+                    Theme.buttonColour(Debug.pathfindingOverlayEnabled, button.isHovered)
             );
             addSidebarButton(
                     uiState,
                     sidebarButtonPos,
-                    "U",
+                    "U", "Upgrade Overlay",
                     KeyCode.U,
                     (button, app, game, ui) ->
                             Logger.debug("toggle tower upgrade overlay = {}", Debug.towerUpgradeOverlayEnabled ^= true),
                     (button, app, game, ui) -> button.fillColour =
-                            Theme.buttonColour(Debug.towerUpgradeOverlayEnabled, button.isHovered)
+                    Theme.buttonColour(Debug.towerUpgradeOverlayEnabled, button.isHovered)
             );
         }
     }
@@ -321,29 +338,30 @@ public class UiManager {
      * @param uiState       Object containing the UI data
      * @param buttonPos     Vector position of the button on-screen, will be mutated
      * @param text          Text for the button
+     * @param description   Text to display as the description (to the side of the button)
      * @param activationKey Key that activates the button
      * @param click         Function to run when the button is clicked/activated
      * @param draw          Function to be called every frame
      */
     private static void addSidebarButton(
             final UiState uiState, final Vector2 buttonPos,
-            final String text, final @Nullable KeyCode activationKey,
+            final String text, final String description,
+            final @Nullable KeyCode activationKey,
             final UiAction<ButtonElement> click,
             final UiAction<ButtonElement> draw) {
-        final Vector2 buttonSize = new Vector2(48, 48);
+        final double BUTTON_SIZE = 48;
+        final double SPACING = 4.0;
+        
+        final Vector2 buttonSize = new Vector2(BUTTON_SIZE, BUTTON_SIZE);
 
-        final Vector2 pos1 = buttonPos.clone();
-        final Vector2 pos2 = buttonPos.clone();
-        pos2.add(buttonSize);
-        buttonPos.y += buttonSize.y + 8;
+        final Vector2 buttonPos1 = buttonPos.clone();
+        final Vector2 buttonPos2 = (Vector2) buttonPos.addCopy(buttonSize);
+        buttonPos.y += buttonSize.y + SPACING;
 
         uiState.uiElements.add(new DynamicWrapperElement<>(new ButtonElement(
-                pos1,
-                pos2,
+                buttonPos1, buttonPos2,
                 text,
-                Theme.TEXT_SIZE_LARGE,
-                Theme.BUTTON_DISABLED,
-                Theme.OUTLINE,
+                Theme.BUTTON_DISABLED, Theme.OUTLINE,
                 activationKey == null ? null : new KeyPress(
                         activationKey,
                         false,
@@ -351,6 +369,13 @@ public class UiManager {
                 ),
                 click
         ), draw));
+        
+        final Vector2 descPos1 = (Vector2) buttonPos1.addCopy(new Vector2(BUTTON_SIZE + SPACING, 0));
+        final Vector2 descPos2 = new Vector2(WINDOW_WIDTH_PX, descPos1.y + BUTTON_SIZE);
+        uiState.uiElements.add(new TextElement(
+                descPos1, descPos2,
+                description
+        ));
     }
 
     // ========== INPUT ========== 

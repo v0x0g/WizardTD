@@ -15,6 +15,7 @@ import java.util.*;
 
 @ToString
 @EqualsAndHashCode(callSuper = true)
+@AllArgsConstructor
 public class ButtonElement extends InteractiveElement {
 
     public final Vector2 corner1, corner2;
@@ -23,9 +24,6 @@ public class ButtonElement extends InteractiveElement {
     public final UiAction<ButtonElement> click;
     public Colour fillColour;
     public Colour outlineColour;
-    /**
-     * See {@link PApplet#rectMode(int)}
-     */
     public @Nullable String text;
     public float fontSize;
 
@@ -36,7 +34,7 @@ public class ButtonElement extends InteractiveElement {
 
     public ButtonElement(
             final Vector2 corner1, final Vector2 corner2,
-            final @Nullable String text, final float fontSize,
+            final @Nullable String text,
             final Colour fillColour, final Colour outlineColour,
             @Nullable final KeyPress activationKey,
             final UiAction<ButtonElement> click) {
@@ -46,7 +44,7 @@ public class ButtonElement extends InteractiveElement {
         this.fillColour = fillColour;
         this.outlineColour = outlineColour;
         this.text = text;
-        this.fontSize = fontSize;
+        this.fontSize = Theme.TEXT_SIZE_LARGE;
         this.activationKey = activationKey;
     }
 
