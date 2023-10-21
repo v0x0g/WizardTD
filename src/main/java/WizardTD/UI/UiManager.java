@@ -270,10 +270,9 @@ public class UiManager {
                         
                         Loggers.INPUT.info("place tower interaction");
                         // Find which tile is hovered
-                        final Tile tile = UiManager.pixelCoordsToTile(
-                                new Vector2(app.mouseX, app.mouseY),
-                                game
-                        );
+                        // Should never be null, since this element should perfectly cover the board
+                        final Tile tile = UiManager.pixelCoordsToTile(new Vector2(app.mouseX, app.mouseY),game);
+                        assert tile != null;
                         GameManager.tryPlaceTower(app, game, tile);
                     }
             ));
