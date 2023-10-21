@@ -10,6 +10,7 @@ import processing.core.*;
 import java.util.*;
 
 import static WizardTD.Ext.ImageExt.*;
+import static WizardTD.GameConfig.*;
 import static WizardTD.Gameplay.Tiles.TileSides.*;
 
 @ToString
@@ -69,10 +70,10 @@ public final class PathTile extends Tile {
     @Override
     public void boardDirty(Board board) {
         // Update what sides are connected.
-        val left = board.maybeGetTileGeneric(PathTile.class, this.getPos().getX() - 1, this.getPos().getY()) != null;
-        val right = board.maybeGetTileGeneric(PathTile.class, this.getPos().getX() + 1, this.getPos().getY()) != null;
-        val up = board.maybeGetTileGeneric(PathTile.class, this.getPos().getX(), this.getPos().getY() - 1) != null;
-        val down = board.maybeGetTileGeneric(PathTile.class, this.getPos().getX(), this.getPos().getY() + 1) != null;
+        boolean left = sideConnected(board, -1, 0);
+        boolean right = sideConnected(board, +1, 0);
+        boolean up = sideConnected(board, 0, -1);
+        boolean down = sideConnected(board, 0, +1);
 
         EnumSet<TileSides> sides = EnumSet.noneOf(TileSides.class);
         if (left) sides.add(LEFT);
@@ -81,6 +82,28 @@ public final class PathTile extends Tile {
         if (down) sides.add(DOWN);
 
         this.connectedPathSides = sides;
+    }
+
+    /**
+     * Calculates whether a certain side of this path tile should be considered connected
+     * 
+     * @param board Board data, holds the tiles
+     * @param offsetX X offset from this tile
+     * @param offsetY
+     * @return
+     */
+    private boolean sideConnected(final Board board, final int offsetX, final int offsetY) {
+        final int x = this.getPos().getX() + offsetX;
+        final int y = this.getPos().getY() + offsetY;
+
+        return // Left/Right edge
+                (x == -1) || (x == BOARD_SIZE_TILES)
+                // Top/Bottom Edge
+                || (y == -1) || (y == BOARD_SIZE_TILES)
+                // Another path tile there
+                || board.maybeGetTileGeneric(PathTile.class, x, y) != null
+                // Wizard house there
+                || board.maybeGetTileGeneric(WizardHouseTile.class, x, y) != null;
     }
 
     @Override
