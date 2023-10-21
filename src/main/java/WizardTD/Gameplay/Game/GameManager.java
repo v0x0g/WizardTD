@@ -443,12 +443,16 @@ public class GameManager {
         Loggers.GAMEPLAY.info("pathfinding done");
     }
 
-    public void tryPlaceTower(final PApplet app, final GameData game, final Tile tile) {
-
+    /**
+     * Places a tower at the given tile, or upgrades it if there is one present.
+     */
+    public void placeOrUpgradeTower(final PApplet app, final GameData game, final Tile tile,
+                                    final boolean upgradeRange, final boolean upgradeSpeed, final boolean upgradeDamage) {
         final TowerTile tower;
         if (tile instanceof TowerTile) {
             // Already existing tower
             tower = (TowerTile) tile;
+            Loggers.GAMEPLAY.debug("preexisting tower at {}", tower.getPos());
         }
         else if (tile instanceof GrassTile) {
             // Can place a tower there
@@ -456,10 +460,11 @@ public class GameManager {
                 game.mana -= game.config.tower.towerCost;
                 tower = new TowerTile();
                 game.board.setTile(tile.getPos().getX(), tile.getPos().getY(), tower);
+                Loggers.GAMEPLAY.debug("placed new tower at {}", tile.getPos());
             }
             else {
                 // Want to place tile but no mana
-                Loggers.GAMEPLAY.debug("insufficient mana to place tile");
+                Loggers.GAMEPLAY.debug("insufficient mana to place tower");
                 return;
             }
         }
@@ -467,7 +472,12 @@ public class GameManager {
             Loggers.GAMEPLAY.debug("tile not grass or tower, ignoring");
             return;
         }
+        
+        // Now apply upgrades, if possible
+        tower.upgradeIfPossible(game, upgradeRange, upgradeSpeed, upgradeDamage);
 
         Logger.info("Tower {}->{}", tile, tower);
     }
+    
+    private void towerClicked(final GameData game, )
 }

@@ -267,13 +267,19 @@ public class UiManager {
                         Loggers.GAMEPLAY.debug("board clicked");
 
                         if (!ui.wantsPlaceTower) return;
-                        
+
                         Loggers.INPUT.info("place tower interaction");
                         // Find which tile is hovered
                         // Should never be null, since this element should perfectly cover the board
-                        final Tile tile = UiManager.pixelCoordsToTile(new Vector2(app.mouseX, app.mouseY),game);
+                        final Tile tile = UiManager.pixelCoordsToTile(new Vector2(app.mouseX, app.mouseY), game);
                         assert tile != null;
-                        GameManager.tryPlaceTower(app, game, tile);
+
+                        GameManager.placeOrUpgradeTower(
+                                app, game, tile,
+                                ui.wantsUpgradeRange,
+                                ui.wantsUpgradeSpeed,
+                                ui.wantsUpgradeDamage
+                        );
                     }
             ));
         }
