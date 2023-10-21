@@ -20,9 +20,10 @@ public class Debug {
     public static boolean
         pathfindingOverlayEnabled = false,
         tileHoverOverlayEnabled = true,
+        f3OverlayEnabled = true,
         towerUpgradeOverlayEnabled = false;
     
-    // TODO: Fix this overlay image
+    // TODO: Fix app overlay image
     static final PImage tileHoverImage =
             ImageExt.generatePattern(
                     CELL_SIZE_PX, CELL_SIZE_PX,
@@ -106,5 +107,25 @@ public class Debug {
                       final Vector2 pos = UiManager.tileToPixelCoords(t);
                       app.text(str, (float)pos.x, (float)pos.y);
                   });
+    }
+    
+    public void showF3Overlay(final PApplet app, final GameData game, final UiState ui){
+        final String SEP = "=====";
+        final String str = String.format(
+                "%s FRAMES %s\n" +
+                "P.frameRate=%03.1f, P.frameCount=%05d\n" +
+                "lastTick=%08.3f, appTick=%08.3f, deltaTime=%.4f, fps=%03.1f\n",
+                SEP, SEP,
+                app.frameRate, app.frameCount,
+                lastTick, appTick, deltaTime, 1 / deltaTime
+        );
+
+        final float x1 = 16, y1 = 40 + 16;
+
+        app.fill(Theme.TEXT.asInt());
+        app.textAlign(PConstants.LEFT, PConstants.TOP);
+        app.textSize(Theme.TEXT_SIZE_NORMAL);
+
+        app.text(str, x1, y1);
     }
 }

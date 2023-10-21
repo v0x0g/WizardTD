@@ -253,14 +253,14 @@ public class UiManager {
                         // Don't really have a good way to access the text
                         // It would be pointless to refactor addSidebarButton() for one use case
                         final TextElement text = ui.uiElements.stream()
-                                .filter(TextElement.class::isInstance)
-                                .map(TextElement.class::cast)
-                                .filter(t -> t.text.startsWith("Mana Pool"))
-                                .findAny().orElse(null);
-                        if (text == null){
+                                                              .filter(TextElement.class::isInstance)
+                                                              .map(TextElement.class::cast)
+                                                              .filter(t -> t.text.startsWith("Mana Pool"))
+                                                              .findAny().orElse(null);
+                        if (text == null) {
                             Loggers.UI.warn("couldn't find the text element for the mana pool description");
                         }
-                        else{
+                        else {
                             text.text = MessageFormat.format(
                                     "Mana Pool:\nCost: {0,number,####}",
                                     game.spells.manaSpell.currentCost
@@ -307,7 +307,7 @@ public class UiManager {
                     (button, app, game, ui) ->
                             Logger.debug("toggle tile hover overlay = {}", Debug.tileHoverOverlayEnabled ^= true),
                     (button, app, game, ui) -> button.fillColour =
-                    Theme.buttonColour(Debug.tileHoverOverlayEnabled, button.isHovered)
+                            Theme.buttonColour(Debug.tileHoverOverlayEnabled, button.isHovered)
             );
             addSidebarButton(
                     uiState,
@@ -317,7 +317,7 @@ public class UiManager {
                     (button, app, game, ui) ->
                             Logger.debug("toggle path overlay = {}", Debug.pathfindingOverlayEnabled ^= true),
                     (button, app, game, ui) -> button.fillColour =
-                    Theme.buttonColour(Debug.pathfindingOverlayEnabled, button.isHovered)
+                            Theme.buttonColour(Debug.pathfindingOverlayEnabled, button.isHovered)
             );
             addSidebarButton(
                     uiState,
@@ -327,7 +327,17 @@ public class UiManager {
                     (button, app, game, ui) ->
                             Logger.debug("toggle tower upgrade overlay = {}", Debug.towerUpgradeOverlayEnabled ^= true),
                     (button, app, game, ui) -> button.fillColour =
-                    Theme.buttonColour(Debug.towerUpgradeOverlayEnabled, button.isHovered)
+                            Theme.buttonColour(Debug.towerUpgradeOverlayEnabled, button.isHovered)
+            );
+            addSidebarButton(
+                    uiState,
+                    sidebarButtonPos,
+                    "UF3", "Upgrade Overlay",
+                    KeyCode.FUNCTION_3,
+                    (button, app, game, ui) ->
+                            Logger.debug("toggle f3 overlay = {}", Debug.f3OverlayEnabled ^= true),
+                    (button, app, game, ui) -> button.fillColour =
+                            Theme.buttonColour(Debug.f3OverlayEnabled, button.isHovered)
             );
         }
     }
@@ -351,7 +361,7 @@ public class UiManager {
             final UiAction<ButtonElement> draw) {
         final double BUTTON_SIZE = 48;
         final double SPACING = 4.0;
-        
+
         final Vector2 buttonSize = new Vector2(BUTTON_SIZE, BUTTON_SIZE);
 
         final Vector2 buttonPos1 = buttonPos.clone();
@@ -369,7 +379,7 @@ public class UiManager {
                 ),
                 click
         ), draw));
-        
+
         final Vector2 descPos1 = (Vector2) buttonPos1.addCopy(new Vector2(BUTTON_SIZE + SPACING, 0));
         final Vector2 descPos2 = new Vector2(WINDOW_WIDTH_PX, descPos1.y + BUTTON_SIZE);
         uiState.uiElements.add(new TextElement(

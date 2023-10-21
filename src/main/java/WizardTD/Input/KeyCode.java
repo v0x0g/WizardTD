@@ -67,6 +67,18 @@ public enum KeyCode {
     MINUS_NUMPAD(109, '-'),
     PERIOD_NUMPAD(110, '.'),
     SLASH_NUMPAD(111, '/'),
+    FUNCTION_1(112, '\0'),
+    FUNCTION_2(113, '\0'),
+    FUNCTION_3(114, '\0'),
+    FUNCTION_4(115, '\0'),
+    FUNCTION_5(116, '\0'),
+    FUNCTION_6(117, '\0'),
+    FUNCTION_7(118, '\0'),
+    FUNCTION_8(119, '\0'),
+    FUNCTION_9(120, '\0'),
+    FUNCTION_10(121, '\0'),
+    FUNCTION_11(122, '\0'),
+    FUNCTION_12(123, '\0'),
     ;
 
     public final int code;

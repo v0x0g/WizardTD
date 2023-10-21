@@ -169,28 +169,10 @@ public final class App extends PApplet {
         Renderer.render(this, this.gameData, this.uiState);
 
         {
-            final String SEP = "=====";
-            final String str = String.format(
-                    "%s FRAMES %s\n" +
-                    "P.frameRate=%03.1f, P.frameCount=%05d\n" +
-                    "lastTick=%08.3f, thisTick=%08.3f, deltaTime=%.4f, fps=%03.1f\n",
-                    SEP, SEP,
-                    this.frameRate, this.frameCount,
-                    lastTick, thisTick, deltaTime, 1 / deltaTime
-            );
-
-            final float x1 = 16, y1 = 40 + 16;
-            
-            this.fill(Theme.TEXT.asInt());
-            this.textAlign(PConstants.LEFT, PConstants.TOP);
-            this.textSize(Theme.TEXT_SIZE_NORMAL);
-
-            this.text(str, x1, y1);
-
-
             Debug.drawPathfindingOverlay(this, gameData);
             Debug.drawHoveredTileOverlay(this, gameData);
             Debug.showTowerUpgradeOverlay(this, gameData);
+            Debug.showF3Overlay(this, gameData, uiState);
         }
 
         Loggers.RENDER.debug("exit draw");
