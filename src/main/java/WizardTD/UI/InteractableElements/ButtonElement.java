@@ -26,7 +26,7 @@ public class ButtonElement extends InteractiveElement {
     /**
      * See {@link PApplet#rectMode(int)}
      */
-    public String text;
+    public @Nullable String text;
     public float fontSize;
 
     /**
@@ -36,7 +36,7 @@ public class ButtonElement extends InteractiveElement {
 
     public ButtonElement(
             final Vector2 corner1, final Vector2 corner2,
-            final String text, final float fontSize,
+            final @Nullable String text, final float fontSize,
             final Colour fillColour, final Colour outlineColour,
             @Nullable final KeyPress activationKey,
             final UiAction<ButtonElement> click) {
@@ -58,15 +58,18 @@ public class ButtonElement extends InteractiveElement {
                 (float) corner1.x, (float) corner1.y,
                 (float) corner2.x, (float) corner2.y
         );
-        app.fill(Theme.TEXT.asInt());
-        app.textAlign(this.textAlignMode, this.textAlignMode);
-        app.textSize(this.fontSize);
-        app.text(
-                this.text,
-                // For some reason text coords are backwards????
-                (float) corner2.x, (float) corner2.y,
-                (float) corner1.x, (float) corner1.y
-        );
+
+        if (text != null && fontSize != 0) {
+            app.fill(Theme.TEXT.asInt());
+            app.textAlign(this.textAlignMode, this.textAlignMode);
+            app.textSize(this.fontSize);
+            app.text(
+                    this.text,
+                    // For some reason text coords are backwards????
+                    (float) corner2.x, (float) corner2.y,
+                    (float) corner1.x, (float) corner1.y
+            );
+        }
     }
 
     @Override
