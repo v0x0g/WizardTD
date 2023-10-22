@@ -523,7 +523,5 @@ public class GameManager {
 
         // Now apply upgrades, if possible
         tower.upgradeIfPossible(game, upgradeRange, upgradeSpeed, upgradeDamage);
-
-        Logger.info("Tower {}->{}", tile, tower);
     }
 }

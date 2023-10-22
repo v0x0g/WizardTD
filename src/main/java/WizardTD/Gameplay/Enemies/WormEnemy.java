@@ -9,7 +9,7 @@ import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.*;
 import processing.core.*;
 
-@ToString
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class WormEnemy extends Enemy {
 
