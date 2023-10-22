@@ -1,6 +1,5 @@
 package WizardTD.Gameplay.Projectiles;
 
-import WizardTD.*;
 import WizardTD.Event.*;
 import WizardTD.Gameplay.Enemies.*;
 import WizardTD.Gameplay.Game.*;
@@ -29,6 +28,7 @@ public class FireballProjectile extends Projectile {
     public static final double HIT_DISTANCE_THRESHOLD = 0.01;
 
     private static PImage projectileImage;
+    private static PImage crosshairImage;
     /**
      * How much damage the fireball should do upon striking an enemy
      */
@@ -45,7 +45,8 @@ public class FireballProjectile extends Projectile {
     @OnEvent(eventTypes = EventType.AppSetup)
     private static void loadImages(final Event event) {
         final PApplet app = (PApplet) event.dataObject;
-        projectileImage = UiManager.loadImage(app, Resources.Projectiles.Fireball.ONLY_IMAGE);
+        projectileImage = UiManager.loadImage(app, Resources.Projectiles.Fireball.PROJECTILE_IMAGE);
+        crosshairImage = UiManager.loadImage(app, Resources.Projectiles.Fireball.CROSSHAIR_IMAGE);
     }
 
     @Override
@@ -88,5 +89,6 @@ public class FireballProjectile extends Projectile {
     @Override
     public void render(final PApplet app, final GameData gameData, final UiState uiState) {
         Renderer.renderSimpleEnemy(app, projectileImage, this.position);
+        Renderer.renderSimpleEnemy(app, crosshairImage, this.targetEnemy.position);
     }
 }

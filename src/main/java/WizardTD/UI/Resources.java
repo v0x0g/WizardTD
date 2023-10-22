@@ -70,7 +70,8 @@ public class Resources {
         @UtilityClass
         public static class Fireball {
             public static final String DIR = Projectiles.DIR + "/Fireball";
-            public static final String ONLY_IMAGE = DIR + "/fireball.png";
+            public static final String PROJECTILE_IMAGE = DIR + "/fireball.png";
+            public static final String CROSSHAIR_IMAGE = DIR + "/crosshair.png";
         }
     }
 }

@@ -373,6 +373,7 @@ public class UiManager {
                     final TowerTile tower = (TowerTile) tile;
 
                     app.stroke(Theme.RANGE_INDICATOR_OUTLINE.asInt());
+                    app.strokeWeight(Theme.OUTLINE_WEIGHT);
                     app.fill(Theme.RANGE_INDICATOR_FILL.asInt());
                     app.ellipseMode(PConstants.RADIUS);
                     final Vector2 towerPosPx = UiManager.tileToPixelCoords(tower);
