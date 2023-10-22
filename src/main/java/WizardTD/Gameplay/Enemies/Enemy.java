@@ -7,7 +7,7 @@ import lombok.*;
 import mikera.vectorz.*;
 
 @ToString
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public abstract class Enemy extends Renderable {
 //TODO: Render
     /**

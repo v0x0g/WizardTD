@@ -13,8 +13,7 @@ import java.util.*;
 import java.util.stream.*;
 
 @ToString
-@EqualsAndHashCode(callSuper = false)
-
+@EqualsAndHashCode(callSuper = true)
 public class GremlinEnemy extends Enemy {
     public static final double DEATH_ANIM_DURATION = 4 / 60.0 /* 4 frames @ 60 FPS */;
     // TODO: Dying Enemy

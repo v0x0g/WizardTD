@@ -4,7 +4,7 @@ import WizardTD.Gameplay.Game.*;
 import lombok.*;
 
 @ToString
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 public class ManaSpell extends Spell {
     /**

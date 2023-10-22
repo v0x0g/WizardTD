@@ -8,7 +8,7 @@ import mikera.vectorz.*;
 import processing.core.*;
 
 @ToString
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class FireballProjectile extends Projectile {
 
     /**

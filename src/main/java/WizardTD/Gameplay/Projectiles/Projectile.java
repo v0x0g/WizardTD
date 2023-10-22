@@ -5,7 +5,7 @@ import lombok.*;
 import mikera.vectorz.*;
 
 @ToString
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Projectile extends Renderable {
 

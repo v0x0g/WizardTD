@@ -10,7 +10,7 @@ import org.checkerframework.checker.nullness.qual.*;
 import processing.core.*;
 
 @ToString
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class WormEnemy extends Enemy {
 
     public static @Nullable PImage entityImage = null;
