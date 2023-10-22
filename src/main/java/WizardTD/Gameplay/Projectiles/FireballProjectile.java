@@ -1,5 +1,6 @@
 package WizardTD.Gameplay.Projectiles;
 
+import WizardTD.Event.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Rendering.*;
 import WizardTD.UI.*;
@@ -16,15 +17,22 @@ public class FireballProjectile extends Projectile {
      */
     public static final double FIREBALL_SPEED = 5.0;
 
+    private static PImage projectileImage;
     /**
-     * How much damage the fireball should do upon striking an enemy. Note that this is base damage,
-     * and will be affected by the damage multiplier
+     * How much damage the fireball should do upon striking an enemy
      */
-    public double baseDamage;
+    public double damage;
 
     public FireballProjectile(final Vector2 position, final double baseDamage) {
         super(position);
-        this.baseDamage = baseDamage;
+        this.damage = baseDamage;
+    }
+
+    @SuppressWarnings({"unused", "DataFlowIssue"})
+    @OnEvent(eventTypes = EventType.AppSetup)
+    private static void loadImages(final Event event) {
+        final PApplet app = (PApplet) event.dataObject;
+        projectileImage = UiManager.loadImage(app, Resources.Projectiles.Fireball.ONLY_IMAGE);
     }
 
     @Override
@@ -32,8 +40,11 @@ public class FireballProjectile extends Projectile {
         return RenderOrder.PROJECTILE;
     }
 
+    
+    
     @Override
     public void render(final PApplet app, final GameData gameData, final UiState uiState) {
-        throw null;
+        final Vector2 pos = UiManager.tileToPixelCoords(this.position);
+        Renderer.renderSimpleEnemy(app, projectileImage, pos);
     }
 }

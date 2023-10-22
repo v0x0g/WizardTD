@@ -63,4 +63,15 @@ public class Resources {
             public static final String ONLY_TILE = DIR + "/worm.png";
         }
     }
+    
+    @UtilityClass
+    public static class Projectiles {
+        public static final String DIR = Resources.BASE_DIR + "/Projectiles";
+        @UtilityClass
+        public static class Fireball {
+            public static final String DIR = Resources.BASE_DIR + "/Fireball";
+            public static final String ONLY_IMAGE = DIR + "/fireball.png";
+        }
+    }
+}
 }

@@ -3,6 +3,7 @@ package WizardTD.Gameplay.Tiles;
 import WizardTD.Event.*;
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
+import WizardTD.Gameplay.Projectiles.*;
 import WizardTD.Rendering.*;
 import WizardTD.UI.Appearance.*;
 import WizardTD.UI.*;
@@ -10,6 +11,8 @@ import lombok.*;
 import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.*;
 import processing.core.*;
+
+import java.util.Vector;
 
 import static java.lang.Math.*;
 
@@ -118,10 +121,15 @@ public final class TowerTile extends Tile {
         this.magazine += gameDeltaTime * this.calculateSpeed(game);
         // Clamp the magazine to 1, so we don't save up a massive burst of fireballs
         this.magazine = Math.min(1.0, magazine);
+
+        // Don't have any fireballs
+        if (this.magazine < 1.0) return;
+
+        Loggers.GAMEPLAY.info("tower fire {}", this);
+        this.magazine--;
         
-        if(this.magazine >= 1.0){
-            this.magazine--;
-            Loggers.GAMEPLAY.info("FIRE");
-        }
+        double damage = this.calculateDamage(game);
+        
+        new FireballProjectile(new Vector2(this.getPos().getX(), this.getPos().getY()), damage);
     }
 }
