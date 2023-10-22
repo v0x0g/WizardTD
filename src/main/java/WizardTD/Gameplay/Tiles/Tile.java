@@ -42,5 +42,5 @@ public abstract class Tile implements Renderable, Tickable {
     /**
      * Called every tick, you can update the tiles here
      */
-    public void tick(final GameData game, double gameDeltaTime, double visualDeltaTime) {}
+    public void tick(final @NonNull GameData game, final double gameDeltaTime, final double visualDeltaTime) {}
 }

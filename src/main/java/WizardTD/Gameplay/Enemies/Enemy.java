@@ -73,7 +73,7 @@ public abstract class Enemy implements Tickable, Renderable {
         return RenderOrder.ENTITY;
     }
 
-    public void tick(final @NonNull GameData game, final double visualDeltaTime, final double gameDeltaTime) {
+    public void tick(final @NonNull GameData game, final double gameDeltaTime, final double visualDeltaTime) {
         // Move along the path
         this.pathProgress += gameDeltaTime * this.speed;
         this.position = this.path.calculatePos(this.pathProgress);

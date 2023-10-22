@@ -11,6 +11,7 @@ import WizardTD.UI.*;
 import lombok.*;
 import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import processing.core.*;
 
 import static java.lang.Math.*;
@@ -24,11 +25,10 @@ public final class TowerTile extends Tile {
     public static final double SPEED_INCREASE_ADD = 0.5;
     public static final double DAMAGE_INCREASE_MULT = 0.5;
 
-
     public static @Nullable PImage tileLevel0 = null;
     public static @Nullable PImage tileLevel1 = null;
     public static @Nullable PImage tileLevel2 = null;
-    
+
     public long rangeUpgrades = 0;
     public long speedUpgrades = 0;
     public long damageUpgrades = 0;
@@ -36,7 +36,7 @@ public final class TowerTile extends Tile {
     /**
      * Internal counter representing how many fireballs we can fire.
      *
-     * @see WizardTD.Gameplay.Spawners.Wave#enemySpawnCounter 
+     * @see WizardTD.Gameplay.Spawners.Wave#enemySpawnCounter
      */
     public transient double magazine;
 
@@ -140,24 +140,24 @@ public final class TowerTile extends Tile {
     }
 
     @Override
-    public void tick(final GameData game, final double gameDeltaTime, final double visualDeltaTime) {
+    public void tick(final @NonNull GameData game, final double gameDeltaTime, final double visualDeltaTime) {
         this.magazine += gameDeltaTime * this.calculateSpeed(game);
         // Clamp the magazine to 1, so we don't save up a massive burst of fireballs
         this.magazine = Math.min(1.0, magazine);
 
         // Don't have any fireballs
         if (this.magazine < 1.0) return;
-        
+
         final double range = this.calculateRange(game);
-        
+
         final Vector2 thisPos = new Vector2(this.getPos().getX(), this.getPos().getY());
         final Enemy enemy = GameManager.getNearestEnemy(game, thisPos, range);
-        if(enemy == null) return;
+        if (enemy == null) return;
 
         this.magazine--;
-        
+
         final double damage = this.calculateDamage(game);
-        
+
         final FireballProjectile fireball = new FireballProjectile(thisPos, enemy, damage);
         game.projectiles.add(fireball);
         Loggers.GAMEPLAY.info("tower fire: tower={}, target={}, fireball={}", this, enemy, fireball);

@@ -5,6 +5,7 @@ import WizardTD.Gameplay.Game.*;
 import WizardTD.Rendering.*;
 import WizardTD.UI.*;
 import lombok.*;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import processing.core.*;
 
 import java.util.*;
@@ -68,7 +69,7 @@ public final class PathTile extends Tile {
      */
     @SuppressWarnings("LocalCanBeFinal")
     @Override
-    public void tick(final GameData game, double gameDeltaTime, double visualDeltaTime) {
+    public void tick(final @NonNull GameData game, final double gameDeltaTime, final double visualDeltaTime) {
         // Don't recalculate every frame
         if(!this.connectedPathSides.isEmpty()) return;
         

@@ -412,7 +412,7 @@ public class GameManager {
         tickers.clear(); // Reset the list
         Streams.<Tickable>concat(game.enemies.stream(), game.board.stream(), game.projectiles.stream())
                .forEach(tickers::add);
-        tickers.forEach(e -> e.tick(game, visualDeltaTime, gameDeltaTime));
+        tickers.forEach(e -> e.tick(game, gameDeltaTime, visualDeltaTime));
 
         // Check if enemies have reached harry potter
         game.enemies.forEach(enemy -> {

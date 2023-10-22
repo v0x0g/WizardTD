@@ -52,7 +52,7 @@ public class FireballProjectile extends Projectile {
     }
 
     @Override
-    public void tick(final @NonNull GameData game, final double visualDeltaTime, final double gameDeltaTime) {
+    public void tick(final @NonNull GameData game, final double gameDeltaTime, final double visualDeltaTime) {
         // Ensure we have a target, else kill the projectile
         // This prioritises a target near to the existing target, or else near the fireball's position
         if (!this.targetEnemy.isAlive) {
@@ -71,7 +71,7 @@ public class FireballProjectile extends Projectile {
         // Move towards target
         final Vector2 targetDir = (Vector2) this.targetEnemy.position.subCopy(this.position).toNormal();
         double enemyDistance = this.position.distance(this.targetEnemy.position);
-        final double motionAmount = Math.min(FIREBALL_SPEED, enemyDistance); // Don't overcompensate
+        final double motionAmount = Math.min(FIREBALL_SPEED, enemyDistance) * gameDeltaTime; // Don't overcompensate
         final Vector2 motion = (Vector2) targetDir.multiplyCopy(motionAmount);
         this.position.add(motion);
 
