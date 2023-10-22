@@ -98,7 +98,8 @@ public class Debug {
                   .forEach(t -> {
                       final String str = "r: " + t.rangeUpgrades + "\n" +
                                          "s: " + t.speedUpgrades + "\n" +
-                                         "d: " + t.damageUpgrades;
+                                         "d: " + t.damageUpgrades + "\n" +
+                                         "m: " + t.magazine;
 
                       app.fill(Colour.RED.asInt());
                       app.textAlign(PConstants.CENTER, PConstants.CENTER);

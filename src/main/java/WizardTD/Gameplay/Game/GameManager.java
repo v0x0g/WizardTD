@@ -361,7 +361,7 @@ public class GameManager {
         final double speedMultiplier = game.fastForward ? FAST_FORWARD_SPEED : 1.0;
 
         final int numTicks = (int) Math.ceil(deltaTime * speedMultiplier / SUB_TICK_THRESHOLD);
-        Logger.trace(
+        Loggers.EVENT.trace(
                 "deltaTime = {}, thresh = {}, mult = {}, numTicks = {}",
                 deltaTime,
                 SUB_TICK_THRESHOLD,
@@ -373,7 +373,7 @@ public class GameManager {
         final double visualDelta = deltaTime * speedMultiplier / numTicks;
 
         for (int i = 0; i < numTicks; i++) {
-            Logger.trace("subtick: game={}; visual={}", gameDelta, visualDelta);
+            Loggers.EVENT.trace("subtick: game={}; visual={}", gameDelta, visualDelta);
             internalTickGame(app, game, gameDelta, visualDelta);
         }
 
@@ -442,16 +442,20 @@ public class GameManager {
                 game.mana -= enemy.health;
             }
         });
+
+
+        // Tick all the tiles
+        game.board.stream().forEach(t -> t.tick(game, gameDeltaTime,visualDeltaTime));
     }
-    
-    public void killEnemy(final GameData game, final Enemy enemy){
-        if(!game.enemies.remove(enemy)){
+
+    public void killEnemy(final GameData game, final Enemy enemy) {
+        if (!game.enemies.remove(enemy)) {
             Logger.warn("can't kill enemy {}, doesn't exist in game", enemy);
             return;
         }
-        
+
         Loggers.GAMEPLAY.debug("kill enemy {}", enemy);
-        
+
         game.mana += enemy.manaGainedOnKill;
     }
 

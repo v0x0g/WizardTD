@@ -68,7 +68,7 @@ public final class PathTile extends Tile {
      */
     @SuppressWarnings("LocalCanBeFinal")
     @Override
-    public void tick(final GameData game) {
+    public void tick(final GameData game, double gameDeltaTime, double visualDeltaTime) {
         // Don't recalculate every frame
         if(!this.connectedPathSides.isEmpty()) return;
         

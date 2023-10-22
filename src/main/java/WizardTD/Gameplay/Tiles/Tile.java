@@ -41,5 +41,5 @@ public abstract class Tile extends Renderable {
     /**
      * Called every tick, you can update the tiles here
      */
-    public void tick(final GameData game) {}
+    public void tick(final GameData game, double gameDeltaTime, double visualDeltaTime) {}
 }

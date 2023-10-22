@@ -159,11 +159,6 @@ public final class App extends PApplet {
 
         GameManager.tickGameWithSubtick(this, this.gameData, deltaTime);
 
-        Loggers.RENDER.trace("tick tiles");
-        this.gameData.board
-                .stream()
-                .forEach(t -> t.tick(this.gameData));
-
         Loggers.RENDER.trace("render gameData");
         Renderer.render(this, this.gameData, this.uiState);
 

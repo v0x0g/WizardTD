@@ -67,7 +67,7 @@
     }
   ],
   "initial_tower_range": 96,
-  "initial_tower_firing_speed": 1.5,
+  "initial_tower_firing_speed": 1.0,
   "initial_tower_damage": 40,
   "initial_mana": 200,
   "initial_mana_cap": 1000,
