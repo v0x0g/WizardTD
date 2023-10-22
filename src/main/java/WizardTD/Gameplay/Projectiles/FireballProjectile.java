@@ -31,9 +31,9 @@ public class FireballProjectile extends Projectile {
      * How much damage the fireball should do upon striking an enemy
      */
     public final double damage;
-    public Enemy targetEnemy;
+    public @NonNull Enemy targetEnemy;
 
-    public FireballProjectile(final Vector2 position, final Enemy targetEnemy, final double baseDamage) {
+    public FireballProjectile(final Vector2 position, final @NonNull Enemy targetEnemy, final double baseDamage) {
         super(position);
         this.damage = baseDamage;
         this.targetEnemy = targetEnemy;
@@ -53,29 +53,32 @@ public class FireballProjectile extends Projectile {
 
     @Override
     public void tick(final @NonNull GameData game, final double visualDeltaTime, final double gameDeltaTime) {
-        // Choose new target if old one dead
-        if (this.targetEnemy == null ||!this.targetEnemy.isAlive) {
+        // Ensure we have a target, else kill the projectile
+        // This prioritises a target near to the existing target, or else near the fireball's position
+        if (!this.targetEnemy.isAlive) {
             // Range is arbitrary, so I chose tower range
-            this.targetEnemy = GameManager.getNearestEnemy(game, this.position, game.config.tower.initialTowerDamage);
+            final Enemy e = GameManager.getNearestEnemy(game, this.targetEnemy.position, game.config.tower.initialTowerRange);
+            if (e == null) GameManager.getNearestEnemy(game, this.position, game.config.tower.initialTowerRange);
+            if(e == null) {
+                GameManager.killProjectile(game,this);
+                return;
+            }
+            // We should never get a dead enemy
+            assert e.isAlive;
+            this.targetEnemy = e;
         }
 
-        // Still no enemy, fireball goes out with a bang
-        if (this.targetEnemy == null || !this.targetEnemy.isAlive) {
-            GameManager.killProjectile(game, this);
-            return;
-        }
-        
         // Move towards target
         final Vector2 targetDir = (Vector2) this.targetEnemy.position.subCopy(this.position).toNormal();
         double enemyDistance = this.position.distance(this.targetEnemy.position);
         final double motionAmount = Math.min(FIREBALL_SPEED, enemyDistance); // Don't overcompensate
         final Vector2 motion = (Vector2) targetDir.multiplyCopy(motionAmount);
         this.position.add(motion);
-        
+
         // Calculate distance again on we've moved, to see if we're close enough to kill
         enemyDistance = this.position.distance(this.targetEnemy.position);
-        if(enemyDistance < HIT_DISTANCE_THRESHOLD){
-            GameManager.damageEnemy(game, this.targetEnemy,this.damage);
+        if (enemyDistance < HIT_DISTANCE_THRESHOLD) {
+            GameManager.damageEnemy(game, this.targetEnemy, this.damage);
             GameManager.killProjectile(game, this);
         }
     }
