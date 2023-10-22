@@ -332,8 +332,8 @@ public class GameManager {
         trace("creating game from level desc: {}", desc);
 
         final Board board = desc.board;
-        final Set<Enemy> enemies = new HashSet<>();
-        final Set<Projectile> projectiles = new HashSet<>();
+        final List<Enemy> enemies = new ArrayList<>();
+        final List<Projectile> projectiles = new ArrayList<>();
         final List<Wave> waves = desc.waves;
         final GameSpells spells = new GameSpells(new ManaSpell(desc.config.spell.manaPool.initialCost));
 
@@ -421,7 +421,9 @@ public class GameManager {
 
             Enemy enemy;
             while (null != (enemy = wave.getEnemy())) {
-                game.enemies.add(enemy);
+                if(!game.enemies.add(enemy)){
+                    Loggers.GAMEPLAY.warn("failed to add enemy to game");
+                }
                 final ThreadLocalRandom rng = ThreadLocalRandom.current();
                 // Choose a random path for the enemy to go along
                 final int pathIdx = rng.nextInt(game.enemyPaths.size());

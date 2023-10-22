@@ -20,8 +20,8 @@ public final class GameData {
 
     public @NonNull Board board;
 
-    public @NonNull Set<Enemy> enemies;
-    public @NonNull Set<Projectile> projectiles;
+    public @NonNull List<Enemy> enemies;
+    public @NonNull List<Projectile> projectiles;
 
     public @NonNull List<Wave> waves;
     public @NonNull List<EnemyPath> enemyPaths;
