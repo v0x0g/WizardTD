@@ -162,19 +162,17 @@ public final class App extends PApplet {
         Loggers.RENDER.trace("render gameData");
         Renderer.render(this, this.gameData, this.uiState);
 
-        {
-            Debug.Stats.Frames.deltaTime = deltaTime;
-            Debug.Stats.Frames.fps = 1/deltaTime;
-            Debug.Stats.Frames.avgFps = this.frameRate;
-            Debug.Stats.Frames.frameCount++;
-            Debug.Stats.Frames.lastTick = lastTick;
-            Debug.Stats.Frames.thisTick = thisTick;
-            
-            Debug.drawPathfindingOverlay(this, gameData);
-            Debug.drawHoveredTileOverlay(this, gameData);
-            Debug.showTowerUpgradeOverlay(this, gameData);
-            Debug.showF3Overlay(this, gameData, uiState);
-        }
+        Debug.Stats.Frames.deltaTime = deltaTime;
+        Debug.Stats.Frames.fps = 1 / deltaTime;
+        Debug.Stats.Frames.avgFps = this.frameRate;
+        Debug.Stats.Frames.frameCount++;
+        Debug.Stats.Frames.lastTick = lastTick;
+        Debug.Stats.Frames.thisTick = thisTick;
+
+        Debug.drawPathfindingOverlay(this, gameData);
+        Debug.drawHoveredTileOverlay(this, gameData);
+        Debug.showTowerUpgradeOverlay(this, gameData);
+        Debug.showF3Overlay(this, gameData, uiState);
 
         Loggers.RENDER.debug("exit draw");
     }

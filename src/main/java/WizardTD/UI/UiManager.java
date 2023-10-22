@@ -20,6 +20,7 @@ import processing.core.*;
 
 import java.text.*;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.stream.*;
 
 import static WizardTD.GameConfig.*;
@@ -270,8 +271,9 @@ public class UiManager {
             );
         }
 
-        // ===== BOARD CLICK HANDLER =====
+        // ===== BOARD  =====
         {
+            // Board click handler (tower upgrading)
             uiState.uiElements.add(new ButtonElement(
                     new Vector2(BOARD_X_PX, BOARD_Y_PX),
                     new Vector2(SIDEBAR_X_PX, WINDOW_HEIGHT_PX),
@@ -295,6 +297,53 @@ public class UiManager {
                         );
                     }
             ));
+
+            // It's kinda cool that you can do this, I guess
+            uiState.uiElements.add(new UiElement() {
+                @Override
+                public void render(final PApplet app, final GameData game, final UiState ui) {
+                    final Vector2 TOP_LEFT = new Vector2(650, 580);
+                    final Vector2 BOT_RIGHT = new Vector2(750, 680);
+
+                    setColours(app, Theme.WIDGET_BACKGROUND, Theme.OUTLINE);
+                    app.rectMode(PConstants.CORNERS);
+                    app.rect((float) TOP_LEFT.x, (float) TOP_LEFT.y, (float) BOT_RIGHT.x, (float) BOT_RIGHT.y);
+                    
+                    final Vector2 mousePos = new Vector2(app.mouseX, app.mouseY);
+                    final Tile tile = UiManager.pixelCoordsToTile(mousePos, game);
+                    final String text;
+                    if (tile instanceof TowerTile) {
+                        final TowerTile tower = (TowerTile) tile; 
+                        text = MessageFormat.format(
+                                "Upgrade Cost\n" +
+                                "speed:      {0,number,###}\n" +
+                                "damage:   {1,number,###}\n" +
+                                "range:       {2,number,###}\n" +
+                                "total:         {3,number,###}",
+//                                tower.
+                                6,6,6,66
+                                );
+                    }
+                    else {
+                        final ThreadLocalRandom rng = ThreadLocalRandom.current();
+                        text = MessageFormat.format(
+                                "Upgrade Cost\n" +
+                                "speed:      {0,}\n" +
+                                "damage:   {1}\n" +
+                                "range:       {2}\n" +
+                                "total;         {3}",
+                                (char) rng.nextInt(16, 255),
+                                (char) rng.nextInt(16, 255),
+                                (char) rng.nextInt(16, 255),
+                                (char) rng.nextInt(16, 255)
+                        );
+                    }
+                    app.textSize(Theme.TEXT_SIZE_NORMAL);
+                    app.textAlign(PConstants.LEFT, PConstants.TOP);
+                    app.fill(Theme.TEXT.asInt());
+                    app.text(text, (float) TOP_LEFT.x, (float) TOP_LEFT.y, (float) BOT_RIGHT.x, (float) BOT_RIGHT.y);
+                }
+            });
         }
 
         // ===== DEBUG STUFF =====
@@ -359,7 +408,7 @@ public class UiManager {
             final @Nullable KeyCode activationKey,
             final UiAction<ButtonElement> click,
             final UiAction<ButtonElement> draw) {
-        final double BUTTON_SIZE = 48;
+        final double BUTTON_SIZE = 40;
         final double SPACING = 4.0;
 
         final Vector2 buttonSize = new Vector2(BUTTON_SIZE, BUTTON_SIZE);

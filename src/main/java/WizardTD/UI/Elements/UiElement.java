@@ -6,7 +6,6 @@ import lombok.*;
 import processing.core.*;
 
 @ToString
-@EqualsAndHashCode
 public abstract class UiElement implements Renderable {
 
     /**
@@ -21,7 +20,7 @@ public abstract class UiElement implements Renderable {
         else app.fill(fill.asInt());
         if (outline == Colour.NONE) app.noStroke();
         else app.stroke((float) outline.r, (float) outline.g, (float) outline.b, (float) outline.a);
-        app.strokeWeight(2);
+        app.strokeWeight(Theme.OUTLINE_WEIGHT);
     }
 
     @Override

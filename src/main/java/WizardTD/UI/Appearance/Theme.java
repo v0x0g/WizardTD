@@ -12,7 +12,7 @@ public class Theme {
     public final Colour RANGE_INDICATOR = Colour.YELLOW;
     public final Colour OUTLINE = Colour.LIGHT_GREY;
     public final Colour SELECTION_FILL = OUTLINE.withAlpha(0.5);
-    
+
     public final Colour TOWER_UPGRADE_RANGE = Colour.RED.withAlpha(1.0);
     public final Colour TOWER_UPGRADE_DAMAGE = Colour.RED.withAlpha(1.0);
     public final Colour TOWER_UPGRADE_SPEED = Colour.LIGHT_BLUE.withAlpha(1.0);
@@ -21,8 +21,9 @@ public class Theme {
     public final Colour BUTTON_HOVERED = BUTTON_ENABLED.withAlpha(0.3);
     public final Colour BUTTON_DISABLED = BUTTON_ENABLED.withAlpha(0.1);
 
-    public final float TEXT_SIZE_NORMAL = 14.0f;
-    public final float TEXT_SIZE_LARGE = 24.0f;
+    public final float OUTLINE_WEIGHT = 2.0f;
+    public final float TEXT_SIZE_NORMAL = 12.0f;
+    public final float TEXT_SIZE_LARGE = 28.0f;
 
     public Colour buttonColour(final boolean enabled, final boolean hovered) {
         return enabled ? BUTTON_ENABLED :
