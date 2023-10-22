@@ -1,6 +1,7 @@
 package WizardTD.Gameplay.Game;
 
 import WizardTD.*;
+import WizardTD.Delegates.*;
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Enemies.*;
 import WizardTD.Gameplay.Pathfinding.*;
@@ -229,7 +230,7 @@ public class GameManager {
                         final double duration = j.getDouble("duration");
                         final double preWavePause = j.getDouble("pre_wave_pause");
 
-                        final List<EnemyFactory<?>> factories = jsonArrayToStream(j.getJSONArray("monsters"))
+                        final List<EnemyFactory> factories = jsonArrayToStream(j.getJSONArray("monsters"))
                                 .map((m) -> {
                                     trace("\tmonster: {}", m);
                                     final long qty = m.getLong("quantity", 0);
@@ -238,67 +239,33 @@ public class GameManager {
                                     final double manaPerKill = m.getDouble("mana_gained_on_kill");
                                     final double speed = m.getDouble("speed");
                                     final double dmgMult = m.getDouble("armour");
-                                    // TODO: Refactor to abstract static method to parse from json?
-                                    switch (m.getString("type")) {
-                                        case "gremlin":
-                                            return new EnemyFactory<GremlinEnemy>(
-                                                    hp,
-                                                    speed,
-                                                    dmgMult,
-                                                    manaPerKill,
-                                                    qty_big,
-                                                    (fact) -> new GremlinEnemy(
-                                                            fact.health,
-                                                            new Vector2(
-                                                                    0,
-                                                                    0
-                                                            ),
-                                                            fact.speed,
-                                                            fact.damageMultiplier,
-                                                            fact.manaGainedOnKill
-                                                    )
-                                            );
-                                        case "worm":
-                                            return new EnemyFactory<WormEnemy>(
-                                                    hp,
-                                                    speed,
-                                                    dmgMult,
-                                                    manaPerKill,
-                                                    qty_big,
-                                                    (fact) -> new WormEnemy(
-                                                            fact.health,
-                                                            new Vector2(
-                                                                    0,
-                                                                    0
-                                                            ),
-                                                            fact.speed,
-                                                            fact.damageMultiplier,
-                                                            fact.manaGainedOnKill
-                                                    )
-                                            );
-                                        case "beetle":
-                                            return new EnemyFactory<BeetleEnemy>(
-                                                    hp,
-                                                    speed,
-                                                    dmgMult,
-                                                    manaPerKill,
-                                                    qty_big,
-                                                    (fact) -> new BeetleEnemy(
-                                                            fact.health,
-                                                            new Vector2(
-                                                                    0,
-                                                                    0
-                                                            ),
-                                                            fact.speed,
-                                                            fact.damageMultiplier,
-                                                            fact.manaGainedOnKill
-                                                    )
-                                            );
-                                        default:
-                                            throw new IllegalArgumentException();
-                                    }
+
+                                    final HashMap<String, Func5<? extends Enemy, Double, Vector2, Double, Double, Double>>
+                                            enemyTypes =
+                                            new HashMap<String, Func5<? extends Enemy, Double, Vector2, Double, Double, Double>>() {{
+                                                put("gremlin", GremlinEnemy::new);
+                                                put("worm", WormEnemy::new);
+                                                put("beetle", BeetleEnemy::new);
+                                            }};
+                                    final Func5<? extends Enemy, Double, Vector2, Double, Double, Double>
+                                            ctor = enemyTypes.get(m.getString("type"));
+
+                                    return new EnemyFactory(
+                                            hp,
+                                            speed,
+                                            dmgMult,
+                                            manaPerKill,
+                                            qty_big,
+                                            (fact) -> ctor.invoke(
+                                                    fact.health,
+                                                    new Vector2(0, 0),
+                                                    fact.speed,
+                                                    fact.damageMultiplier,
+                                                    fact.manaGainedOnKill
+                                            )
+                                    );
                                 })
-                                .collect(Collectors.<EnemyFactory<?>>toList());
+                                .collect(Collectors.<EnemyFactory>toList());
                         final BigInteger totalQuantity =
                                 factories
                                         .stream()

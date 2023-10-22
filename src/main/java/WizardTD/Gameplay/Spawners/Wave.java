@@ -24,7 +24,7 @@ public final class Wave {
      * Multiplier on how fast monsters should spawn. This should be 1/duration
      */
     public final double spawnRateMult;
-    public final List<EnemyFactory<?>> enemyFactories;
+    public final List<EnemyFactory> enemyFactories;
     public final long waveNumber;
 
     /**
@@ -40,7 +40,7 @@ public final class Wave {
     public Wave(
             final double duration, final double delayBeforeWave, final double spawnRateMult,
             final long waveNumber,
-            final List<EnemyFactory<?>> enemyFactories) {
+            final List<EnemyFactory> enemyFactories) {
         this.duration = duration;
         this.delayBeforeWave = delayBeforeWave;
         this.spawnRateMult = spawnRateMult;
@@ -69,7 +69,7 @@ public final class Wave {
         while (!enemyFactories.isEmpty()) {
             // Pick a random factory by index, and spawn an enemy from it
             final int randIndex = ThreadLocalRandom.current().nextInt(0, this.enemyFactories.size());
-            final EnemyFactory<?> factory = this.enemyFactories.get(randIndex);
+            final EnemyFactory factory = this.enemyFactories.get(randIndex);
 
             @Nullable Enemy enemy;
             try {

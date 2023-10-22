@@ -16,7 +16,7 @@ import java.util.*;
 @ToString
 @RequiredArgsConstructor
 @EqualsAndHashCode
-public class EnemyFactory<TEnemy extends Enemy> {
+public class EnemyFactory {
     /**
      * How much health the enemy has remaining
      */
@@ -40,12 +40,11 @@ public class EnemyFactory<TEnemy extends Enemy> {
     /// Maximum number of enemies that can be spawned by this factory.
     /// If @c null then there is no cap on the enemies
     public final @Nullable BigInteger maxQuantity;
-    public final Func1<TEnemy, EnemyFactory<TEnemy>> spawn;
+    public final Func1<Enemy, EnemyFactory> spawn;
     /// How many enemies have been spawned so far
     private BigInteger quantitySpawned = BigInteger.valueOf(0L);
 
-    @Nullable
-    public TEnemy spawnEnemy() {
+    public Enemy spawnEnemy() {
         // Spawn cap
         if (maxQuantity != null && maxQuantity.compareTo(quantitySpawned) < 0) {
             throw new NoSuchElementException("spawn cap reached");
