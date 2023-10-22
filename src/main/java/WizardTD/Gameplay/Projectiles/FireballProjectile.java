@@ -68,7 +68,6 @@ public class FireballProjectile extends Projectile {
 
     @Override
     public void render(final PApplet app, final GameData gameData, final UiState uiState) {
-        final Vector2 pos = UiManager.tileToPixelCoords(this.position);
-        Renderer.renderSimpleEnemy(app, projectileImage, pos);
+        Renderer.renderSimpleEnemy(app, projectileImage, this.position);
     }
 }
