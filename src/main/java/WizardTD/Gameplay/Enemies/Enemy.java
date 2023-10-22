@@ -9,7 +9,7 @@ import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 @ToString
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode
 public abstract class Enemy implements Tickable, Renderable {
     public boolean isAlive = true;
     

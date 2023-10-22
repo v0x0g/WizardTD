@@ -421,9 +421,7 @@ public class GameManager {
 
             Enemy enemy;
             while (null != (enemy = wave.getEnemy())) {
-                if(!game.enemies.add(enemy)){
-                    Loggers.GAMEPLAY.warn("failed to add enemy to game");
-                }
+                game.enemies.add(enemy);
                 final ThreadLocalRandom rng = ThreadLocalRandom.current();
                 // Choose a random path for the enemy to go along
                 final int pathIdx = rng.nextInt(game.enemyPaths.size());
