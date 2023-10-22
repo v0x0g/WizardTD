@@ -123,14 +123,16 @@ public final class TowerTile extends Tile {
 
         // Don't have any fireballs
         if (this.magazine < 1.0) return;
+        
+        final Vector2 thisPos = new Vector2(this.getPos().getX(), this.getPos().getY());
+        final Enemy enemy = GameManager.getNearestEnemy(game, thisPos);
+        if(enemy == null) return;
 
         this.magazine--;
         
         final double damage = this.calculateDamage(game);
         
-        final Vector2 pos = new Vector2(this.getPos().getX(), this.getPos().getY());
-        final Enemy enemy = GameManager.getNearestEnemy(game, pos);
-        final FireballProjectile fireball = new FireballProjectile(pos, enemy, damage);
+        final FireballProjectile fireball = new FireballProjectile(thisPos, enemy, damage);
         game.projectiles.add(fireball);
         Loggers.GAMEPLAY.info("tower fire: tower={}, target={}, fireball={}", this, enemy, fireball);
     }
