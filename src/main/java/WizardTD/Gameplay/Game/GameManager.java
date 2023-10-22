@@ -322,9 +322,9 @@ public class GameManager {
         trace("creating game from level desc: {}", desc);
 
         final Board board = desc.board;
-        final List<Enemy> enemies = new ArrayList<>();
+        final Set<Enemy> enemies = new HashSet<>();
+        final Set<Projectile> projectiles = new HashSet<>();
         final List<Wave> waves = desc.waves;
-        final List<Projectile> projectiles = new ArrayList<>();
         final GameSpells spells = new GameSpells(new ManaSpell(desc.config.spell.manaPool.initialCost));
 
         final double mana_ = desc.config.mana.initialManaValue;
@@ -442,6 +442,17 @@ public class GameManager {
                 game.mana -= enemy.health;
             }
         });
+    }
+    
+    public void killEnemy(final GameData game, final Enemy enemy){
+        if(!game.enemies.remove(enemy)){
+            Logger.warn("can't kill enemy {}, doesn't exist in game", enemy);
+            return;
+        }
+        
+        Loggers.GAMEPLAY.debug("kill enemy {}", enemy);
+        
+        game.mana += enemy.manaGainedOnKill;
     }
 
     /**
