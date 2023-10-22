@@ -26,7 +26,7 @@ public final class WizardHouseTile extends Tile {
 
     @Override
     public RenderOrder getRenderOrder() {
-        return RenderOrder.TILE_PRIORITY;
+        return RenderOrder.WIZARD_HOUSE;
     }
 
     @Override
