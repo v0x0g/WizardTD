@@ -115,7 +115,7 @@ public final class TowerTile extends Tile {
      * Calculates the tower's range (in tiles)
      */
     public double calculateRange(final GameData game) {
-        return game.config.tower.initialTowerRange + ((1 + this.rangeUpgrades) * RANGE_INCREASE_ADD);
+        return game.config.tower.initialTowerRange + (this.rangeUpgrades * RANGE_INCREASE_ADD);
     }
 
     /**

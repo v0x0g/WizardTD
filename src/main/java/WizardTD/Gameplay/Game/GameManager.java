@@ -448,6 +448,7 @@ public class GameManager {
         enemy.isAlive = false;
         enemy.health = 0.0;
         game.mana += enemy.manaGainedOnKill;
+        game.mana = Math.min(game.mana, game.manaCap);
     }
 
     /**
