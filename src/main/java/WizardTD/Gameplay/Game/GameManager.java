@@ -237,7 +237,9 @@ public class GameManager {
                                     final BigInteger qty_big = qty <= 0 ? null : BigInteger.valueOf(qty);
                                     final double hp = m.getDouble("hp");
                                     final double manaPerKill = m.getDouble("mana_gained_on_kill");
-                                    final double speed = m.getDouble("speed");
+                                    double speed = m.getDouble("speed");
+                                    // pixels per frame -> tiles/sec
+                                    speed = speed * REFERENCE_FPS / TILE_SIZE_PX;
                                     final double dmgMult = m.getDouble("armour");
 
                                     final HashMap<String, Func5<? extends Enemy, Double, Vector2, Double, Double, Double>>
