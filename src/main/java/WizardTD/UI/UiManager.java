@@ -372,8 +372,8 @@ public class UiManager {
                     if (!(tile instanceof TowerTile)) return;
                     final TowerTile tower = (TowerTile) tile;
 
-                    app.stroke(Theme.RANGE_INDICATOR.asInt());
-                    app.noFill();
+                    app.stroke(Theme.RANGE_INDICATOR_OUTLINE.asInt());
+                    app.fill(Theme.RANGE_INDICATOR_FILL.asInt());
                     app.ellipseMode(PConstants.RADIUS);
                     final Vector2 towerPosPx = UiManager.tileToPixelCoords(tower);
                     final float rangePx = (float) (tower.calculateRange(game) * TILE_SIZE_PX);

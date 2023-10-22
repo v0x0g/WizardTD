@@ -8,7 +8,8 @@ public class Theme {
     public final Colour WIDGET_BACKGROUND = Colour.GREY.withAlpha(0.6);
     public final Colour APP_BACKGROUND = Colour.DARK_GREY;
 
-    public final Colour RANGE_INDICATOR = Colour.YELLOW;
+    public final Colour RANGE_INDICATOR_OUTLINE = Colour.YELLOW;
+    public final Colour RANGE_INDICATOR_FILL = Colour.YELLOW.withAlpha(0.1);
     public final Colour OUTLINE = Colour.LIGHT_GREY;
     public final Colour SELECTION_FILL = OUTLINE.withAlpha(0.5);
 

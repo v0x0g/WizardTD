@@ -19,7 +19,7 @@ import static WizardTD.UI.Appearance.GuiConfig.*;
 
 @UtilityClass
 public class Debug {
-    // TODO: Fix app overlay image
+    // TODO: Fix hover overlay image
     static final PImage tileHoverImage =
             ImageExt.generatePattern(
                     GameConfig.TILE_SIZE_PX, GameConfig.TILE_SIZE_PX,
