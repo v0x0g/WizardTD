@@ -325,6 +325,13 @@ public class UiManager {
                                 tower.rangeCost(),
                                 tower.speedCost() + tower.damageCost() + tower.rangeCost()
                         );
+                        
+                        app.stroke(Theme.RANGE_INDICATOR.asInt());
+                        app.noFill();
+                        app.ellipseMode(PConstants.RADIUS);
+                        final Vector2 towerPosPx = UiManager.tileToPixelCoords(tower);
+                        final float rangePx = (float)(tower.calculateRange(game) * TILE_SIZE_PX);
+                        app.ellipse((float)towerPosPx.x, (float) towerPosPx.y, rangePx, rangePx);
                     }
                     else {
                         final ThreadLocalRandom rng = ThreadLocalRandom.current();
