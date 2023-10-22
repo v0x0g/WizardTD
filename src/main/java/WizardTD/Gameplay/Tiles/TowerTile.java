@@ -19,9 +19,16 @@ import static java.lang.Math.*;
 @EqualsAndHashCode(callSuper = true)
 public final class TowerTile extends Tile {
     public static final double TOWER_UPGRADE_COST = 20.0;
+    public static final double TOWER_UPGRADE_COST_INCREASE = 10.0;
+    public static final double RANGE_INCREASE_ADD = 1;
+    public static final double SPEED_INCREASE_ADD = 0.5;
+    public static final double DAMAGE_INCREASE_MULT = 0.5;
+
+
     public static @Nullable PImage tileLevel0 = null;
     public static @Nullable PImage tileLevel1 = null;
     public static @Nullable PImage tileLevel2 = null;
+    
     public long rangeUpgrades = 0;
     public long speedUpgrades = 0;
     public long damageUpgrades = 0;
@@ -76,21 +83,20 @@ public final class TowerTile extends Tile {
             final GameData game,
             final boolean upgradeRange, final boolean upgradeSpeed, final boolean upgradeDamage) {
 
-        // TODO: COST MIGHT BE WRONG I THINK?
-        if (upgradeRange && game.mana > TOWER_UPGRADE_COST) {
-            game.mana -= TOWER_UPGRADE_COST;
+        if (upgradeRange && game.mana > this.rangeCost()) {
+            game.mana -= this.rangeCost();
 
             this.rangeUpgrades++;
             Loggers.GAMEPLAY.debug("upgrade tower range {}: {}", this, this.rangeUpgrades);
         }
-        if (upgradeSpeed && game.mana > TOWER_UPGRADE_COST) {
-            game.mana -= TOWER_UPGRADE_COST;
+        if (upgradeSpeed && game.mana > this.speedCost()) {
+            game.mana -= this.speedCost();
 
             this.speedUpgrades++;
             Loggers.GAMEPLAY.debug("upgrade tower speed {}: {}", this, this.speedUpgrades);
         }
-        if (upgradeDamage && game.mana > TOWER_UPGRADE_COST) {
-            game.mana -= TOWER_UPGRADE_COST;
+        if (upgradeDamage && game.mana > this.damageCost()) {
+            game.mana -= this.damageCost();
 
             this.damageUpgrades++;
             Loggers.GAMEPLAY.debug("upgrade tower damage {}: {}", this, this.damageUpgrades);
@@ -98,21 +104,38 @@ public final class TowerTile extends Tile {
     }
 
     public double calculateDamage(final GameData game) {
-        final double DAMAGE_INCREASE_MULT = 0.5;
         return game.config.tower.initialTowerDamage * (1 + (this.damageUpgrades * DAMAGE_INCREASE_MULT));
     }
 
     public double calculateSpeed(final GameData game) {
-        final double SPEED_INCREASE_ADD = 0.5;
         return game.config.tower.initialTowerFiringSpeed + (this.speedUpgrades * SPEED_INCREASE_ADD);
     }
-
     /**
      * Calculates the tower's range (in tiles)
      */
     public double calculateRange(final GameData game) {
-        final double RANGE_INCREASE_ADD = 1;
         return game.config.tower.initialTowerRange + ((1 + this.damageUpgrades) * RANGE_INCREASE_ADD);
+    }
+
+    /**
+     * Calculates the cost of upgrading the tower's damage
+     */
+    public double damageCost() {
+        return TOWER_UPGRADE_COST + (TOWER_UPGRADE_COST_INCREASE * this.damageUpgrades);
+    }
+
+    /**
+     * Calculates the cost of upgrading the tower's speed
+     */
+    public double speedCost() {
+        return TOWER_UPGRADE_COST + (TOWER_UPGRADE_COST_INCREASE * this.speedUpgrades);
+    }
+
+    /**
+     * Calculates the cost of upgrading the tower's range
+     */
+    public double rangeCost() {
+        return TOWER_UPGRADE_COST + (TOWER_UPGRADE_COST_INCREASE * this.rangeUpgrades);
     }
 
     @Override

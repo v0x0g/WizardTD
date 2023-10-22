@@ -308,21 +308,23 @@ public class UiManager {
                     setColours(app, Theme.WIDGET_BACKGROUND, Theme.OUTLINE);
                     app.rectMode(PConstants.CORNERS);
                     app.rect((float) TOP_LEFT.x, (float) TOP_LEFT.y, (float) BOT_RIGHT.x, (float) BOT_RIGHT.y);
-                    
+
                     final Vector2 mousePos = new Vector2(app.mouseX, app.mouseY);
                     final Tile tile = UiManager.pixelCoordsToTile(mousePos, game);
                     final String text;
                     if (tile instanceof TowerTile) {
-                        final TowerTile tower = (TowerTile) tile; 
+                        final TowerTile tower = (TowerTile) tile;
                         text = MessageFormat.format(
                                 "Upgrade Cost\n" +
                                 "speed:      {0,number,###}\n" +
                                 "damage:   {1,number,###}\n" +
                                 "range:       {2,number,###}\n" +
                                 "total:         {3,number,###}",
-//                                tower.
-                                6,6,6,66
-                                );
+                                tower.speedCost(),
+                                tower.damageCost(),
+                                tower.rangeCost(),
+                                tower.speedCost() + tower.damageCost() + tower.rangeCost()
+                        );
                     }
                     else {
                         final ThreadLocalRandom rng = ThreadLocalRandom.current();
