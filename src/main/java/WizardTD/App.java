@@ -90,8 +90,8 @@ public final class App extends PApplet {
     public void setup() {
         Logger.info("enter setup");
 
-        Logger.trace("cap framerate: {} fps", GuiConfig.Window.TARGET_FPS);
-        frameRate((float) GuiConfig.Window.TARGET_FPS);
+        Logger.trace("cap framerate: {} fps", GameConfig.TARGET_FPS);
+        frameRate((float) GameConfig.TARGET_FPS);
         EventManager.invokeEvent(new Event(EventType.AppSetup, this));
 
         Logger.info("done setup");

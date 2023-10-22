@@ -24,7 +24,6 @@ import java.util.concurrent.*;
 import java.util.stream.*;
 
 import static WizardTD.GameConfig.*;
-import static WizardTD.UI.Appearance.GuiConfig.*;
 import static WizardTD.UI.Appearance.GuiConfig.UiPositions.*;
 import static WizardTD.UI.Appearance.GuiConfig.Window.*;
 

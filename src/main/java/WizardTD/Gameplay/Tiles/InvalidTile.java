@@ -1,5 +1,6 @@
 package WizardTD.Gameplay.Tiles;
 
+import WizardTD.*;
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Rendering.*;
@@ -17,7 +18,7 @@ import processing.core.*;
 public class InvalidTile extends Tile {
 
     private static final PImage invalidTileImg = ImageExt.generatePattern(
-            GuiConfig.TILE_SIZE_PX, GuiConfig.TILE_SIZE_PX, GuiConfig.TILE_SIZE_PX / 2, 2,
+            GameConfig.TILE_SIZE_PX, GameConfig.TILE_SIZE_PX, GameConfig.TILE_SIZE_PX / 2, 2,
             ImageExt.ImagePattern.CHECKERS,
             Colour.BRIGHT_PURPLE, Colour.RED
     );

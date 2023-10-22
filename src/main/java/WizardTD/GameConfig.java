@@ -27,4 +27,13 @@ public class GameConfig {
      */
     public static final double SUB_TICK_THRESHOLD = 50.0/1000.0 /*50 ms*/;
 
+    /**
+     * How many pixels large each tile is
+     */
+    public static final int TILE_SIZE_PX = 32;
+    /**
+     * Reference framerate assumed by the assignment spec
+     */
+    public static final double REFERENCE_FPS = 60.0;
+    public static final double TARGET_FPS = 120.0;
 }

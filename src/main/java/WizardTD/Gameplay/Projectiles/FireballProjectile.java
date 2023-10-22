@@ -1,5 +1,6 @@
 package WizardTD.Gameplay.Projectiles;
 
+import WizardTD.*;
 import WizardTD.Event.*;
 import WizardTD.Gameplay.Enemies.*;
 import WizardTD.Gameplay.Game.*;
@@ -10,8 +11,6 @@ import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import processing.core.*;
 
-import static WizardTD.UI.Appearance.GuiConfig.*;
-
 @ToString
 @EqualsAndHashCode(callSuper = true)
 public class FireballProjectile extends Projectile {
@@ -19,7 +18,7 @@ public class FireballProjectile extends Projectile {
     /**
      * How many units (tiles) per frame the fireball moves
      */
-    public static final double FIREBALL_SPEED = 5.0 / TILE_SIZE_PX;
+    public static final double FIREBALL_SPEED_TILES = 5.0 / GameConfig.TILE_SIZE_PX;
     /**
      * Distance between an enemy and projectile that is considered a 'hit'.
      * Necessary because of floating-point approximation errors
@@ -71,7 +70,7 @@ public class FireballProjectile extends Projectile {
         // Move towards target
         final Vector2 targetDir = (Vector2) this.targetEnemy.position.subCopy(this.position).toNormal();
         double enemyDistance = this.position.distance(this.targetEnemy.position);
-        final double motionAmount = Math.min(FIREBALL_SPEED, enemyDistance) * gameDeltaTime; // Don't overcompensate
+        final double motionAmount = Math.min(FIREBALL_SPEED_TILES, enemyDistance) * gameDeltaTime; // Don't overcompensate
         final Vector2 motion = (Vector2) targetDir.multiplyCopy(motionAmount);
         this.position.add(motion);
 

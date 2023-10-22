@@ -1,5 +1,6 @@
 package WizardTD.Rendering;
 
+import WizardTD.*;
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.UI.Appearance.*;
@@ -13,15 +14,13 @@ import processing.core.*;
 import java.time.*;
 import java.util.*;
 
-import static WizardTD.UI.Appearance.GuiConfig.*;
-
 @UtilityClass
 @ExtensionMethod(Arrays.class)
 public class Renderer {
     public final PImage missingTextureImage = ImageExt.generatePattern(
-            GuiConfig.TILE_SIZE_PX,
-            GuiConfig.TILE_SIZE_PX,
-            TILE_SIZE_PX / 2,
+            GameConfig.TILE_SIZE_PX,
+            GameConfig.TILE_SIZE_PX,
+            GameConfig.TILE_SIZE_PX / 2,
             2,
             ImageExt.ImagePattern.CHECKERS,
             Colour.BRIGHT_PURPLE,

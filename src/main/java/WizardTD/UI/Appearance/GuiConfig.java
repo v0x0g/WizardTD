@@ -7,10 +7,6 @@ import static WizardTD.UI.Appearance.GuiConfig.UiPositions.*;
 
 @UtilityClass
 public class GuiConfig {
-    /**
-     * How many pixels large each tile is
-     */
-    public static final int TILE_SIZE_PX = 32;
     @UtilityClass
     public class UiPositions {
         /*
@@ -24,8 +20,8 @@ public class GuiConfig {
          * How many pixels wide the sidebar is
          */
         public static final int SIDEBAR_WIDTH_PX = 120;
-        public static final int SIDEBAR_HEIGHT_PX = GameConfig.BOARD_SIZE_TILES * TILE_SIZE_PX;
-        public static final int SIDEBAR_X_PX = GameConfig.BOARD_SIZE_TILES * TILE_SIZE_PX;
+        public static final int SIDEBAR_HEIGHT_PX = GameConfig.BOARD_SIZE_TILES * GameConfig.TILE_SIZE_PX;
+        public static final int SIDEBAR_X_PX = GameConfig.BOARD_SIZE_TILES * GameConfig.TILE_SIZE_PX;
         public static final int SIDEBAR_Y_PX = TOP_BAR_HEIGHT_PX;
 
         /**
@@ -44,7 +40,5 @@ public class GuiConfig {
          * Total window height, in pixels
          */
         public static final int WINDOW_WIDTH_PX = SIDEBAR_X_PX + SIDEBAR_WIDTH_PX;
-        public static final double TARGET_FPS = 60.0f;
     }
-
 }

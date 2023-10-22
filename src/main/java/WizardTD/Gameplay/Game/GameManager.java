@@ -10,7 +10,6 @@ import WizardTD.Gameplay.Spawners.*;
 import WizardTD.Gameplay.Spells.*;
 import WizardTD.Gameplay.Tiles.*;
 import WizardTD.Rendering.*;
-import WizardTD.UI.Appearance.*;
 import com.google.common.collect.Streams;
 import lombok.experimental.*;
 import mikera.vectorz.*;
@@ -129,7 +128,7 @@ public class GameManager {
         final GameDataConfig gameDataConfig;
         try {
             // Names are purposefully like this to match JSON
-            final double initial_tower_range = conf.getDouble("initial_tower_range") / GuiConfig.TILE_SIZE_PX;
+            final double initial_tower_range = conf.getDouble("initial_tower_range") / TILE_SIZE_PX;
             final double initial_tower_firing_speed = conf.getDouble("initial_tower_firing_speed");
             final double initial_tower_damage = conf.getDouble("initial_tower_damage");
             final double initial_mana = conf.getDouble("initial_mana");
