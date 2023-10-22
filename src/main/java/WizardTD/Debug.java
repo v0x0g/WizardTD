@@ -11,6 +11,7 @@ import lombok.experimental.*;
 import mikera.vectorz.*;
 import processing.core.*;
 
+import java.text.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -96,10 +97,13 @@ public class Debug {
                   .filter(TowerTile.class::isInstance)
                   .map(TowerTile.class::cast)
                   .forEach(t -> {
-                      final String str = "r: " + t.rangeUpgrades + "\n" +
-                                         "s: " + t.speedUpgrades + "\n" +
-                                         "d: " + t.damageUpgrades + "\n" +
-                                         "m: " + t.magazine;
+                      final String str = MessageFormat.format(
+                              "r: {0}\ns: {1}\nd: {2}\nm: {3,number,#.000}",
+                              t.rangeUpgrades,
+                              t.speedUpgrades,
+                              t.damageUpgrades,
+                              t.magazine
+                      );
 
                       app.fill(Colour.RED.asInt());
                       app.textAlign(PConstants.CENTER, PConstants.CENTER);
