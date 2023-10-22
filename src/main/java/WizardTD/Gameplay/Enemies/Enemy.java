@@ -1,5 +1,6 @@
 package WizardTD.Gameplay.Enemies;
 
+import WizardTD.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Gameplay.Pathfinding.*;
 import WizardTD.Rendering.*;
@@ -7,9 +8,10 @@ import lombok.*;
 import mikera.vectorz.*;
 
 @ToString
-@EqualsAndHashCode(callSuper = true)
-public abstract class Enemy extends Renderable {
-//TODO: Render
+@EqualsAndHashCode
+public abstract class Enemy implements Tickable, Renderable {
+    public boolean isAlive = true;
+    
     /**
      * How much health the enemy has remaining
      */

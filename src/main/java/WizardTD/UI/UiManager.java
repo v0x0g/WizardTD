@@ -45,8 +45,8 @@ public class UiManager {
 
     public @Nullable Tile pixelCoordsToTile(final Vector2 coords, final GameData gameData) {
         // Use inverse lerp to extract the tile coordinates from the mouse pos
-        final double x = Numerics.inverseLerp(coords.x, BOARD_X_PX, BOARD_X_PX + (CELL_SIZE_PX * BOARD_SIZE_TILES));
-        final double y = Numerics.inverseLerp(coords.y, BOARD_Y_PX, BOARD_Y_PX + (CELL_SIZE_PX * BOARD_SIZE_TILES));
+        final double x = Numerics.inverseLerp(coords.x, BOARD_X_PX, BOARD_X_PX + (TILE_SIZE_PX * BOARD_SIZE_TILES));
+        final double y = Numerics.inverseLerp(coords.y, BOARD_Y_PX, BOARD_Y_PX + (TILE_SIZE_PX * BOARD_SIZE_TILES));
 
         // Floor to avoid small negatives rounding to zero
         final int tileX = (int) (Math.floor(x * BOARD_SIZE_TILES));
@@ -64,8 +64,8 @@ public class UiManager {
      */
     public Vector2 tileToPixelCoords(final Vector2 tilePos) {
         // Offset by the tile's coordinates, and then half a tile extra to move to the centre 
-        final double middlePosX = BOARD_X_PX + (tilePos.x * CELL_SIZE_PX) + (CELL_SIZE_PX / 2.0);
-        final double middlePosY = BOARD_Y_PX + (tilePos.y * CELL_SIZE_PX) + (CELL_SIZE_PX / 2.0);
+        final double middlePosX = BOARD_X_PX + (tilePos.x * TILE_SIZE_PX) + (TILE_SIZE_PX / 2.0);
+        final double middlePosY = BOARD_Y_PX + (tilePos.y * TILE_SIZE_PX) + (TILE_SIZE_PX / 2.0);
         return new Vector2(middlePosX, middlePosY);
     }
 

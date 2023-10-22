@@ -21,7 +21,7 @@ public class Debug {
     // TODO: Fix app overlay image
     static final PImage tileHoverImage =
             ImageExt.generatePattern(
-                    CELL_SIZE_PX, CELL_SIZE_PX,
+                    TILE_SIZE_PX, TILE_SIZE_PX,
                     1, 1,
                     ImageExt.ImagePattern.CHECKERS,
                     Colour.BLACK.withAlpha(0.5),
@@ -59,7 +59,7 @@ public class Debug {
         for (int i = 0; i < paths.size(); i++) {
             final EnemyPath path = paths.get(i);
             // Give each line a slight offset, so they don't all overlap
-            final double offsetVal = Numerics.lerp(-CELL_SIZE_PX / 2.0, CELL_SIZE_PX / 2.0, (double) i / paths.size());
+            final double offsetVal = Numerics.lerp(-TILE_SIZE_PX / 2.0, TILE_SIZE_PX / 2.0, (double) i / paths.size());
             final Vector2 offset = new Vector2(offsetVal, offsetVal);
             final Colour colour = DRAW_COLOURS[i % DRAW_COLOURS.length].withAlpha(0.5);
             // Lerp along the path and draw lines/dots to visualise

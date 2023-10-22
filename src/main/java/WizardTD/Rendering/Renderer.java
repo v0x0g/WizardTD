@@ -20,9 +20,9 @@ import static WizardTD.UI.Appearance.GuiConfig.*;
 @ExtensionMethod(Arrays.class)
 public class Renderer {
     public final PImage missingTextureImage = ImageExt.generatePattern(
-            GuiConfig.CELL_SIZE_PX,
-            GuiConfig.CELL_SIZE_PX,
-            CELL_SIZE_PX / 2,
+            GuiConfig.TILE_SIZE_PX,
+            GuiConfig.TILE_SIZE_PX,
+            TILE_SIZE_PX / 2,
             2,
             ImageExt.ImagePattern.CHECKERS,
             Colour.BRIGHT_PURPLE,

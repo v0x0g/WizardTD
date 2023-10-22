@@ -13,20 +13,6 @@ import processing.core.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public abstract class InteractiveElement extends UiElement {
-//    /**
-//     * Top left corner of the object
-//     */
-//    public Vector2 corner1;
-//    /**
-//     * Bottom right corner of the object
-//     */
-//    public Vector2 corner2;
-//    /**
-//     * A key press that can be used to activate the button, as an alternative to clicking it
-//     */
-//    public @Nullable KeyPress activationKey;
-
-
     /**
      * Checks whether the mouse is currently over this UI Element
      *

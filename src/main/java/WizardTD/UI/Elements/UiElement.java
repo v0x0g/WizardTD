@@ -6,8 +6,8 @@ import lombok.*;
 import processing.core.*;
 
 @ToString
-@EqualsAndHashCode(callSuper = true)
-public abstract class UiElement extends Renderable {
+@EqualsAndHashCode
+public abstract class UiElement implements Renderable {
 
     /**
      * Helper function that sets up simple shape parameters
@@ -24,7 +24,6 @@ public abstract class UiElement extends Renderable {
         app.strokeWeight(2);
     }
 
-    // TODO: Refactor this?
     @Override
     public RenderOrder getRenderOrder() {
         return RenderOrder.UI;

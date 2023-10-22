@@ -2,6 +2,7 @@ package WizardTD.Gameplay.Tiles;
 
 import WizardTD.Event.*;
 import WizardTD.Ext.*;
+import WizardTD.Gameplay.Enemies.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Gameplay.Projectiles.*;
 import WizardTD.Rendering.*;
@@ -11,8 +12,6 @@ import lombok.*;
 import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.*;
 import processing.core.*;
-
-import java.util.Vector;
 
 import static java.lang.Math.*;
 
@@ -30,7 +29,7 @@ public final class TowerTile extends Tile {
     /**
      * Internal counter representing how many fireballs we can fire.
      *
-     * @See See {@link WizardTD.Gameplay.Spawners.Wave#enemySpawnCounter} for better explanation
+     * @see WizardTD.Gameplay.Spawners.Wave#enemySpawnCounter 
      */
     public transient double magazine;
 
@@ -128,8 +127,10 @@ public final class TowerTile extends Tile {
         Loggers.GAMEPLAY.info("tower fire {}", this);
         this.magazine--;
         
-        double damage = this.calculateDamage(game);
+        final double damage = this.calculateDamage(game);
         
-        new FireballProjectile(new Vector2(this.getPos().getX(), this.getPos().getY()), damage);
+        final Vector2 pos = new Vector2(this.getPos().getX(), this.getPos().getY());
+        final Enemy enemy = GameManager.getNearestEnemy(game, pos);
+        new FireballProjectile(pos, enemy, damage);
     }
 }

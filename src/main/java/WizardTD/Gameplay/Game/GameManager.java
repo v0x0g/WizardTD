@@ -445,10 +445,15 @@ public class GameManager {
 
 
         // Tick all the tiles
-        game.board.stream().forEach(t -> t.tick(game, gameDeltaTime,visualDeltaTime));
+        game.board.stream().forEach(t -> t.tick(game, gameDeltaTime, visualDeltaTime));
     }
 
     public void killEnemy(final GameData game, final Enemy enemy) {
+        if (!enemy.isAlive) {
+            Logger.warn("can't kill enemy {}, already dead", enemy);
+            return;
+        }
+
         if (!game.enemies.remove(enemy)) {
             Logger.warn("can't kill enemy {}, doesn't exist in game", enemy);
             return;
@@ -456,7 +461,22 @@ public class GameManager {
 
         Loggers.GAMEPLAY.debug("kill enemy {}", enemy);
 
+        enemy.isAlive = false;
         game.mana += enemy.manaGainedOnKill;
+    }
+
+    public void killProjectile(final GameData game, final Projectile projectile) {
+        if (!game.projectiles.remove(projectile)) {
+            Logger.warn("can't remove projectile {}, doesn't exist in game", projectile);
+        }
+        Loggers.GAMEPLAY.debug("kill projectile {}", projectile);
+    }
+
+    public @Nullable Enemy getNearestEnemy(final GameData game, final Vector2 nearPos) {
+        // This is a linear search, but it shouldn't be an issue since we should be < 1000 elems
+        return game.enemies.stream()
+                           .min(Comparator.comparingDouble(enemy -> nearPos.distanceSquared(enemy.position)))
+                           .orElse(null);
     }
 
     /**

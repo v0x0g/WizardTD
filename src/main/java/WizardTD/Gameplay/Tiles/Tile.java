@@ -7,8 +7,8 @@ import lombok.*;
 import java.util.*;
 
 @ToString
-@EqualsAndHashCode(callSuper = true)
-public abstract class Tile extends Renderable {
+@EqualsAndHashCode
+public abstract class Tile implements Renderable {
 
     @Getter @NonNull private final TilePos pos = new TilePos(0,0);
     
