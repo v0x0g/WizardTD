@@ -54,12 +54,12 @@ public class FireballProjectile extends Projectile {
     @Override
     public void tick(final @NonNull GameData game, final double visualDeltaTime, final double gameDeltaTime) {
         // Choose new target if old one dead
-        if (!this.targetEnemy.isAlive) {
+        if (this.targetEnemy == null ||!this.targetEnemy.isAlive) {
             this.targetEnemy = GameManager.getNearestEnemy(game, this.position);
         }
 
-        // No enemy, fireball goes out with a bang
-        if (this.targetEnemy == null) {
+        // Still no enemy, fireball goes out with a bang
+        if (this.targetEnemy == null || !this.targetEnemy.isAlive) {
             GameManager.killProjectile(game, this);
             return;
         }
