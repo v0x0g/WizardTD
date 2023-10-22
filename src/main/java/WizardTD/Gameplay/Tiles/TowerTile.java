@@ -110,11 +110,12 @@ public final class TowerTile extends Tile {
     public double calculateSpeed(final GameData game) {
         return game.config.tower.initialTowerFiringSpeed + (this.speedUpgrades * SPEED_INCREASE_ADD);
     }
+
     /**
      * Calculates the tower's range (in tiles)
      */
     public double calculateRange(final GameData game) {
-        return game.config.tower.initialTowerRange + ((1 + this.damageUpgrades) * RANGE_INCREASE_ADD);
+        return game.config.tower.initialTowerRange + ((1 + this.rangeUpgrades) * RANGE_INCREASE_ADD);
     }
 
     /**

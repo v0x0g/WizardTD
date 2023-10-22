@@ -108,7 +108,7 @@ public class Debug {
                       app.fill(Colour.RED.asInt());
                       app.textAlign(PConstants.CENTER, PConstants.CENTER);
                       app.textSize(Theme.TEXT_SIZE_NORMAL);
-                      app.textLeading(Theme.TEXT_SIZE_NORMAL * 0.6f);
+                      app.textLeading(Theme.TEXT_SIZE_NORMAL);
                       final Vector2 pos = UiManager.tileToPixelCoords(t);
                       app.text(str, (float) pos.x, (float) pos.y);
                   });
