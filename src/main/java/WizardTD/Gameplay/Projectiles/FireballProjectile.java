@@ -10,7 +10,7 @@ import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import processing.core.*;
 
-import static WizardTD.UI.Appearance.GuiConfig.TILE_SIZE_PX;
+import static WizardTD.UI.Appearance.GuiConfig.*;
 
 @ToString
 @EqualsAndHashCode(callSuper = true)
@@ -28,7 +28,7 @@ public class FireballProjectile extends Projectile {
     public final double damage;
     public Enemy targetEnemy;
 
-    public FireballProjectile(final Vector2 position, final Enemy targetEnemy,final double baseDamage) {
+    public FireballProjectile(final Vector2 position, final Enemy targetEnemy, final double baseDamage) {
         super(position);
         this.damage = baseDamage;
         this.targetEnemy = targetEnemy;
@@ -49,12 +49,12 @@ public class FireballProjectile extends Projectile {
     @Override
     public void tick(final @NonNull GameData game, final double visualDeltaTime, final double gameDeltaTime) {
         // Choose new target if old one dead
-        if(!this.targetEnemy.isAlive){
+        if (!this.targetEnemy.isAlive) {
             this.targetEnemy = GameManager.getNearestEnemy(game, this.position);
         }
-        
+
         // No enemy, fireball goes out with a bang
-        if(this.targetEnemy == null){
+        if (this.targetEnemy == null) {
             GameManager.killProjectile(game, this);
             return;
         }

@@ -12,7 +12,6 @@ import processing.core.*;
 
 import java.time.*;
 import java.util.*;
-import java.util.concurrent.*;
 
 import static WizardTD.UI.Appearance.GuiConfig.*;
 
@@ -28,40 +27,51 @@ public class Renderer {
             Colour.BRIGHT_PURPLE,
             Colour.BLACK
     );
-    private static final ThreadLocal<ConcurrentHashMap<RenderOrder, List<Renderable>>> renderOrderMaps =
-            ThreadLocal.withInitial(ConcurrentHashMap::new);
-    private static final RenderOrder[] renderOrders =
-            RenderOrder.values()
-                       .stream()
-                       .sorted()
-                       .toArray(RenderOrder[]::new);
+
+    /**
+     * This contains cached HashMaps and Lists for use when sorting objects for rendering.
+     * This allows memory reuse (lists and maps are pooled), massively increasing performance
+     * and reducing allocations.
+     * <p>
+     * I use thread-locals here just in case, probably not necessary, but it's good practice to be certain
+     * (thanks Rust)
+     */
+    private static final ThreadLocal<HashMap<RenderOrder, List<Renderable>>> renderOrderMaps =
+            ThreadLocal.withInitial(HashMap::new);
+
+    /**
+     * Sorted array containing the render orders.
+     * Iterate over this in order to render everything correctly
+     */
+    private static final RenderOrder[] sortedRenderOrders =
+            RenderOrder.values().stream().sorted().toArray(RenderOrder[]::new);
 
     public void render(final PApplet app, final GameData game, final UiState ui) {
         Loggers.RENDER.debug("start render");
         final Instant startInstant = Instant.now();
         // When we render, we aggregate all the `Renderables`, and sort them into our map
         // Then iterate through the map in the correct order, and happy days
-        final ConcurrentHashMap<RenderOrder, List<Renderable>> renderOrderMap = renderOrderMaps.get();
+        final HashMap<RenderOrder, List<Renderable>> renderOrderMap = renderOrderMaps.get();
 
         renderOrderMap.clear(); // Reset the mapping
-        
+
         Streams.concat(game.enemies.stream(), game.projectiles.stream(), game.board.stream(), ui.uiElements.stream())
-               .forEach(obj -> // Get the set for this render order, or create if missing
-                                renderOrderMap
-                                        .computeIfAbsent(obj.getRenderOrder(), $_ -> new ArrayList<>())
-                                        .add(obj)// Add the object to that set
+               // Get the set for this render order, or create if missing
+               .forEach(obj -> renderOrderMap.computeIfAbsent(obj.getRenderOrder(), $_ -> new ArrayList<>())
+                                             .add(obj)// Add the object to that set
                );
 
-        renderOrders.stream()
-                    // map.get() CAN RETURN NULL, CARE
-                    .map(key -> new AbstractMap.SimpleEntry<>(key, renderOrderMap.get(key)))
-                    .forEach((final AbstractMap.SimpleEntry<RenderOrder, @Nullable List<Renderable>> entry) -> {
-                        final RenderOrder order = entry.getKey();
-                        final @Nullable List<Renderable> objs = entry.getValue();
-                        Loggers.RENDER.debug("render group {}", order);
-                        if (objs != null) objs.forEach(obj -> obj.render(app, game, ui));
-                        else Loggers.RENDER.debug("render group {} empty", order);
-                    });
+
+        // WARNING: map.get() can return null, if there have been no objects in that render group so far
+        // (and therefore the entry was never initialised)
+        sortedRenderOrders.stream()
+                          .map(key -> new AbstractMap.SimpleEntry<>(key, renderOrderMap.get(key)))
+                          .forEach(entry -> {
+                              final RenderOrder order = entry.getKey();
+                              final @Nullable List<Renderable> objs = entry.getValue();
+                              Loggers.RENDER.debug("render group {} (size {})", order, objs != null ? objs.size() : 0);
+                              if (objs != null) objs.forEach(obj -> obj.render(app, game, ui));
+                          });
 
         final Instant endInstant = Instant.now();
         Loggers.RENDER.debug(

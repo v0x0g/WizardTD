@@ -8,6 +8,7 @@ import WizardTD.Gameplay.Projectiles.*;
 import WizardTD.Gameplay.Spawners.*;
 import WizardTD.Gameplay.Spells.*;
 import WizardTD.Gameplay.Tiles.*;
+import WizardTD.Rendering.*;
 import com.google.common.collect.Streams;
 import lombok.experimental.*;
 import mikera.vectorz.*;
@@ -35,7 +36,15 @@ import static org.tinylog.Logger.*;
  */
 @UtilityClass
 public class GameManager {
-
+    /**
+     * This contains cached HashMaps and Lists for use when grouping objects for ticking.
+     * This allows memory reuse (lists and maps are pooled), massively increasing performance 
+     * and reducing allocations.
+     * 
+     * @see Renderer#renderOrderMaps
+     */
+    private static final ThreadLocal<List<Tickable>> cachedTickableLists = ThreadLocal.withInitial(ArrayList::new);
+    
     /**
      * Loads the game config from disk, and returns it as a JSON object
      */
@@ -425,8 +434,17 @@ public class GameManager {
         }
 
         // Tick all enemies, projectiles, etc
+        // Because ticking might involve modification of the streams (such as removing enemies that die)
+        // We need to create a copy of the collections
+        // So use a (pooled) list
+
+        // When we render, we aggregate all the `Renderables`, and sort them into our map
+        // Then iterate through the map in the correct order, and happy days
+        final List<Tickable> tickers = cachedTickableLists.get();
+        tickers.clear(); // Reset the list
         Streams.<Tickable>concat(game.enemies.stream(), game.board.stream(), game.projectiles.stream())
-                       .forEach(e -> e.tick(game, visualDeltaTime, gameDeltaTime));
+                .forEach(tickers::add);
+        tickers.forEach(e -> e.tick(game, visualDeltaTime, gameDeltaTime));
 
         // Check if enemies have reached harry potter
         game.enemies.forEach(enemy -> {
