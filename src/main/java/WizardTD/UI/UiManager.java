@@ -312,8 +312,8 @@ public class UiManager {
             addSidebarButton(
                     uiState,
                     sidebarButtonPos,
-                    "P", "Path Overlay",
-                    KeyCode.P,
+                    "E", "Enemy Paths",
+                    KeyCode.E,
                     (button, app, game, ui) ->
                             Logger.debug("toggle path overlay = {}", Debug.pathfindingOverlayEnabled ^= true),
                     (button, app, game, ui) -> button.fillColour =

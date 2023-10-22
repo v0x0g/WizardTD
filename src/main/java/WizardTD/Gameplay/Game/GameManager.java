@@ -427,14 +427,19 @@ public class GameManager {
         game.enemies.forEach(e -> e.tick(game, visualDeltaTime, gameDeltaTime));
 
         // Check if enemies have reached harry potter
-        game.enemies.forEach(e -> {
+        game.enemies.forEach(enemy -> {
             // If the enemy is closer than this threshold, they have reached the house
             // Banish them
             final double DISTANCE_THRESHOLD = 1.0;
-            if (Math.abs(e.pathProgress - e.path.positions.length) < DISTANCE_THRESHOLD) {
-                Loggers.GAMEPLAY.debug("enemy {} reached end of path (wizard)", e);
-                e.pathProgress = 0.0;
-                game.mana -= e.health;
+            if (Math.abs(enemy.pathProgress - enemy.path.positions.length) < DISTANCE_THRESHOLD) {
+                Loggers.GAMEPLAY.debug("enemy {} reached end of path (wizard)", enemy);
+                enemy.pathProgress = 0.0;
+                // Choose a random path for the enemy to go along
+                final int pathIdx = ThreadLocalRandom.current().nextInt(game.enemyPaths.size());
+                final EnemyPath path = game.enemyPaths.get(pathIdx);
+                Loggers.GAMEPLAY.trace("switch path {}; path = [{}]: {}", enemy, pathIdx, path);
+                enemy.path = path;
+                game.mana -= enemy.health;
             }
         });
     }

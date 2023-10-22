@@ -12,6 +12,7 @@ import mikera.vectorz.*;
 import processing.core.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 import static WizardTD.UI.Appearance.GuiConfig.*;
 
@@ -109,31 +110,31 @@ public class Debug {
     }
 
     public void showF3Overlay(final PApplet app, final GameData game, final UiState ui) {
-        if(!f3OverlayEnabled) return;
-        
+        if (!f3OverlayEnabled) return;
+
         final String str = String.format(
                 "\n" +
                 "===== FRAMES =====\n" +
-                "avgFps=%03.1f, fps=%03.1f, frameCount=%05d\n" +
-                "lastTick=%08.3f, appTick=%08.3f, deltaTime=%.4f\n" +
+                "avgFps=%03.1f fps, fps=%03.1f fps, frameCount=%05d f\n" +
+                "lastTick=%08.3fs, appTick=%08.3fs, deltaTime=%.4fs\n" +
                 "uiElements=%02d\n" +
-                
+
                 "\n" +
                 "===== TICK =====\n" +
-                "subTickThresh=%03.1f, numTicks=%02d, speedMult=%03.1f\n" +
-                "gameDelta=%01.4f, visualDelta=%01.4f\n" +
-                
+                "subTickThresh=%03.1f s, numTicks=%02d, speedMult=%03.1f\n" +
+                "gameDelta=%01.4f s, visualDelta=%01.4f s\n" +
+
                 "\n" +
                 "===== PATHFINDING =====\n" +
-                "pathCount=%03d, length=%02d\n" +
-                
+                "pathCount=%03d, lengths=%s\n" +
+
                 "\n" +
                 "===== ENTITIES =====\n" +
                 "enemies=%03d, projectiles=%03d\n" +
-                
+
                 "\n" +
                 "===== MANA =====\n" +
-                "trickle=%03.2f (%03.2f), mult=%03.02f",
+                "trickle=%03.2f (%03.2f) /sec, mult=x%03.02f",
 
                 Stats.Frames.avgFps, Stats.Frames.fps, Stats.Frames.frameCount,
                 Stats.Frames.lastTick, Stats.Frames.thisTick, Stats.Frames.deltaTime,
@@ -142,38 +143,42 @@ public class Debug {
                 Stats.Tick.subTickThresh, Stats.Tick.numTicks, Stats.Tick.speedMultiplier,
                 Stats.Tick.gameDelta, Stats.Tick.visualDelta,
 
-                game.enemyPaths.size(), game.enemyPaths.isEmpty() ? -1 : game.enemyPaths.get(0).positions.length,
+                game.enemyPaths.size(), game.enemyPaths.stream().collect(
+                        Collectors.groupingBy(p -> p.positions.length, Collectors.counting())),
 
                 game.enemies.size(), game.projectiles.size(),
 
-                game.config.mana.initialManaTrickle, game.config.mana.initialManaTrickle * game.manaGainMultiplier, game.manaGainMultiplier
-                
+                game.config.mana.initialManaTrickle, game.config.mana.initialManaTrickle *
+                                                     game.manaGainMultiplier, game.manaGainMultiplier
+
         );
 
-        final float x1 = 16, y1 = 40 + 16;
+        final float x1 = 16, y1 = 40 + 16,
+                x2 = UiPositions.SIDEBAR_X_PX, y2 = Window.WINDOW_HEIGHT_PX;
 
         app.fill(Theme.TEXT.asInt());
         app.textAlign(PConstants.LEFT, PConstants.TOP);
         app.textSize(Theme.TEXT_SIZE_NORMAL);
-
-        app.text(str, x1, y1);
+        app.rectMode(PConstants.CORNERS);
+        app.text(str, x1, y1, x2, y2);
     }
+
     /**
      * Class containing statistics for debugging purposes
      */
     @UtilityClass
     public class Stats {
         @UtilityClass
-        public class Frames{
-                public double fps, avgFps;
-                public double lastTick, thisTick, deltaTime;
-                public long frameCount;
+        public class Frames {
+            public double fps, avgFps;
+            public double lastTick, thisTick, deltaTime;
+            public long frameCount;
         }
         @UtilityClass
-        public class Tick{
-                public double subTickThresh, speedMultiplier;
-                public double gameDelta, visualDelta;
-                public long numTicks;
+        public class Tick {
+            public double subTickThresh, speedMultiplier;
+            public double gameDelta, visualDelta;
+            public long numTicks;
         }
     }
 }
