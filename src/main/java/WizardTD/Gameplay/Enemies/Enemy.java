@@ -4,19 +4,27 @@ import WizardTD.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Gameplay.Pathfinding.*;
 import WizardTD.Rendering.*;
+import WizardTD.UI.*;
+import WizardTD.UI.Appearance.*;
 import lombok.*;
 import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import processing.core.*;
 
 @ToString
 @EqualsAndHashCode
 public abstract class Enemy implements Tickable, Renderable {
     public boolean isAlive = true;
-    
+
     /**
      * How much health the enemy has remaining
      */
     public double health;
+    /**
+     * Maximum amount of health the enemy can have.
+     * Only used for the health bar
+     */
+    public double maxHealth;
 
     /**
      * Where the enemy is on the map.
@@ -44,8 +52,10 @@ public abstract class Enemy implements Tickable, Renderable {
     public double pathProgress;
 
     protected Enemy(
-            final double health, final Vector2 position, final double speed, final double damageMultiplier, final double manaGainedOnKill) {
+            final double health, final Vector2 position, final double speed, final double damageMultiplier,
+            final double manaGainedOnKill) {
         this.health = health;
+        this.maxHealth = health;
         this.position = position;
         this.speed = speed;
         this.damageMultiplier = damageMultiplier;
@@ -67,5 +77,36 @@ public abstract class Enemy implements Tickable, Renderable {
         // Move along the path
         this.pathProgress += gameDeltaTime * this.speed;
         this.position = this.path.calculatePos(this.pathProgress);
+    }
+
+    @Override
+    public void render(final PApplet app, final GameData gameData, final UiState uiState) {
+        this.renderHealthBar(app);
+    }
+
+    /**
+     * Renders a health bar above the enemy
+     */
+    public void renderHealthBar(final PApplet app) {
+        /// Offset from the enemy's position to render the bar at
+        final Vector2 OFFSET_PX = new Vector2(16, 0);
+        /// How large the bar should be
+        final Vector2 DIMENSIONS_PX = new Vector2(48, 4);
+
+        final Vector2 uiPos = UiManager.tileToPixelCoords(this.position);
+        uiPos.add(OFFSET_PX);
+        
+        final double healthRatio = this.health / this.maxHealth;
+        
+        final Vector2 corner1 = (Vector2) uiPos.subCopy(DIMENSIONS_PX.multiplyCopy(0.5));
+        final Vector2 corner2 = (Vector2) uiPos.addCopy(DIMENSIONS_PX.multiplyCopy(0.5));
+        final Vector2 midCorner =  new Vector2 (uiPos.x + (DIMENSIONS_PX.x * healthRatio), corner2.y);
+        
+        app.noStroke();
+        app.rectMode(PConstants.CORNERS);
+        app.fill(Theme.HEALTH_MISSING.asInt());
+        app.rect((float)corner1.x, (float) corner1.y, (float) corner2.x, (float) corner2.y);
+        app.fill(Theme.HEALTH_FULL.asInt());
+        app.rect((float)corner1.x, (float) corner1.y, (float) midCorner.x, (float) midCorner.y);
     }
 }
