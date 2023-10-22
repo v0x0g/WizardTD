@@ -6,9 +6,10 @@ import WizardTD.Gameplay.Pathfinding.*;
 import WizardTD.Rendering.*;
 import lombok.*;
 import mikera.vectorz.*;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public abstract class Enemy implements Tickable, Renderable {
     public boolean isAlive = true;
     
@@ -62,7 +63,7 @@ public abstract class Enemy implements Tickable, Renderable {
         return RenderOrder.ENTITY;
     }
 
-    public void tick(final GameData game, final double visualDeltaTime, final double gameDeltaTime) {
+    public void tick(final @NonNull GameData game, final double visualDeltaTime, final double gameDeltaTime) {
         // Move along the path
         this.pathProgress += gameDeltaTime * this.speed;
         this.position = this.path.calculatePos(this.pathProgress);
