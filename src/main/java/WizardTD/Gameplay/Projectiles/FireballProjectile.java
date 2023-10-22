@@ -55,7 +55,8 @@ public class FireballProjectile extends Projectile {
     public void tick(final @NonNull GameData game, final double visualDeltaTime, final double gameDeltaTime) {
         // Choose new target if old one dead
         if (this.targetEnemy == null ||!this.targetEnemy.isAlive) {
-            this.targetEnemy = GameManager.getNearestEnemy(game, this.position);
+            // Range is arbitrary, so I chose tower range
+            this.targetEnemy = GameManager.getNearestEnemy(game, this.position, game.config.tower.initialTowerDamage);
         }
 
         // Still no enemy, fireball goes out with a bang

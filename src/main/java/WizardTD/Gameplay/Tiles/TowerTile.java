@@ -124,8 +124,10 @@ public final class TowerTile extends Tile {
         // Don't have any fireballs
         if (this.magazine < 1.0) return;
         
+        final double range = this.calculateRange(game);
+        
         final Vector2 thisPos = new Vector2(this.getPos().getX(), this.getPos().getY());
-        final Enemy enemy = GameManager.getNearestEnemy(game, thisPos);
+        final Enemy enemy = GameManager.getNearestEnemy(game, thisPos, range);
         if(enemy == null) return;
 
         this.magazine--;

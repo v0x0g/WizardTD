@@ -509,9 +509,10 @@ public class GameManager {
         Loggers.GAMEPLAY.debug("kill projectile {}", projectile);
     }
 
-    public @Nullable Enemy getNearestEnemy(final GameData game, final Vector2 nearPos) {
+    public @Nullable Enemy getNearestEnemy(final GameData game, final Vector2 nearPos, final double maxDist) {
         // This is a linear search, but it shouldn't be an issue since we should be < 1000 elems
         return game.enemies.stream()
+                           .filter(enemy -> nearPos.distanceSquared(enemy.position) < (maxDist * maxDist))
                            .min(Comparator.comparingDouble(enemy -> nearPos.distanceSquared(enemy.position)))
                            .orElse(null);
     }
