@@ -20,6 +20,11 @@ public class FireballProjectile extends Projectile {
      * How many units (tiles) per frame the fireball moves
      */
     public static final double FIREBALL_SPEED = 5.0 / TILE_SIZE_PX;
+    /**
+     * Distance between an enemy and projectile that is considered a 'hit'.
+     * Necessary because of floating-point approximation errors
+     */
+    public static final double HIT_DISTANCE_THRESHOLD = 0.01;
 
     private static PImage projectileImage;
     /**
@@ -59,11 +64,19 @@ public class FireballProjectile extends Projectile {
             return;
         }
         
-        // Calculate direction between this and target
+        // Move towards target
         final Vector2 targetDir = (Vector2) this.targetEnemy.position.subCopy(this.position).toNormal();
-        final Vector2 motion = (Vector2) targetDir.multiplyCopy(FIREBALL_SPEED);
-
+        double enemyDistance = this.position.distance(this.targetEnemy.position);
+        final double motionAmount = Math.min(FIREBALL_SPEED, enemyDistance); // Don't overcompensate
+        final Vector2 motion = (Vector2) targetDir.multiplyCopy(motionAmount);
         this.position.add(motion);
+        
+        // Calculate distance again on we've moved, to see if we're close enough to kill
+        enemyDistance = this.position.distance(this.targetEnemy.position);
+        if(enemyDistance < HIT_DISTANCE_THRESHOLD){
+            GameManager.damageEnemy(game, this.targetEnemy,this.damage);
+            GameManager.killProjectile(game, this);
+        }
     }
 
     @Override

@@ -38,13 +38,13 @@ import static org.tinylog.Logger.*;
 public class GameManager {
     /**
      * This contains cached HashMaps and Lists for use when grouping objects for ticking.
-     * This allows memory reuse (lists and maps are pooled), massively increasing performance 
+     * This allows memory reuse (lists and maps are pooled), massively increasing performance
      * and reducing allocations.
-     * 
+     *
      * @see Renderer#renderOrderMaps
      */
     private static final ThreadLocal<List<Tickable>> cachedTickableLists = ThreadLocal.withInitial(ArrayList::new);
-    
+
     /**
      * Loads the game config from disk, and returns it as a JSON object
      */
@@ -443,7 +443,7 @@ public class GameManager {
         final List<Tickable> tickers = cachedTickableLists.get();
         tickers.clear(); // Reset the list
         Streams.<Tickable>concat(game.enemies.stream(), game.board.stream(), game.projectiles.stream())
-                .forEach(tickers::add);
+               .forEach(tickers::add);
         tickers.forEach(e -> e.tick(game, visualDeltaTime, gameDeltaTime));
 
         // Check if enemies have reached harry potter
@@ -478,7 +478,28 @@ public class GameManager {
         Loggers.GAMEPLAY.debug("kill enemy {}", enemy);
 
         enemy.isAlive = false;
+        enemy.health = 0.0;
         game.mana += enemy.manaGainedOnKill;
+    }
+
+    /**
+     * Deals damage to an enemy, killing them if their health reaches zero
+     *
+     * @param baseDamage Base damage to be dealt (before damage multipliers)
+     */
+    public void damageEnemy(final GameData game, final Enemy enemy, final double baseDamage) {
+        if (!enemy.isAlive) return;
+        final double dmg = baseDamage * enemy.damageMultiplier;
+        enemy.health -= dmg;
+        Loggers.GAMEPLAY.trace(
+                "damage enemy {}: {} x {} ({}) -> {} hp",
+                enemy,
+                baseDamage,
+                enemy.damageMultiplier,
+                dmg,
+                enemy.health
+        );
+        if (enemy.health <= 0) killEnemy(game, enemy);
     }
 
     public void killProjectile(final GameData game, final Projectile projectile) {
