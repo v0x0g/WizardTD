@@ -8,6 +8,7 @@ import WizardTD.Gameplay.Projectiles.*;
 import WizardTD.Gameplay.Spawners.*;
 import WizardTD.Gameplay.Spells.*;
 import WizardTD.Gameplay.Tiles.*;
+import com.google.common.collect.Streams;
 import lombok.experimental.*;
 import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.*;
@@ -423,8 +424,9 @@ public class GameManager {
             break;
         }
 
-        // Update all enemies
-        game.enemies.forEach(e -> e.tick(game, visualDeltaTime, gameDeltaTime));
+        // Tick all enemies, projectiles, etc
+        Streams.<Tickable>concat(game.enemies.stream(), game.board.stream(), game.projectiles.stream())
+                       .forEach(e -> e.tick(game, visualDeltaTime, gameDeltaTime));
 
         // Check if enemies have reached harry potter
         game.enemies.forEach(enemy -> {
@@ -442,10 +444,6 @@ public class GameManager {
                 game.mana -= enemy.health;
             }
         });
-
-
-        // Tick all the tiles
-        game.board.stream().forEach(t -> t.tick(game, gameDeltaTime, visualDeltaTime));
     }
 
     public void killEnemy(final GameData game, final Enemy enemy) {

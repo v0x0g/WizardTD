@@ -1,5 +1,6 @@
 package WizardTD.Gameplay.Tiles;
 
+import WizardTD.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Rendering.*;
 import lombok.*;
@@ -8,7 +9,7 @@ import java.util.*;
 
 @ToString
 @EqualsAndHashCode
-public abstract class Tile implements Renderable {
+public abstract class Tile implements Renderable, Tickable {
 
     @Getter @NonNull private final TilePos pos = new TilePos(0,0);
     
