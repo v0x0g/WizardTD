@@ -138,24 +138,19 @@ public class Debug {
                 "avgFps=%03.1f fps, fps=%03.1f fps, frameCount=%05d f\n" +
                 "lastTick=%08.3fs, appTick=%08.3fs, deltaTime=%.4fs\n" +
                 "uiElements=%02d\n" +
-
                 "\n" +
                 "===== PERF =====\n" +
                 "renderTime=%04.1f ms, tickTime=%04.1f ms\n" +
-
                 "\n" +
                 "===== TICK =====\n" +
                 "subTickThresh=%03.1f s, numTicks=%02d, speedMult=%03.1f\n" +
                 "gameDelta=%01.4f s, visualDelta=%01.4f s\n" +
-
                 "\n" +
                 "===== PATHFINDING =====\n" +
                 "pathCount=%03d, lengths=%s\n" +
-
                 "\n" +
                 "===== ENTITIES =====\n" +
                 "enemies=%03d, projectiles=%03d\n" +
-
                 "\n" +
                 "===== MANA =====\n" +
                 "trickle=%03.2f (%03.2f) /sec, mult=x%03.02f",
