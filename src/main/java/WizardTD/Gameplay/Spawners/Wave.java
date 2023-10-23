@@ -1,5 +1,6 @@
 package WizardTD.Gameplay.Spawners;
 
+import WizardTD.Ext.*;
 import WizardTD.Gameplay.Enemies.*;
 import lombok.*;
 import org.checkerframework.checker.nullness.qual.*;
@@ -7,6 +8,7 @@ import org.tinylog.*;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.stream.*;
 
 @ToString
 @EqualsAndHashCode
@@ -26,16 +28,21 @@ public final class Wave {
     public final double spawnRateMult;
     public final List<EnemyFactory> enemyFactories;
     public final long waveNumber;
-
     /**
      * Internal value used to keep track of how enemies to spawn.
      * This should be incremented each frame by @c deltaTime.
      * It indicates how many available enemies there are to spawn;
      * e.g. a value of 2.31 indicates we have 2 enemy slots available
      */
-    private double enemySpawnCounter = 0;
+    private double enemySpawnCounter;
     @Getter
-    private double timer = 0;
+    private double timer;
+
+    public Wave(final Wave w) {
+        this(w.duration, w.delayBeforeWave, w.spawnRateMult, w.waveNumber,
+             w.enemyFactories.stream().map(EnemyFactory::new).collect(Collectors.toList())
+            );
+    }
 
     public Wave(
             final double duration, final double delayBeforeWave, final double spawnRateMult,
@@ -46,6 +53,8 @@ public final class Wave {
         this.spawnRateMult = spawnRateMult;
         this.enemyFactories = enemyFactories;
         this.waveNumber = waveNumber;
+        enemySpawnCounter = 0.0;
+        timer = 0.0;
     }
 
     public void tick(final double deltaTime) {
@@ -74,11 +83,11 @@ public final class Wave {
             @Nullable Enemy enemy;
             try {
                 enemy = factory.spawnEnemy();
-            }
-            catch (final NoSuchElementException e) {
+            } catch (final NoSuchElementException e) {
                 // NoSuchElementException indicates the factory is empty
                 // so remove
                 this.enemyFactories.remove(randIndex);
+                Loggers.GAMEPLAY.trace("remove factory {}", factory);
                 enemy = null;
             }
 

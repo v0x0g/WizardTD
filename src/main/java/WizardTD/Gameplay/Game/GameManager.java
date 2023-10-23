@@ -297,7 +297,7 @@ public class GameManager {
         // this is a real pain in the rear end
         desc = new GameDescriptor(desc);
         
-        final Board board = new Board(desc.board.tiles);
+        final Board board = desc.board;
         final List<Enemy> enemies = new ArrayList<>();
         final List<Projectile> projectiles = new ArrayList<>();
         final List<Wave> waves = new ArrayList<>(desc.waves);
@@ -395,7 +395,7 @@ public class GameManager {
             final Wave wave = game.waves.get(0);
             wave.tick(gameDeltaTime);
             if (wave.getWaveState() == Wave.WaveState.COMPLETE) {
-                Loggers.GAMEPLAY.debug("wave complete, moving onto next");
+                Loggers.GAMEPLAY.debug("wave {} complete, moving onto next {}", wave.waveNumber, wave);
                 game.waves.remove(0);
                 continue;
             }

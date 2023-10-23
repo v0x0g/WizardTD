@@ -2,6 +2,7 @@ package WizardTD.Gameplay.Game;
 
 import WizardTD.Gameplay.Spawners.*;
 import lombok.*;
+import lombok.experimental.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -14,6 +15,7 @@ import java.util.stream.*;
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor
+@ExtensionMethod(Arrays.class)
 public class GameDescriptor {
 
     public final String name;
@@ -25,15 +27,12 @@ public class GameDescriptor {
     public final List<Wave> waves;
 
     public GameDescriptor(final GameDescriptor other) {
-        this.board = new Board(other.board.tiles);
+        this.board = new Board(other.board);
         this.name = other.name;
         this.config = other.config;
         this.waves = other.waves
                 .stream()
-                .map(w -> new Wave(w.duration, w.delayBeforeWave, w.spawnRateMult,
-                                   w.waveNumber,
-                                   w.enemyFactories.stream().map(EnemyFactory::new).collect(Collectors.toList())
-                ))
+                .map(Wave::new)
                 .collect(Collectors.toList());
     }
 }

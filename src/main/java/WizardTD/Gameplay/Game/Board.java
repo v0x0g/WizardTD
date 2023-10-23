@@ -3,8 +3,8 @@ package WizardTD.Gameplay.Game;
 import WizardTD.Gameplay.Tiles.*;
 import lombok.*;
 import lombok.experimental.*;
-import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.*;
 
 import java.text.*;
 import java.util.*;
@@ -14,21 +14,34 @@ import static WizardTD.GameConfig.*;
 
 @EqualsAndHashCode
 @ExtensionMethod(Arrays.class)
-@AllArgsConstructor
-@RequiredArgsConstructor
 public final class Board {
-
     /**
      * Array storing the map of tiles for the board.
      * <p>
      * This should always be sized exactly `[BOARD_SIZE_TILES][BOARD_SIZE_TILES]`.
      * Indices are `[row][col]`
      */
-    public @NonNull Tile[][] tiles =
-            // Default value is filled with invalid tiles
-            IntStream.range(0, BOARD_SIZE_TILES).mapToObj(
-                    $_ -> IntStream.range(0, BOARD_SIZE_TILES).mapToObj($__ -> (Tile) new InvalidTile())
-                                   .toArray(Tile[]::new)).toArray(Tile[][]::new);
+    public @NonNull Tile[][] tiles;
+
+    public Board(@NonNull final Board other) {
+        // Default value is filled with invalid tiles
+        tiles = new Tile[BOARD_SIZE_TILES][BOARD_SIZE_TILES];
+        for (int i = 0; i < BOARD_SIZE_TILES; i++) {
+            for (int j = 0; j < BOARD_SIZE_TILES; j++) {
+                tiles[i][j] = other.tiles[i][j];
+            }
+        }
+    }
+
+    public Board() {
+        // Default value is filled with invalid tiles
+        tiles = new Tile[BOARD_SIZE_TILES][BOARD_SIZE_TILES];
+        for (int i = 0; i < BOARD_SIZE_TILES; i++) {
+            for (int j = 0; j < BOARD_SIZE_TILES; j++) {
+                tiles[i][j] = new InvalidTile();
+            }
+        }
+    }
 
     public Tile getTile(final int row, final int col) {
         return this.tiles[row][col];
@@ -76,7 +89,7 @@ public final class Board {
                 "\n", (Iterable<String>) this.tiles.stream().map(row -> String.join(
                         " ",
                         (Iterable<String>) row.stream().map(tile -> tile.toString().substring(0, 1))::iterator
-                ))::iterator));
+                                                                                   ))::iterator));
     }
 
     /**
