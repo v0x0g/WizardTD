@@ -18,7 +18,7 @@ public class GameConfig {
     /**
      * How fast the game should go when fast-forwarded
      */
-    public static final double FAST_FORWARD_SPEED = 2.0;
+    public static final double FAST_FORWARD_SPEED = 20.0;
     /**
      * Time threshold for enabling subticks.
      * <p>

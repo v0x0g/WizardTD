@@ -75,30 +75,22 @@ public class UiManager {
     public void initUi(final UiState uiState) {
         // ===== BACKGROUND =====
         {
-            uiState.uiElements.add(
-                    new RectElement(
-                            new Vector2(TOP_BAR_X_PX, TOP_BAR_Y_PX),
-                            new Vector2(WINDOW_WIDTH_PX, TOP_BAR_HEIGHT_PX),
-                            Theme.APP_BACKGROUND,
-                            Colour.NONE
-                    ) {
-                        @Override
-                        public RenderOrder getRenderOrder() {
-                            return RenderOrder.UI_BACKGROUND;
-                        }
-                    }
-            );
-            uiState.uiElements.add(
-                    new RectElement(
-                            new Vector2(SIDEBAR_X_PX, SIDEBAR_Y_PX),
-                            new Vector2(WINDOW_WIDTH_PX, WINDOW_HEIGHT_PX),
-                            Theme.APP_BACKGROUND,
-                            Colour.NONE
-                    ) {
-                        @Override
-                        public RenderOrder getRenderOrder() {return RenderOrder.UI_BACKGROUND;}
-                    }
-            );
+            uiState.uiElements.add(new RectElement(new Vector2(TOP_BAR_X_PX, TOP_BAR_Y_PX),
+                                                   new Vector2(WINDOW_WIDTH_PX, TOP_BAR_HEIGHT_PX),
+                                                   Theme.APP_BACKGROUND, Colour.NONE
+            ) {
+                @Override
+                public RenderOrder getRenderOrder() {
+                    return RenderOrder.UI_BACKGROUND;
+                }
+            });
+            uiState.uiElements.add(new RectElement(new Vector2(SIDEBAR_X_PX, SIDEBAR_Y_PX),
+                                                   new Vector2(WINDOW_WIDTH_PX, WINDOW_HEIGHT_PX), Theme.APP_BACKGROUND,
+                                                   Colour.NONE
+            ) {
+                @Override
+                public RenderOrder getRenderOrder() {return RenderOrder.UI_BACKGROUND;}
+            });
         }
 
         // ===== MANA BAR =====
@@ -108,146 +100,99 @@ public class UiManager {
             uiState.uiElements.add(new RectElement(manaBarPos1, manaBarPos2, Theme.WIDGET_BACKGROUND, Theme.OUTLINE));
 
 
-            uiState.uiElements.add(
-                    new DynamicWrapperElement<>(
-                            new RectElement(manaBarPos1,
-                                            new Vector2(0, 0) /* Will be overwritten */,
-                                            Theme.MANA,
-                                            Theme.OUTLINE
-                            ),
-                            (rectElement, app, game, ui) -> {
-                                // Each frame, update the position of the mana bar to reflect the
-                                // fraction of how much mana the wizard has, compared to the max
-                                rectElement.pos2.x = Numerics.lerp(
-                                        manaBarPos1.x,
-                                        manaBarPos2.x,
-                                        Math.max(0, game.mana / game.manaCap)
-                                );
-                                rectElement.pos2.y = manaBarPos2.y;
-                            }
-                    )
-            );
-            uiState.uiElements.add(
-                    new DynamicWrapperElement<>(
-                            new TextElement(manaBarPos1, manaBarPos2, ""),
-                            (text, app, game, ui) -> text.text =
-                                    MessageFormat.format(
-                                            "Mana: {0,number,integer}/{1,number,integer}",
-                                            game.mana,
-                                            game.manaCap
-                                    )
-                    )
-            );
+            uiState.uiElements.add(new DynamicWrapperElement<>(
+                    new RectElement(manaBarPos1, new Vector2(0, 0) /* Will be overwritten */, Theme.MANA,
+                                    Theme.OUTLINE
+                    ), (rectElement, app, game, ui) -> {
+                // Each frame, update the position of the mana bar to reflect the
+                // fraction of how much mana the wizard has, compared to the max
+                rectElement.pos2.x = Numerics.lerp(manaBarPos1.x, manaBarPos2.x, Math.max(0, game.mana / game.manaCap));
+                rectElement.pos2.y = manaBarPos2.y;
+            }));
+            uiState.uiElements.add(new DynamicWrapperElement<>(new TextElement(manaBarPos1, manaBarPos2, ""),
+                                                               (text, app, game, ui) -> text.text =
+                                                                       MessageFormat.format(
+                                                                               "Mana: {0,number,integer}/{1,number,integer}",
+                                                                               game.mana, game.manaCap
+                                                                       )
+            ));
         }
 
         // ===== NEXT WAVE INDICATOR =====
         {
             final Vector2 waveIndicatorPos1 = new Vector2(0, 10);
             final Vector2 waveIndicatorPos2 = new Vector2(320, 30);
-            uiState.uiElements.add(new DynamicWrapperElement<>(new TextElement(
-                    waveIndicatorPos1,
-                    waveIndicatorPos2,
-                    ""
-            ), (text, app, game, ui) -> {
-                final Wave wave = game.waves.isEmpty() ? null : game.waves.get(0);
-                if (wave == null) {
-                    text.text = "No more waves remaining";
-                }
-                else if (wave.getWaveState() == Wave.WaveState.PRE_DELAY) {
-                    final double timeTillSpawn = -wave.getTimer() + wave.delayBeforeWave;
-                    text.text = MessageFormat.format(
-                            "Wave {0,number,##} starts: {1,number,00.00} seconds",
-                            wave.waveNumber,
-                            timeTillSpawn
-                    );
-                }
-                else if (wave.getWaveState() == Wave.WaveState.SPAWNING) {
-                    text.text = MessageFormat.format("Wave {0,number,##} spawning now", wave.waveNumber);
-                }
-                else if (wave.getWaveState() == Wave.WaveState.COMPLETE) {
-                    text.text = MessageFormat.format("Wave {0,number,##} complete", wave.waveNumber);
-                }
-                else {
-                    text.text = "ERROR: WAVE GOOFED";
-                    Loggers.GAMEPLAY.warn("wave {} had invalid wave state", wave.waveNumber);
-                }
-            }));
+            uiState.uiElements.add(
+                    new DynamicWrapperElement<>(new TextElement(waveIndicatorPos1, waveIndicatorPos2, ""),
+                                                (text, app, game, ui) -> {
+                                                    final Wave wave = game.waves.isEmpty() ? null : game.waves.get(0);
+                                                    if (wave == null) {
+                                                        text.text = "No more waves remaining";
+                                                    }
+                                                    else if (wave.getWaveState() == Wave.WaveState.PRE_DELAY) {
+                                                        final double timeTillSpawn =
+                                                                -wave.getTimer() + wave.delayBeforeWave;
+                                                        text.text = MessageFormat.format(
+                                                                "Wave {0,number,##} starts: {1,number,00.00} seconds",
+                                                                wave.waveNumber, timeTillSpawn
+                                                        );
+                                                    }
+                                                    else if (wave.getWaveState() == Wave.WaveState.SPAWNING) {
+                                                        text.text =
+                                                                MessageFormat.format("Wave {0,number,##} spawning now",
+                                                                                     wave.waveNumber
+                                                                );
+                                                    }
+                                                    else if (wave.getWaveState() == Wave.WaveState.COMPLETE) {
+                                                        text.text = MessageFormat.format("Wave {0,number,##} complete",
+                                                                                         wave.waveNumber
+                                                        );
+                                                    }
+                                                    else {
+                                                        text.text = "ERROR: WAVE GOOFED";
+                                                        Loggers.GAMEPLAY.warn(
+                                                                "wave {} had invalid wave state", wave.waveNumber);
+                                                    }
+                                                }
+                    ));
         }
 
 
         // ===== SIDEBAR BUTTONS =====
         final Vector2 sidebarButtonPos = new Vector2(SIDEBAR_X_PX + 8, SIDEBAR_Y_PX + 8);
         {
-            addSidebarButton(
-                    uiState,
-                    sidebarButtonPos,
-                    "FF",
-                    "Fast Forward",
-                    KeyCode.F,
-                    (button, app, game, ui) -> Logger.debug(
-                            "toggle fast forward = {}",
-                            game.fastForward ^= true
-                    ),
-                    (button, app, game, ui) -> button.fillColour =
+            addSidebarButton(uiState, sidebarButtonPos, "FF", "Fast Forward", KeyCode.F,
+                             (button, app, game, ui) -> Logger.debug("toggle fast forward = {}",
+                                                                     game.fastForward ^= true
+                             ), (button, app, game, ui) -> button.fillColour =
                             Theme.buttonColour(game.fastForward, button.isHovered)
             );
-            addSidebarButton(
-                    uiState,
-                    sidebarButtonPos,
-                    "P",
-                    "Pause",
-                    KeyCode.P,
-                    (button, app, game, ui) -> Logger.debug("toggle pause = {}", game.paused ^= true),
-                    (button, app, game, ui) -> button.fillColour =
-                            Theme.buttonColour(game.paused, button.isHovered)
+            addSidebarButton(uiState, sidebarButtonPos, "P", "Pause", KeyCode.P,
+                             (button, app, game, ui) -> Logger.debug("toggle pause = {}", game.paused ^= true),
+                             (button, app, game, ui) -> button.fillColour =
+                                     Theme.buttonColour(game.paused, button.isHovered)
             );
-            addSidebarButton(
-                    uiState,
-                    sidebarButtonPos,
-                    "T",
-                    "Build Tower",
-                    KeyCode.T,
-                    (button, app, game, ui) -> Logger.debug("toggle tower = {}", ui.wantsPlaceTower ^= true),
-                    (button, app, game, ui) -> button.fillColour =
-                            Theme.buttonColour(ui.wantsPlaceTower, button.isHovered)
+            addSidebarButton(uiState, sidebarButtonPos, "T", "Build Tower", KeyCode.T,
+                             (button, app, game, ui) -> Logger.debug("toggle tower = {}", ui.wantsPlaceTower ^= true),
+                             (button, app, game, ui) -> button.fillColour =
+                                     Theme.buttonColour(ui.wantsPlaceTower, button.isHovered)
             );
-            addSidebarButton(
-                    uiState,
-                    sidebarButtonPos,
-                    "U1",
-                    "Upgrade Range",
-                    KeyCode.NUM_1,
-                    (button, app, game, ui) -> Logger.debug(
-                            "toggle upgrade range = {}",
-                            ui.upgradeRange ^= true
-                    ),
-                    (button, app, game, ui) -> button.fillColour =
+            addSidebarButton(uiState, sidebarButtonPos, "U1", "Upgrade Range", KeyCode.NUM_1,
+                             (button, app, game, ui) -> Logger.debug("toggle upgrade range = {}",
+                                                                     ui.upgradeRange ^= true
+                             ), (button, app, game, ui) -> button.fillColour =
                             Theme.buttonColour(ui.upgradeRange, button.isHovered)
             );
-            addSidebarButton(
-                    uiState,
-                    sidebarButtonPos,
-                    "U2",
-                    "Upgrade Speed",
-                    KeyCode.NUM_2,
-                    (button, app, game, ui) -> Logger.debug(
-                            "toggle upgrade speed = {}",
-                            ui.upgradeSpeed ^= true
-                    ),
-                    (button, app, game, ui) -> button.fillColour =
+            addSidebarButton(uiState, sidebarButtonPos, "U2", "Upgrade Speed", KeyCode.NUM_2,
+                             (button, app, game, ui) -> Logger.debug("toggle upgrade speed = {}",
+                                                                     ui.upgradeSpeed ^= true
+                             ), (button, app, game, ui) -> button.fillColour =
                             Theme.buttonColour(ui.upgradeSpeed, button.isHovered)
             );
-            addSidebarButton(
-                    uiState,
-                    sidebarButtonPos,
-                    "U3",
-                    "Upgrade Damage",
-                    KeyCode.NUM_3,
-                    (button, app, game, ui) -> Logger.debug(
-                            "toggle upgrade damage = {}",
-                            ui.upgradeDamage ^= true
-                    ),
-                    (button, app, game, ui) -> button.fillColour =
+            addSidebarButton(uiState, sidebarButtonPos, "U3", "Upgrade Damage", KeyCode.NUM_3,
+                             (button, app, game, ui) -> Logger.debug("toggle upgrade damage = {}",
+                                                                     ui.upgradeDamage ^= true
+                             ), (button, app, game, ui) -> button.fillColour =
                             Theme.buttonColour(ui.upgradeDamage, button.isHovered)
             );
             addSidebarButton(uiState, sidebarButtonPos, "M", "Mana Pool", KeyCode.M,
@@ -258,24 +203,23 @@ public class UiManager {
                                  game.spells.manaSpell.cast(game);
                              }, (button, app, game, ui) -> {
                         final double ANIM_SPEED = 0.03;
-                        button.fillColour = Colour.lerp(
-                                button.fillColour,
-                                button.isHovered ? Theme.BUTTON_HOVERED : Theme.BUTTON_DISABLED,
-                                ANIM_SPEED
+                        button.fillColour = Colour.lerp(button.fillColour,
+                                                        button.isHovered ? Theme.BUTTON_HOVERED : Theme.BUTTON_DISABLED,
+                                                        ANIM_SPEED
                         );
                         // A slight hack to modify the text that shows the cost of the spell
                         // Don't really have a good way to access the text
                         // It would be pointless to refactor addSidebarButton() for one use case
-                        final TextElement text = ui.uiElements.stream().filter(TextElement.class::isInstance).map(
-                                TextElement.class::cast).filter(t -> t.text.startsWith("Mana Pool")).findAny().orElse(
-                                null);
+                        final TextElement text = ui.uiElements.stream().filter(TextElement.class::isInstance)
+                                                              .map(TextElement.class::cast)
+                                                              .filter(t -> t.text.startsWith("Mana Pool")).findAny()
+                                                              .orElse(null);
                         if (text == null) {
                             Loggers.UI.warn("couldn't find the text element for the mana pool description");
                         }
                         else {
-                            text.text = MessageFormat.format(
-                                    "Mana Pool:\nCost: {0,number,####}",
-                                    game.spells.manaSpell.currentCost
+                            text.text = MessageFormat.format("Mana Pool:\nCost: {0,number,####}",
+                                                             game.spells.manaSpell.currentCost
                             );
                         }
                     }
@@ -285,14 +229,9 @@ public class UiManager {
         // ===== BOARD  =====
         {
             // Board click handler (tower upgrading)
-            uiState.uiElements.add(new ButtonElement(
-                    new Vector2(BOARD_X_PX, BOARD_Y_PX),
-                    new Vector2(SIDEBAR_X_PX, WINDOW_HEIGHT_PX),
-                    null,
-                    Colour.NONE,
-                    Colour.NONE,
-                    null,
-                    (button, app, game, ui) -> {
+            uiState.uiElements.add(
+                    new ButtonElement(new Vector2(BOARD_X_PX, BOARD_Y_PX), new Vector2(SIDEBAR_X_PX, WINDOW_HEIGHT_PX),
+                                      null, Colour.NONE, Colour.NONE, null, (button, app, game, ui) -> {
                         Loggers.GAMEPLAY.debug("board clicked");
 
                         if (!ui.wantsPlaceTower) return;
@@ -300,23 +239,14 @@ public class UiManager {
                         Loggers.INPUT.info("place tower interaction");
                         // Find which tile is hovered
                         // Should never be null, since this element should perfectly cover the board
-                        final Tile tile =
-                                UiManager.pixelCoordsToTile(new Vector2(
-                                        app.mouseX,
-                                        app.mouseY
-                                ), game);
+                        final Tile tile = UiManager.pixelCoordsToTile(new Vector2(app.mouseX, app.mouseY), game);
                         assert tile != null;
 
-                        GameManager.placeOrUpgradeTower(
-                                app,
-                                game,
-                                tile,
-                                ui.upgradeRange,
-                                ui.upgradeSpeed,
-                                ui.upgradeDamage
+                        GameManager.placeOrUpgradeTower(app, game, tile, ui.upgradeRange, ui.upgradeSpeed,
+                                                        ui.upgradeDamage
                         );
                     }
-            ));
+                    ));
 
             // Tower upgrade cost indicator
             // It's kinda cool that you can do this, I guess
@@ -332,33 +262,45 @@ public class UiManager {
 
                     final Vector2 mousePos = new Vector2(app.mouseX, app.mouseY);
                     final Tile tile = UiManager.pixelCoordsToTile(mousePos, game);
-                    final String text;
+                    final StringBuilder text = new StringBuilder("Upgrade Cost:\n");
                     if (tile instanceof TowerTile) {
                         final TowerTile tower = (TowerTile) tile;
-                        text = MessageFormat.format(
-                                "Upgrade Cost\n" + "speed:      {0,number,###}\n" + "damage:   {1,number,###}\n" +
-                                "range:       {2,number,###}\n" + "total:         {3,number,###}",
-                                tower.speedCost(),
-                                tower.damageCost(),
-                                tower.rangeCost(),
-                                tower.speedCost() + tower.damageCost() + tower.rangeCost()
-                        );
+                        double totalCost = 0.0;
+                        if (ui.upgradeRange) {
+                            text.append("Range:  ").append((int) tower.rangeCost()).append('\n');
+                            totalCost += tower.rangeCost();
+                        }
+                        if (ui.upgradeSpeed) {
+                            text.append("Speed:  ").append((int) tower.speedCost()).append('\n');
+                            totalCost += tower.speedCost();
+                        }
+                        if (ui.upgradeDamage) {
+                            text.append("Damage: ").append((int) tower.damageCost()).append('\n');
+                            totalCost += tower.damageCost();
+                        }
+                        if (totalCost != 0.0) text.append("Total:  ").append((int) totalCost);
+                    }
+                    else if (tile instanceof WizardHouseTile) {
+                        // A little easter egg...
+                        final ThreadLocalRandom threadLocalPseudoRandomNumberGenerator = ThreadLocalRandom.current();
+                        //noinspection MagicNumber
+                        text.append(MessageFormat.format(
+                                "Speed:      {0,}\nDamage:   {1}\nRange:       {2}\nTotal;         {3}",
+                                (char) threadLocalPseudoRandomNumberGenerator.nextInt(16, 255),
+                                (char) threadLocalPseudoRandomNumberGenerator.nextInt(16, 255),
+                                (char) threadLocalPseudoRandomNumberGenerator.nextInt(16, 255),
+                                (char) threadLocalPseudoRandomNumberGenerator.nextInt(16, 255)
+                        ));
                     }
                     else {
-                        final ThreadLocalRandom rng = ThreadLocalRandom.current();
-                        text = MessageFormat.format(
-                                "Upgrade Cost\n" + "speed:      {0,}\n" + "damage:   {1}\n" + "range:       {2}\n" +
-                                "total;         {3}",
-                                (char) rng.nextInt(16, 255),
-                                (char) rng.nextInt(16, 255),
-                                (char) rng.nextInt(16, 255),
-                                (char) rng.nextInt(16, 255)
-                        );
+                        text.append("\nNot hovering tower");
                     }
                     app.textSize(Theme.TEXT_SIZE_NORMAL);
                     app.textAlign(PConstants.LEFT, PConstants.TOP);
                     app.fill(Theme.TEXT.asInt());
-                    app.text(text, (float) TOP_LEFT.x, (float) TOP_LEFT.y, (float) BOT_RIGHT.x, (float) BOT_RIGHT.y);
+                    app.text(text.toString(), (float) TOP_LEFT.x, (float) TOP_LEFT.y, (float) BOT_RIGHT.x,
+                             (float) BOT_RIGHT.y
+                    );
                 }
             });
 
@@ -390,56 +332,28 @@ public class UiManager {
 
         // ===== DEBUG STUFF =====
         {
-            addSidebarButton(
-                    uiState,
-                    sidebarButtonPos,
-                    "H",
-                    "Hover Overlay",
-                    KeyCode.H,
-                    (button, app, game, ui) -> Logger.debug(
-                            "toggle tile hover overlay = {}",
-                            Debug.tileHoverOverlayEnabled ^= true
-                    ),
-                    (button, app, game, ui) -> button.fillColour =
+            addSidebarButton(uiState, sidebarButtonPos, "H", "Hover Overlay", KeyCode.H,
+                             (button, app, game, ui) -> Logger.debug("toggle tile hover overlay = {}",
+                                                                     Debug.tileHoverOverlayEnabled ^= true
+                             ), (button, app, game, ui) -> button.fillColour =
                             Theme.buttonColour(Debug.tileHoverOverlayEnabled, button.isHovered)
             );
-            addSidebarButton(
-                    uiState,
-                    sidebarButtonPos,
-                    "E",
-                    "Enemy Paths",
-                    KeyCode.E,
-                    (button, app, game, ui) -> Logger.debug(
-                            "toggle path overlay = {}",
-                            Debug.pathfindingOverlayEnabled ^= true
-                    ),
-                    (button, app, game, ui) -> button.fillColour =
+            addSidebarButton(uiState, sidebarButtonPos, "E", "Enemy Paths", KeyCode.E,
+                             (button, app, game, ui) -> Logger.debug("toggle path overlay = {}",
+                                                                     Debug.pathfindingOverlayEnabled ^= true
+                             ), (button, app, game, ui) -> button.fillColour =
                             Theme.buttonColour(Debug.pathfindingOverlayEnabled, button.isHovered)
             );
-            addSidebarButton(
-                    uiState,
-                    sidebarButtonPos,
-                    "U",
-                    "Upgrade Overlay",
-                    KeyCode.U,
-                    (button, app, game, ui) -> Logger.debug(
-                            "toggle tower upgrade overlay = {}",
-                            Debug.towerUpgradeOverlayEnabled ^= true
-                    ),
-                    (button, app, game, ui) -> button.fillColour =
+            addSidebarButton(uiState, sidebarButtonPos, "U", "Upgrade Overlay", KeyCode.U,
+                             (button, app, game, ui) -> Logger.debug("toggle tower upgrade overlay = {}",
+                                                                     Debug.towerUpgradeOverlayEnabled ^= true
+                             ), (button, app, game, ui) -> button.fillColour =
                             Theme.buttonColour(Debug.towerUpgradeOverlayEnabled, button.isHovered)
             );
-            addSidebarButton(
-                    uiState,
-                    sidebarButtonPos,
-                    "F3",
-                    "Stats Overlay",
-                    KeyCode.FUNCTION_3,
-                    (button, app, game, ui) -> Logger.debug(
-                            "toggle f3 overlay = {}",
-                            Debug.f3OverlayEnabled ^= true
-                    ),
-                    (button, app, game, ui) -> button.fillColour =
+            addSidebarButton(uiState, sidebarButtonPos, "F3", "Stats Overlay", KeyCode.FUNCTION_3,
+                             (button, app, game, ui) -> Logger.debug("toggle f3 overlay = {}",
+                                                                     Debug.f3OverlayEnabled ^= true
+                             ), (button, app, game, ui) -> button.fillColour =
                             Theme.buttonColour(Debug.f3OverlayEnabled, button.isHovered)
             );
         }
@@ -469,20 +383,11 @@ public class UiManager {
         final Vector2 buttonPos2 = (Vector2) buttonPos.addCopy(buttonSize);
         buttonPos.y += buttonSize.y + SPACING;
 
-        uiState.uiElements.add(new DynamicWrapperElement<>(new ButtonElement(
-                buttonPos1,
-                buttonPos2,
-                text,
-                Theme.BUTTON_DISABLED,
-                Theme.OUTLINE,
-                activationKey ==
-                null ? null : new KeyPress(
-                        activationKey,
-                        false,
-                        KeyAction.PRESS
-                ),
-                click
-        ), draw));
+        uiState.uiElements.add(new DynamicWrapperElement<>(
+                new ButtonElement(buttonPos1, buttonPos2, text, Theme.BUTTON_DISABLED, Theme.OUTLINE,
+                                  activationKey == null ? null : new KeyPress(activationKey, false, KeyAction.PRESS),
+                                  click
+                ), draw));
 
         final Vector2 descPos1 = (Vector2) buttonPos1.addCopy(new Vector2(BUTTON_SIZE + SPACING, 0));
         final Vector2 descPos2 = new Vector2(WINDOW_WIDTH_PX, descPos1.y + BUTTON_SIZE);
@@ -495,13 +400,10 @@ public class UiManager {
     public void mouseEvent(
             final PApplet app, final GameData gameData, final UiState uiState, final MousePress press) {
         final @Nullable Tile tile = UiManager.pixelCoordsToTile(new Vector2(press.coords.x, press.coords.y), gameData);
-        if (tile != null) Loggers.INPUT.debug(
-                "mouse event: {}; [{}, {}]: {}",
-                press,
-                tile.getPos().getX(),
-                tile.getPos().getY(),
-                tile
-        );
+        if (tile != null)
+            Loggers.INPUT.debug("mouse event: {}; [{}, {}]: {}", press, tile.getPos().getX(), tile.getPos().getY(),
+                                tile
+            );
         else Loggers.INPUT.debug("mouse event: {}; no tile", press);
 
         // Click any elements that matched on hovering
@@ -546,8 +448,7 @@ public class UiManager {
                 return (InteractiveElement) elem;
             }
             // Also see if it's a DynamicWrapperElement
-            else if ((elem instanceof DynamicWrapperElement) &&
-                     (((DynamicWrapperElement<UiElement>) elem).element instanceof InteractiveElement)) {
+            else if ((elem instanceof DynamicWrapperElement) && (((DynamicWrapperElement<UiElement>) elem).element instanceof InteractiveElement)) {
                 return (InteractiveElement) ((DynamicWrapperElement<UiElement>) elem).element;
             }
             // Couldn't cast, skip it
