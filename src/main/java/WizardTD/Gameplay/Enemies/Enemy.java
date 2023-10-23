@@ -96,6 +96,9 @@ public abstract class Enemy implements Tickable, Renderable {
         final Vector2 uiPos = UiManager.tileToPixelCoords(this.position);
         uiPos.add(OFFSET_PX);
 
+        // Don't render on max HP
+        if (this.health == this.maxHealth) return;
+
         final double healthRatio = this.health / this.maxHealth;
 
         final Vector2 corner1 = (Vector2) uiPos.subCopy(DIMENSIONS_PX.multiplyCopy(0.5));
