@@ -30,7 +30,7 @@ public class TextElement extends UiElement {
     public void render(final PApplet app, final GameData gameData, final UiState uiState) {
         app.fill(Theme.TEXT.asInt());
         app.rectMode(this.rectPosMode);
-        app.textAlign(this.textAlignMode);
+        app.textAlign(this.textAlignMode, this.textAlignMode);
         app.textSize(this.fontSize);
         app.text(
                 this.text,

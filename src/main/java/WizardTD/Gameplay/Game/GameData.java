@@ -17,6 +17,8 @@ import java.util.*;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public final class GameData {
+    
+    public @NonNull GameState gameState;
 
     public @NonNull Board board;
 

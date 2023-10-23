@@ -62,8 +62,7 @@ public final class App extends PApplet {
         Logger.debug("run PApplet.main({})", APP_CLASS_NAME);
         try {
             PApplet.main(APP_CLASS_NAME);
-        }
-        catch (final Exception e) {
+        } catch (final Exception e) {
             if (e.getCause() instanceof InvocationTargetException && e
                     .getCause()
                     .getCause() instanceof AppInitException)
@@ -154,12 +153,10 @@ public final class App extends PApplet {
         final double deltaTime = thisTick - lastTick;
         this.lastFrameTime = thisTick;
 
-        final double tickDuration = Debug.timeAction(() -> GameManager.tickGameWithSubtick(this, this.gameData, deltaTime));
-        
         Loggers.RENDER.trace("background");
         background(Colour.DEEP_PURPLE.asInt());
-        
-        Loggers.RENDER.trace("render gameData");
+
+        final double tickDuration = Debug.timeAction(() -> GameManager.tickGameWithSubtick(this, this.gameData, deltaTime));
         final double renderDuration = Debug.timeAction(() -> Renderer.render(this, this.gameData, this.uiState));
 
         Debug.Stats.Frames.deltaTime = deltaTime;

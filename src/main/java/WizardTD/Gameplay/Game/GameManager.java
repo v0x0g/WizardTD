@@ -303,7 +303,7 @@ public class GameManager {
         final double mana_ = desc.config.mana.initialManaValue;
         final double manaCap_ = desc.config.mana.initialManaCap;
 
-        final GameData game = new GameData(board, enemies, projectiles, waves, new ArrayList<>(), desc.config, spells);
+        final GameData game = new GameData(GameState.PLAYING, board, enemies, projectiles, waves, new ArrayList<>(), desc.config, spells);
         game.mana = mana_;
         game.manaCap = manaCap_;
 
@@ -434,6 +434,16 @@ public class GameManager {
                 game.mana -= enemy.health;
             }
         });
+        
+        // Update win/loss status
+        if (game.gameState == GameState.PLAYING && game.mana <= 0.0){
+            game.gameState = GameState.LOST;
+            Loggers.GAMEPLAY.info("game lost (out of mana)");
+        }
+        else if (game.gameState == GameState.PLAYING && game.waves.isEmpty() && game.enemies.isEmpty()){
+            game.gameState = GameState.WON;
+            Loggers.GAMEPLAY.info("game won (no more waves)");
+        }
     }
 
     public void killEnemy(final GameData game, final Enemy enemy) {

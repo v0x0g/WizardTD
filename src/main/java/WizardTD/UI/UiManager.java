@@ -236,6 +236,26 @@ public class UiManager {
             );
         }
 
+        // ===== MISC ===== 
+        {
+            uiState.uiElements.add(new DynamicWrapperElement<>(
+                    new TextElement(new Vector2(0.0, 0.0), new Vector2(WINDOW_WIDTH_PX, WINDOW_HEIGHT_PX), "") {{
+                        this.fontSize = 100;
+                        this.textAlignMode = PConstants.CENTER;
+                    }},
+                    (elem, app, game, ui) -> {
+                        // Stupid java doesn't have proper match statements, so I made my own
+                        final GameState s = game.gameState;
+                        elem.text =
+                                (s == GameState.PLAYING) ? "" :
+                                (s == GameState.WON) ? "YOU WON" :
+                                (s == GameState.LOST) ? "YOU LOST" :
+                                "Bro what did you do to your game, this state ain't valid";
+
+                    }
+            ));
+        }
+
         // ===== BOARD  =====
         {
             // Board click handler (tower upgrading)

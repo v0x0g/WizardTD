@@ -94,37 +94,6 @@
           "quantity": 999
         }
       ]
-    },
-
-    {
-      "duration": 99999999999999,
-      "pre_wave_pause": 0,
-      "monsters": [
-        {
-          "type": "gremlin",
-          "hp": 150,
-          "speed": 1.0,
-          "armour": 0.7,
-          "mana_gained_on_kill": 70,
-          "quantity": 999999999999999
-        },
-        {
-          "type": "worm",
-          "hp": 1,
-          "speed": 1.0,
-          "armour": 0.7,
-          "mana_gained_on_kill": 70,
-          "quantity": 999999999999999
-        },
-        {
-          "type": "beetle",
-          "hp": 150,
-          "speed": 1.0,
-          "armour": 0.7,
-          "mana_gained_on_kill": 70,
-          "quantity": 999999999999999
-        }
-      ]
     }
   ],
   "initial_tower_range": 96,
