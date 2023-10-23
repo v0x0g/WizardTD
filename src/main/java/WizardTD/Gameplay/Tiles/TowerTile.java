@@ -57,7 +57,7 @@ public final class TowerTile extends Tile {
          * You need an upgrade of level 20+ which is dumb
          */
 
-        // This is the lowest level hat has all upgrades
+        // This is the lowest level that has all upgrades
         final long towerLevel = min(min(this.damageUpgrades, this.rangeUpgrades), this.speedUpgrades);
         // Since we only have sprites up to level 2, we have to cap it :(
         final long cappedTowerLevel = min(2, towerLevel);
@@ -68,7 +68,19 @@ public final class TowerTile extends Tile {
 
         Renderer.renderSimpleTile(app, tileImage, UiManager.tileToPixelCoords(this));
         final Vector2 pixelPos = UiManager.tileToPixelCoords(this);
-
+        
+        // Render speed upgrade
+        final float SPEED_INDICATOR_RADIUS = 20.0f;
+        app.rectMode(PConstants.CENTER);
+        app.noFill();
+        // Special maths: `ln(x^2 + 1)`
+        final double speedIndicatorWidth = Math.log(Math.pow(this.speedUpgrades - cappedTowerLevel, 2) + 1);
+        // `1 - a/(x+a), a=20`
+        final double speedIndicatorStrength = 1.0 - (20.0 / (this.speedUpgrades - cappedTowerLevel + 20.0));
+        app.strokeWeight((float) speedIndicatorWidth);
+        app.stroke(Colour.lerp(Theme.TOWER_UPGRADE_SPEED, Colour.BLACK, speedIndicatorStrength).asInt());
+        app.rect((float) pixelPos.x, (float) pixelPos.y, SPEED_INDICATOR_RADIUS, SPEED_INDICATOR_RADIUS);
+        
         // Render range upgrade
         final float RANGE_INDICATOR_SIZE = 10.0f;
         app.rectMode(PConstants.CENTER);
@@ -76,22 +88,10 @@ public final class TowerTile extends Tile {
         app.fill(Theme.TOWER_UPGRADE_RANGE.asInt());
         final int numRangeIndicators = (int) (this.rangeUpgrades - cappedTowerLevel);
         app.textSize(RANGE_INDICATOR_SIZE);
-        final Vector2 rangePos = (Vector2) UiManager.tileToPixelCoords(this).addCopy(new Vector2(-16, -12));
+        final Vector2 rangePos = (Vector2) pixelPos.addCopy(new Vector2(-16, -12));
         final StringBuilder rangeStr = new StringBuilder();
         for (int i = 0; i < numRangeIndicators; i++) rangeStr.append('O');
         app.text(rangeStr.toString(), (float) rangePos.x, (float) rangePos.y);
-
-        // Render speed upgrade
-        final float SPEED_INDICATOR_RADIUS = 20.0f;
-        app.rectMode(PConstants.CENTER);
-        app.noFill();
-        // Special maths: `ln(x^2 + 1)`
-        final double speedIndicatorWidth = Math.log(Math.pow(this.speedUpgrades - cappedTowerLevel, 2) + 1);
-        // `a/(x+a), a=2`
-        final double speedIndicatorStrength = 2.0 / (this.speedUpgrades - cappedTowerLevel + 2);
-        app.strokeWeight((float) speedIndicatorWidth);
-        app.stroke(Colour.lerp(Theme.TOWER_UPGRADE_SPEED, Colour.BLACK, speedIndicatorStrength).asInt());
-        app.rect((float) pixelPos.x, (float) pixelPos.y, SPEED_INDICATOR_RADIUS, SPEED_INDICATOR_RADIUS);
 
         // Render damage upgrade
         final float DAMAGE_INDICATOR_SIZE = 10.0f;
@@ -100,12 +100,15 @@ public final class TowerTile extends Tile {
         app.fill(Theme.TOWER_UPGRADE_DAMAGE.asInt());
         final int numDamageIndicators = (int) (this.damageUpgrades - cappedTowerLevel);
         app.textSize(DAMAGE_INDICATOR_SIZE);
-        final Vector2 damagePos = (Vector2) UiManager.tileToPixelCoords(this).addCopy(new Vector2(-16, 12));
+        final Vector2 damagePos = (Vector2) pixelPos.addCopy(new Vector2(-16, 12));
         final StringBuilder damageStr = new StringBuilder();
         for (int i = 0; i < numDamageIndicators; i++) damageStr.append('X');
         app.text(damageStr.toString(), (float) damagePos.x, (float) damagePos.y);
     }
 
+    /**
+     * Upgrades the tower, if there are upgrades that can be afforded.
+     */
     public void upgradeIfPossible(
             final GameData game,
             final boolean upgradeRange, final boolean upgradeSpeed, final boolean upgradeDamage) {
