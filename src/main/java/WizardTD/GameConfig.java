@@ -35,5 +35,5 @@ public class GameConfig {
      * Reference framerate assumed by the assignment spec
      */
     public static final double REFERENCE_FPS = 60.0;
-    public static final double TARGET_FPS = 120.0;
+    public static final double TARGET_FPS = 60.0;
 }

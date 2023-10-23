@@ -50,11 +50,6 @@ public class FireballProjectile extends Projectile {
     }
 
     @Override
-    public RenderOrder getRenderOrder() {
-        return RenderOrder.PROJECTILE;
-    }
-
-    @Override
     public void tick(final @NonNull GameData game, final double gameDeltaTime, final double visualDeltaTime) {
         // Ensure we have a target, else kill the projectile
         // This prioritises a target near to the existing target, or else near the fireball's position

@@ -10,4 +10,10 @@ import mikera.vectorz.*;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Projectile implements Renderable, Tickable {
     public Vector2 position;
+    
+    @Override
+    public RenderOrder getRenderOrder() {
+        return RenderOrder.PROJECTILE;
+    }
+
 }

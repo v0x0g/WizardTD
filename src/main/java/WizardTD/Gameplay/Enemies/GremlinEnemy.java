@@ -3,6 +3,7 @@ package WizardTD.Gameplay.Enemies;
 import WizardTD.Event.*;
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
+import WizardTD.Gameplay.Projectiles.*;
 import WizardTD.Rendering.*;
 import WizardTD.UI.*;
 import lombok.*;
@@ -12,11 +13,13 @@ import processing.core.*;
 import java.util.*;
 import java.util.stream.*;
 
+import static WizardTD.GameConfig.REFERENCE_FPS;
+
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class GremlinEnemy extends Enemy {
-    public static final double DEATH_ANIM_DURATION = 4 / 60.0 /* 4 frames @ 60 FPS */;
-    // TODO: Dying Enemy
+    public static final double DEATH_ANIM_DURATION = 4 / REFERENCE_FPS /* 4 frames @ 60 FPS */;
+
     public static PImage entityImage;
     public static ImageAnimation deathAnim;
 
@@ -51,4 +54,8 @@ public class GremlinEnemy extends Enemy {
         Renderer.renderSimpleEnemy(app, entityImage, this.position);
     }
 
+    @Override
+    public void onDeath(final GameData game) {
+        game.projectiles.add(new DeathAnimationProjectile(this.position, deathAnim));
+    }
 }

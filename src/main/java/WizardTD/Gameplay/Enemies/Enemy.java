@@ -15,7 +15,6 @@ import processing.core.*;
 @EqualsAndHashCode
 public abstract class Enemy implements Tickable, Renderable {
     public boolean isAlive = true;
-
     /**
      * How much health the enemy has remaining
      */
@@ -25,32 +24,26 @@ public abstract class Enemy implements Tickable, Renderable {
      * Only used for the health bar
      */
     public double maxHealth;
-
     /**
      * Where the enemy is on the map.
      * <p/>
      * This is in TILE coordinates, not pixels
      */
     public Vector2 position;
-
     /**
      * How many units (tiles) per frame the monster moves
      */
     public double speed;
-
     /**
      * Multiplier on how much damage the enemy takes
      */
     public double damageMultiplier;
-
     /**
      * How much mana the wizard will gain upon killing this enemy
      */
     public double manaGainedOnKill;
-
     public EnemyPath path;
     public double pathProgress;
-
     protected Enemy(
             final double health, final Vector2 position, final double speed, final double damageMultiplier,
             final double manaGainedOnKill) {
@@ -67,6 +60,8 @@ public abstract class Enemy implements Tickable, Renderable {
         this.path = null;
         this.pathProgress = 0.0;
     }
+
+    public void onDeath(final GameData game) {}
 
     @Override
     public RenderOrder getRenderOrder() {
@@ -104,7 +99,7 @@ public abstract class Enemy implements Tickable, Renderable {
         final Vector2 corner1 = (Vector2) uiPos.subCopy(DIMENSIONS_PX.multiplyCopy(0.5));
         final Vector2 corner2 = (Vector2) uiPos.addCopy(DIMENSIONS_PX.multiplyCopy(0.5));
         final Vector2 midCorner = new Vector2(corner1.x + (DIMENSIONS_PX.x * healthRatio), corner1.y);
-        
+
         app.noStroke();
         app.rectMode(PConstants.CORNERS);
         app.fill(Theme.HEALTH_FULL.asInt());
