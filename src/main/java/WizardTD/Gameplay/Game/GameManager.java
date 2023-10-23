@@ -303,7 +303,10 @@ public class GameManager {
         final double mana_ = desc.config.mana.initialManaValue;
         final double manaCap_ = desc.config.mana.initialManaCap;
 
-        final GameData game = new GameData(GameState.PLAYING, board, enemies, projectiles, waves, new ArrayList<>(), desc.config, spells);
+        final GameData game =
+                new GameData(GameState.PLAYING, board, enemies, projectiles, waves, new ArrayList<>(), desc.config,
+                             spells
+                );
         game.mana = mana_;
         game.manaCap = manaCap_;
 
@@ -356,7 +359,10 @@ public class GameManager {
 
         for (int i = 0; i < numTicks; i++) {
             Loggers.EVENT.trace("subtick: game={}; visual={}", gameDelta, visualDelta);
-            internalTickGame(app, game, gameDelta, visualDelta);
+            // Only tick game if we are still playing
+            // This will freeze the game in the last frame on win/loss
+            if (game.gameState == GameState.PLAYING)
+                internalTickGame(app, game, gameDelta, visualDelta);
         }
 
         Debug.Stats.Tick.numTicks = numTicks;
@@ -434,13 +440,13 @@ public class GameManager {
                 game.mana -= enemy.health;
             }
         });
-        
+
         // Update win/loss status
-        if (game.gameState == GameState.PLAYING && game.mana <= 0.0){
+        if (game.gameState == GameState.PLAYING && game.mana <= 0.0) {
             game.gameState = GameState.LOST;
             Loggers.GAMEPLAY.info("game lost (out of mana)");
         }
-        else if (game.gameState == GameState.PLAYING && game.waves.isEmpty() && game.enemies.isEmpty()){
+        else if (game.gameState == GameState.PLAYING && game.waves.isEmpty() && game.enemies.isEmpty()) {
             game.gameState = GameState.WON;
             Loggers.GAMEPLAY.info("game won (no more waves)");
         }
@@ -498,11 +504,12 @@ public class GameManager {
         // We also add a little bit of randomness so that we don't always target the same enemy with multiple projectiles
         final long RANDOMISE = 10;
         final Enemy[] enemies = game.enemies.stream()
-                           .filter(enemy -> nearPos.distance(enemy.position) < maxDist)
+                                            .filter(enemy -> nearPos.distance(enemy.position) < maxDist)
 //                           .sorted(Comparator.comparingDouble(enemy -> nearPos.distanceSquared(enemy.position)))
-                           .sorted(Comparator.comparingDouble(enemy -> enemy.path.positions.length - enemy.pathProgress))
-                            .limit(RANDOMISE)
-                            .toArray(Enemy[]::new);
+                                            .sorted(Comparator.comparingDouble(
+                                                    enemy -> enemy.path.positions.length - enemy.pathProgress))
+                                            .limit(RANDOMISE)
+                                            .toArray(Enemy[]::new);
         if (enemies.length == 0) return null;
         return enemies[ThreadLocalRandom.current().nextInt(enemies.length)];
     }
