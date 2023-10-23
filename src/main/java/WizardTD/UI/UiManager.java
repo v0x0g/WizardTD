@@ -109,12 +109,13 @@ public class UiManager {
                 rectElement.pos2.x = Numerics.lerp(manaBarPos1.x, manaBarPos2.x, Math.max(0, game.mana / game.manaCap));
                 rectElement.pos2.y = manaBarPos2.y;
             }));
-            uiState.uiElements.add(new DynamicWrapperElement<>(new TextElement(manaBarPos1, manaBarPos2, ""),
-                                                               (text, app, game, ui) -> text.text =
-                                                                       MessageFormat.format(
-                                                                               "Mana: {0,number,integer}/{1,number,integer}",
-                                                                               game.mana, game.manaCap
-                                                                       )
+            uiState.uiElements.add(new DynamicWrapperElement<>(
+                    new TextElement(manaBarPos1, manaBarPos2, ""),
+                    (text, app, game, ui) -> text.text =
+                            MessageFormat.format(
+                                    "Mana: {0,number,integer}/{1,number,integer}",
+                                    game.mana, game.manaCap
+                            )
             ));
         }
 
@@ -123,37 +124,40 @@ public class UiManager {
             final Vector2 waveIndicatorPos1 = new Vector2(0, 10);
             final Vector2 waveIndicatorPos2 = new Vector2(320, 30);
             uiState.uiElements.add(
-                    new DynamicWrapperElement<>(new TextElement(waveIndicatorPos1, waveIndicatorPos2, ""),
-                                                (text, app, game, ui) -> {
-                                                    final Wave wave = game.waves.isEmpty() ? null : game.waves.get(0);
-                                                    if (wave == null) {
-                                                        text.text = "No more waves remaining";
-                                                    }
-                                                    else if (wave.getWaveState() == Wave.WaveState.PRE_DELAY) {
-                                                        final double timeTillSpawn =
-                                                                -wave.getTimer() + wave.delayBeforeWave;
-                                                        text.text = MessageFormat.format(
-                                                                "Wave {0,number,##} starts: {1,number,00.00} seconds",
-                                                                wave.waveNumber, timeTillSpawn
-                                                        );
-                                                    }
-                                                    else if (wave.getWaveState() == Wave.WaveState.SPAWNING) {
-                                                        text.text =
-                                                                MessageFormat.format("Wave {0,number,##} spawning now",
-                                                                                     wave.waveNumber
-                                                                );
-                                                    }
-                                                    else if (wave.getWaveState() == Wave.WaveState.COMPLETE) {
-                                                        text.text = MessageFormat.format("Wave {0,number,##} complete",
-                                                                                         wave.waveNumber
-                                                        );
-                                                    }
-                                                    else {
-                                                        text.text = "ERROR: WAVE GOOFED";
-                                                        Loggers.GAMEPLAY.warn(
-                                                                "wave {} had invalid wave state", wave.waveNumber);
-                                                    }
-                                                }
+                    new DynamicWrapperElement<>(
+                            new TextElement(waveIndicatorPos1, waveIndicatorPos2, ""),
+                            (text, app, game, ui) -> {
+                                final Wave wave = game.waves.isEmpty() ? null : game.waves.get(0);
+                                if (wave == null) {
+                                    text.text = "No more waves remaining";
+                                }
+                                else if (wave.getWaveState() == Wave.WaveState.PRE_DELAY) {
+                                    final double timeTillSpawn =
+                                            -wave.getTimer() + wave.delayBeforeWave;
+                                    text.text = MessageFormat.format(
+                                            "Wave {0,number,##} starts: {1,number,00.00} seconds",
+                                            wave.waveNumber, timeTillSpawn
+                                    );
+                                }
+                                else if (wave.getWaveState() == Wave.WaveState.SPAWNING) {
+                                    text.text =
+                                            MessageFormat.format(
+                                                    "Wave {0,number,##} spawning now",
+                                                    wave.waveNumber
+                                            );
+                                }
+                                else if (wave.getWaveState() == Wave.WaveState.COMPLETE) {
+                                    text.text = MessageFormat.format(
+                                            "Wave {0,number,##} complete",
+                                            wave.waveNumber
+                                    );
+                                }
+                                else {
+                                    text.text = "ERROR: WAVE GOOFED";
+                                    Loggers.GAMEPLAY.warn(
+                                            "wave {} had invalid wave state", wave.waveNumber);
+                                }
+                            }
                     ));
         }
 
@@ -162,8 +166,9 @@ public class UiManager {
         final Vector2 sidebarButtonPos = new Vector2(SIDEBAR_X_PX + 8, SIDEBAR_Y_PX + 8);
         {
             addSidebarButton(uiState, sidebarButtonPos, "FF", "Fast Forward", KeyCode.F,
-                             (button, app, game, ui) -> Logger.debug("toggle fast forward = {}",
-                                                                     game.fastForward ^= true
+                             (button, app, game, ui) -> Logger.debug(
+                                     "toggle fast forward = {}",
+                                     game.fastForward ^= true
                              ), (button, app, game, ui) -> button.fillColour =
                             Theme.buttonColour(game.fastForward, button.isHovered)
             );
@@ -178,20 +183,23 @@ public class UiManager {
                                      Theme.buttonColour(ui.wantsPlaceTower, button.isHovered)
             );
             addSidebarButton(uiState, sidebarButtonPos, "U1", "Upgrade Range", KeyCode.NUM_1,
-                             (button, app, game, ui) -> Logger.debug("toggle upgrade range = {}",
-                                                                     ui.upgradeRange ^= true
+                             (button, app, game, ui) -> Logger.debug(
+                                     "toggle upgrade range = {}",
+                                     ui.upgradeRange ^= true
                              ), (button, app, game, ui) -> button.fillColour =
                             Theme.buttonColour(ui.upgradeRange, button.isHovered)
             );
             addSidebarButton(uiState, sidebarButtonPos, "U2", "Upgrade Speed", KeyCode.NUM_2,
-                             (button, app, game, ui) -> Logger.debug("toggle upgrade speed = {}",
-                                                                     ui.upgradeSpeed ^= true
+                             (button, app, game, ui) -> Logger.debug(
+                                     "toggle upgrade speed = {}",
+                                     ui.upgradeSpeed ^= true
                              ), (button, app, game, ui) -> button.fillColour =
                             Theme.buttonColour(ui.upgradeSpeed, button.isHovered)
             );
             addSidebarButton(uiState, sidebarButtonPos, "U3", "Upgrade Damage", KeyCode.NUM_3,
-                             (button, app, game, ui) -> Logger.debug("toggle upgrade damage = {}",
-                                                                     ui.upgradeDamage ^= true
+                             (button, app, game, ui) -> Logger.debug(
+                                     "toggle upgrade damage = {}",
+                                     ui.upgradeDamage ^= true
                              ), (button, app, game, ui) -> button.fillColour =
                             Theme.buttonColour(ui.upgradeDamage, button.isHovered)
             );
@@ -203,9 +211,10 @@ public class UiManager {
                                  game.spells.manaSpell.cast(game);
                              }, (button, app, game, ui) -> {
                         final double ANIM_SPEED = 0.03;
-                        button.fillColour = Colour.lerp(button.fillColour,
-                                                        button.isHovered ? Theme.BUTTON_HOVERED : Theme.BUTTON_DISABLED,
-                                                        ANIM_SPEED
+                        button.fillColour = Colour.lerp(
+                                button.fillColour,
+                                button.isHovered ? Theme.BUTTON_HOVERED : Theme.BUTTON_DISABLED,
+                                ANIM_SPEED
                         );
                         // A slight hack to modify the text that shows the cost of the spell
                         // Don't really have a good way to access the text
@@ -218,8 +227,9 @@ public class UiManager {
                             Loggers.UI.warn("couldn't find the text element for the mana pool description");
                         }
                         else {
-                            text.text = MessageFormat.format("Mana Pool:\nCost: {0,number,####}",
-                                                             game.spells.manaSpell.currentCost
+                            text.text = MessageFormat.format(
+                                    "Mana Pool:\nCost: {0,number,####}",
+                                    game.spells.manaSpell.currentCost
                             );
                         }
                     }
@@ -242,7 +252,7 @@ public class UiManager {
                         final Tile tile = UiManager.pixelCoordsToTile(new Vector2(app.mouseX, app.mouseY), game);
                         assert tile != null;
 
-                        GameManager.placeOrUpgradeTower(app, game, tile, ui.upgradeRange, ui.upgradeSpeed,
+                        GameManager.placeOrUpgradeTower(game, tile, ui.upgradeRange, ui.upgradeSpeed,
                                                         ui.upgradeDamage
                         );
                     }
@@ -333,29 +343,50 @@ public class UiManager {
         // ===== DEBUG STUFF =====
         {
             addSidebarButton(uiState, sidebarButtonPos, "H", "Hover Overlay", KeyCode.H,
-                             (button, app, game, ui) -> Logger.debug("toggle tile hover overlay = {}",
-                                                                     Debug.tileHoverOverlayEnabled ^= true
+                             (button, app, game, ui) -> Logger.debug(
+                                     "toggle tile hover overlay = {}",
+                                     Debug.tileHoverOverlayEnabled ^= true
                              ), (button, app, game, ui) -> button.fillColour =
                             Theme.buttonColour(Debug.tileHoverOverlayEnabled, button.isHovered)
             );
             addSidebarButton(uiState, sidebarButtonPos, "E", "Enemy Paths", KeyCode.E,
-                             (button, app, game, ui) -> Logger.debug("toggle path overlay = {}",
-                                                                     Debug.pathfindingOverlayEnabled ^= true
+                             (button, app, game, ui) -> Logger.debug(
+                                     "toggle path overlay = {}",
+                                     Debug.pathfindingOverlayEnabled ^= true
                              ), (button, app, game, ui) -> button.fillColour =
                             Theme.buttonColour(Debug.pathfindingOverlayEnabled, button.isHovered)
             );
             addSidebarButton(uiState, sidebarButtonPos, "U", "Upgrade Overlay", KeyCode.U,
-                             (button, app, game, ui) -> Logger.debug("toggle tower upgrade overlay = {}",
-                                                                     Debug.towerUpgradeOverlayEnabled ^= true
+                             (button, app, game, ui) -> Logger.debug(
+                                     "toggle tower upgrade overlay = {}",
+                                     Debug.towerUpgradeOverlayEnabled ^= true
                              ), (button, app, game, ui) -> button.fillColour =
                             Theme.buttonColour(Debug.towerUpgradeOverlayEnabled, button.isHovered)
             );
             addSidebarButton(uiState, sidebarButtonPos, "F3", "Stats Overlay", KeyCode.FUNCTION_3,
-                             (button, app, game, ui) -> Logger.debug("toggle f3 overlay = {}",
-                                                                     Debug.f3OverlayEnabled ^= true
+                             (button, app, game, ui) -> Logger.debug(
+                                     "toggle f3 overlay = {}",
+                                     Debug.f3OverlayEnabled ^= true
                              ), (button, app, game, ui) -> button.fillColour =
                             Theme.buttonColour(Debug.f3OverlayEnabled, button.isHovered)
             );
+            // Remove towers if we press the S key
+            uiState.uiElements.add(new InteractiveElement() {
+
+                @Override
+                public boolean isMouseOver(final Vector2 mousePos) {return false;}
+
+                @Override
+                public boolean keyMatches(final KeyPress keyPress) {return false;}
+
+                @Override
+                public void activate(final PApplet app, final GameData gameData, final UiState uiState) {
+                    GameManager.removeTower(gameData, UiManager.pixelCoordsToTile(new Vector2(app.mouseX, app.mouseY), gameData));
+                }
+
+                @Override
+                public void render(final PApplet app, final GameData gameData, final UiState uiState) {}
+            });
         }
     }
 

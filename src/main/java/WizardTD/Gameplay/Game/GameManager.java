@@ -484,7 +484,7 @@ public class GameManager {
         return game.enemies.stream()
                            .filter(enemy -> nearPos.distance(enemy.position) < maxDist)
 //                           .min(Comparator.comparingDouble(enemy -> nearPos.distanceSquared(enemy.position)))
-                           .max(Comparator.comparingDouble(enemy -> enemy.pathProgress / enemy.path.positions.length))
+                           .min(Comparator.comparingDouble(enemy -> enemy.path.positions.length - enemy.pathProgress))
                            .orElse(null);
     }
 
@@ -503,7 +503,7 @@ public class GameManager {
      * Places a tower at the given tile, or upgrades it if there is one present.
      */
     public void placeOrUpgradeTower(
-            final PApplet app, final GameData game, final Tile tile,
+            final GameData game, final Tile tile,
             final boolean upgradeRange, final boolean upgradeSpeed, final boolean upgradeDamage) {
         final TowerTile tower;
         if (tile instanceof TowerTile) {
@@ -532,5 +532,10 @@ public class GameManager {
 
         // Now apply upgrades, if possible
         tower.upgradeIfPossible(game, upgradeRange, upgradeSpeed, upgradeDamage);
+    }
+    
+    public void removeTower(final GameData game, final Tile tile){
+        if(!(tile instanceof TowerTile)) return;
+        game.board.setTile(tile.getPos().getX(), tile.getPos().getY(), new GrassTile());
     }
 }

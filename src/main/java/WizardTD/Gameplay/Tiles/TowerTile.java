@@ -85,9 +85,12 @@ public final class TowerTile extends Tile {
         final float SPEED_INDICATOR_RADIUS = 20.0f;
         app.rectMode(PConstants.CENTER);
         app.noFill();
-        app.stroke(Theme.TOWER_UPGRADE_SPEED.asInt());
-        final float speedIndicatorStrength = (this.speedUpgrades - cappedTowerLevel);
-        app.strokeWeight(speedIndicatorStrength);
+        // Special maths: `ln(x^2 + 1)`
+        final double speedIndicatorWidth = Math.log(Math.pow(this.speedUpgrades - cappedTowerLevel, 2) + 1);
+        // `a/(x+a), a=2`
+        final double speedIndicatorStrength = 2.0 / (this.speedUpgrades - cappedTowerLevel + 2);
+        app.strokeWeight((float)speedIndicatorWidth);
+        app.stroke(Colour.lerp(Theme.TOWER_UPGRADE_SPEED, Colour.BLACK, speedIndicatorStrength).asInt());
         app.rect((float) pixelPos.x, (float) pixelPos.y, SPEED_INDICATOR_RADIUS, SPEED_INDICATOR_RADIUS);
 
         // Render damage upgrade
