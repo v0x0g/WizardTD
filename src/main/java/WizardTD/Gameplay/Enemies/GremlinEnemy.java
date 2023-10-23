@@ -18,7 +18,7 @@ import static WizardTD.GameConfig.REFERENCE_FPS;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class GremlinEnemy extends Enemy {
-    public static final double DEATH_ANIM_DURATION = 4 / REFERENCE_FPS /* 4 frames @ 60 FPS */;
+    public static final double DEATH_ANIM_DURATION = 4 * 5 / REFERENCE_FPS /* 5 images @ 4 frames/img @ 60 FPS */;
 
     public static PImage entityImage;
     public static ImageAnimation deathAnim;
