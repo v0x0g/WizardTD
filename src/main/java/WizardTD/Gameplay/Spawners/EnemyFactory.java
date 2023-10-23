@@ -44,6 +44,16 @@ public class EnemyFactory {
     /// How many enemies have been spawned so far
     private BigInteger quantitySpawned = BigInteger.valueOf(0L);
 
+    public EnemyFactory(final EnemyFactory other) {
+        this.health = other.health;
+        this.speed = other.speed;
+        this.damageMultiplier = other.damageMultiplier;
+        this.manaGainedOnKill = other.manaGainedOnKill;
+        this.maxQuantity = other.maxQuantity;
+        this.spawn = other.spawn;
+        this.quantitySpawned = other.quantitySpawned;
+    }
+
     public Enemy spawnEnemy() {
         // Spawn cap
         if (maxQuantity != null && maxQuantity.compareTo(quantitySpawned) < 0) {

@@ -290,9 +290,14 @@ public class GameManager {
     /**
      * Actually creates a game object, that can then be played
      */
-    public static GameData createGame(final GameDescriptor desc) {
+    public static GameData createGame(GameDescriptor desc) {
         trace("creating game from level desc: {}", desc);
 
+        // Since java is **** and uses reference types everywhere, we have to clone all the fields
+        // this is a real pain in the rear end
+        
+        desc = new GameDescriptor(desc);
+        
         final Board board = new Board(desc.board.tiles);
         final List<Enemy> enemies = new ArrayList<>();
         final List<Projectile> projectiles = new ArrayList<>();
