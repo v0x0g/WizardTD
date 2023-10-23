@@ -32,7 +32,7 @@ public class FireballProjectile extends Projectile {
     /**
      * How much damage the fireball should do upon striking an enemy
      */
-    public final double damage;
+    public double damage;
     public @NonNull Enemy targetEnemy;
 
     public FireballProjectile(final Vector2 position, final @NonNull Enemy targetEnemy, final double baseDamage) {
@@ -76,8 +76,11 @@ public class FireballProjectile extends Projectile {
         // Calculate distance again on we've moved, to see if we're close enough to kill
         enemyDistance = this.position.distance(this.targetEnemy.position);
         if (enemyDistance < HIT_DISTANCE_THRESHOLD) {
+            final double damageDealt = Math.min(this.targetEnemy.health / this.targetEnemy.damageMultiplier, this.damage);
             GameManager.damageEnemy(game, this.targetEnemy, this.damage);
-            GameManager.killProjectile(game, this);
+            // Allow this fireball to keep going after hitting an enemy, if it still had damage left
+            if(this.targetEnemy.isAlive) GameManager.killProjectile(game, this);
+            else this.damage -= damageDealt;
         }
     }
 
