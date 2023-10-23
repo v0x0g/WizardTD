@@ -4,6 +4,7 @@ import WizardTD.Gameplay.Tiles.*;
 import lombok.*;
 import lombok.experimental.*;
 import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.text.*;
 import java.util.*;
@@ -13,6 +14,8 @@ import static WizardTD.GameConfig.*;
 
 @EqualsAndHashCode
 @ExtensionMethod(Arrays.class)
+@AllArgsConstructor
+@RequiredArgsConstructor
 public final class Board {
 
     /**
@@ -21,8 +24,7 @@ public final class Board {
      * This should always be sized exactly `[BOARD_SIZE_TILES][BOARD_SIZE_TILES]`.
      * Indices are `[row][col]`
      */
-
-    public final Tile[][] tiles =
+    public @NonNull Tile[][] tiles =
             // Default value is filled with invalid tiles
             IntStream.range(0, BOARD_SIZE_TILES).mapToObj(
                     $_ -> IntStream.range(0, BOARD_SIZE_TILES).mapToObj($__ -> (Tile) new InvalidTile())

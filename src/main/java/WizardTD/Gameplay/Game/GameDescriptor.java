@@ -22,5 +22,4 @@ public class GameDescriptor {
     public final GameDataConfig config;
 
     public final List<Wave> waves;
-
 }

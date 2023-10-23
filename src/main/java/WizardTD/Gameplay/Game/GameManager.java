@@ -293,10 +293,10 @@ public class GameManager {
     public static GameData createGame(final GameDescriptor desc) {
         trace("creating game from level desc: {}", desc);
 
-        final Board board = desc.board;
+        final Board board = new Board(desc.board.tiles);
         final List<Enemy> enemies = new ArrayList<>();
         final List<Projectile> projectiles = new ArrayList<>();
-        final List<Wave> waves = desc.waves;
+        final List<Wave> waves = new ArrayList<>(desc.waves);
         final GameSpells spells = new GameSpells(new ManaSpell(desc.config.spell.manaPool.initialCost));
 
         final double mana_ = desc.config.mana.initialManaValue;
@@ -571,6 +571,12 @@ public class GameManager {
      * Restarts the game, by returning a new fresh game (possibly based off the old game)
      */
     public GameData resetGame(final GameData game) {
-        return createGame(game.descriptor);
+        final GameDescriptor gameDesc = new GameDescriptor(
+                game.descriptor.name,
+                new Board(game.descriptor.board.tiles),
+                game.config,
+                new ArrayList<>(game.descriptor.waves)
+        );
+        return createGame(gameDesc);
     }
 }
