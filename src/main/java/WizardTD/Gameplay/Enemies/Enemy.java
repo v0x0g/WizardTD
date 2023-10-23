@@ -89,7 +89,7 @@ public abstract class Enemy implements Tickable, Renderable {
      */
     public void renderHealthBar(final PApplet app) {
         /// Offset from the enemy's position to render the bar at
-        final Vector2 OFFSET_PX = new Vector2(0, 16);
+        final Vector2 OFFSET_PX = new Vector2(0, -16);
         /// How large the bar should be
         final Vector2 DIMENSIONS_PX = new Vector2(48, 4);
 

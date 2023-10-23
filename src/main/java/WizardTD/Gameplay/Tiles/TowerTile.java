@@ -10,8 +10,8 @@ import WizardTD.UI.Appearance.*;
 import WizardTD.UI.*;
 import lombok.*;
 import mikera.vectorz.*;
-import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.*;
 import processing.core.*;
 
 import static java.lang.Math.*;
@@ -58,7 +58,7 @@ public final class TowerTile extends Tile {
          */
 
         // This is the lowest level hat has all upgrades
-        final long towerLevel = min(min(this.damageUpgrades, this.rangeUpgrades), this.damageUpgrades);
+        final long towerLevel = min(min(this.damageUpgrades, this.rangeUpgrades), this.speedUpgrades);
         // Since we only have sprites up to level 2, we have to cap it :(
         final long cappedTowerLevel = min(2, towerLevel);
 
@@ -69,6 +69,18 @@ public final class TowerTile extends Tile {
         Renderer.renderSimpleTile(app, tileImage, UiManager.tileToPixelCoords(this));
         final Vector2 pixelPos = UiManager.tileToPixelCoords(this);
 
+        // Render range upgrade
+        final float RANGE_INDICATOR_SIZE = 10.0f;
+        app.rectMode(PConstants.CENTER);
+        app.textAlign(PConstants.LEFT);
+        app.fill(Theme.TOWER_UPGRADE_RANGE.asInt());
+        final int numRangeIndicators = (int) (this.rangeUpgrades - cappedTowerLevel);
+        app.textSize(RANGE_INDICATOR_SIZE);
+        final Vector2 rangePos = (Vector2) UiManager.tileToPixelCoords(this).addCopy(new Vector2(-16, -12));
+        final StringBuilder rangeStr = new StringBuilder();
+        for (int i = 0; i < numRangeIndicators; i++) rangeStr.append('O');
+        app.text(rangeStr.toString(), (float) rangePos.x, (float) rangePos.y);
+        
         // Render speed upgrade
         final float SPEED_INDICATOR_RADIUS = 20.0f;
         app.rectMode(PConstants.CENTER);
@@ -77,6 +89,18 @@ public final class TowerTile extends Tile {
         final float speedIndicatorStrength = (this.speedUpgrades - cappedTowerLevel);
         app.strokeWeight(speedIndicatorStrength);
         app.rect((float) pixelPos.x, (float) pixelPos.y, SPEED_INDICATOR_RADIUS, SPEED_INDICATOR_RADIUS);
+
+        // Render damage upgrade
+        final float DAMAGE_INDICATOR_SIZE = 10.0f;
+        app.rectMode(PConstants.CENTER);
+        app.textAlign(PConstants.LEFT);
+        app.fill(Theme.TOWER_UPGRADE_DAMAGE.asInt());
+        final int numDamageIndicators = (int) (this.damageUpgrades - cappedTowerLevel);
+        app.textSize(DAMAGE_INDICATOR_SIZE);
+        final Vector2 damagePos = (Vector2) UiManager.tileToPixelCoords(this).addCopy(new Vector2(-16, 12));
+        final StringBuilder damageStr = new StringBuilder();
+        for (int i = 0; i < numDamageIndicators; i++) damageStr.append('X');
+        app.text(damageStr.toString(), (float) damagePos.x, (float) damagePos.y);
     }
 
     public void upgradeIfPossible(
@@ -151,7 +175,7 @@ public final class TowerTile extends Tile {
         final double range = this.calculateRange(game);
 
         final Vector2 thisPos = new Vector2(this.getPos().getX(), this.getPos().getY());
-        final Enemy enemy = GameManager.getNearestEnemy(game, thisPos, range);
+        final Enemy enemy = GameManager.getNextEnemy(game, thisPos, range);
         if (enemy == null) return;
 
         this.magazine--;

@@ -60,8 +60,8 @@ public class FireballProjectile extends Projectile {
         // This prioritises a target near to the existing target, or else near the fireball's position
         if (!this.targetEnemy.isAlive) {
             // Range is arbitrary, so I chose tower range
-            final Enemy e = GameManager.getNearestEnemy(game, this.targetEnemy.position, game.config.tower.initialTowerRange);
-            if (e == null) GameManager.getNearestEnemy(game, this.position, game.config.tower.initialTowerRange);
+            final Enemy e = GameManager.getNextEnemy(game, this.targetEnemy.position, game.config.tower.initialTowerRange);
+            if (e == null) GameManager.getNextEnemy(game, this.position, game.config.tower.initialTowerRange);
             if(e == null) {
                 GameManager.killProjectile(game,this);
                 return;
