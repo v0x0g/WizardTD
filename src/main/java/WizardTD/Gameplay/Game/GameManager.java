@@ -295,7 +295,6 @@ public class GameManager {
 
         // Since java is **** and uses reference types everywhere, we have to clone all the fields
         // this is a real pain in the rear end
-        
         desc = new GameDescriptor(desc);
         
         final Board board = new Board(desc.board.tiles);
@@ -576,12 +575,6 @@ public class GameManager {
      * Restarts the game, by returning a new fresh game (possibly based off the old game)
      */
     public GameData resetGame(final GameData game) {
-        final GameDescriptor gameDesc = new GameDescriptor(
-                game.descriptor.name,
-                new Board(game.descriptor.board.tiles),
-                game.config,
-                new ArrayList<>(game.descriptor.waves)
-        );
-        return createGame(gameDesc);
+        return createGame(game.descriptor);
     }
 }

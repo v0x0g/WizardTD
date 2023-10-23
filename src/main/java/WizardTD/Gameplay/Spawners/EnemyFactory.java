@@ -51,7 +51,7 @@ public class EnemyFactory {
         this.manaGainedOnKill = other.manaGainedOnKill;
         this.maxQuantity = other.maxQuantity;
         this.spawn = other.spawn;
-        this.quantitySpawned = other.quantitySpawned;
+        this.quantitySpawned = BigInteger.ZERO;
     }
 
     public Enemy spawnEnemy() {
