@@ -1,5 +1,6 @@
 package WizardTD.Gameplay.Tiles;
 
+import WizardTD.*;
 import WizardTD.Event.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Rendering.*;
@@ -24,7 +25,7 @@ public final class PathTile extends Tile {
     @SuppressWarnings("unused")
     private static void loadImages(final Event evt) {
         assert evt.dataObject != null;
-        final App app = (PApplet) evt.dataObject;
+        final App app = (App) evt.dataObject;
 
         // Angles to rotate by
         final double NONE = 0;

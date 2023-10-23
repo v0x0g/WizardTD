@@ -239,7 +239,7 @@ public class UiManager {
                     uiState, sidebarButtonPos, "R", "Restart Game",
                     KeyCode.R, 
                     (_elem, app, game, ui) -> {
-                        GameManager.resetGame(game);
+                        app.gameData = GameManager.resetGame(game);
                     },
                     (elem, app, game, ui) ->
                             elem.fillColour = Theme.buttonColour(game.gameState == GameState.PLAYING, elem.isHovered)

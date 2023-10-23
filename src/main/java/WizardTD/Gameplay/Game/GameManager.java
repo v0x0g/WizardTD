@@ -16,7 +16,6 @@ import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import org.tinylog.*;
-import processing.core.*;
 import processing.data.*;
 
 import java.io.*;
@@ -303,10 +302,10 @@ public class GameManager {
         final double mana_ = desc.config.mana.initialManaValue;
         final double manaCap_ = desc.config.mana.initialManaCap;
 
-        final GameData game =
-                new GameData(GameState.PLAYING, board, enemies, projectiles, waves, new ArrayList<>(), desc.config,
-                             spells
-                );
+        final GameData game = new GameData(
+                GameState.PLAYING, board, enemies, projectiles, waves,
+                new ArrayList<>(), desc.config, spells, desc
+        );
         game.mana = mana_;
         game.manaCap = manaCap_;
 
@@ -411,7 +410,7 @@ public class GameManager {
             break;
         }
 
-        // Tick all enemies, projectiles, etc
+        // Tick all enemies, projectiles, etc.
         // Because ticking might involve modification of the streams (such as removing enemies that die)
         // We need to create a copy of the collections
         // So use a (pooled) list
@@ -571,7 +570,7 @@ public class GameManager {
     /**
      * Restarts the game, by returning a new fresh game (possibly based off the old game)
      */
-    public GameData resetGame(final GameData game){
+    public GameData resetGame(final GameData game) {
         return createGame(game.descriptor);
     }
 }

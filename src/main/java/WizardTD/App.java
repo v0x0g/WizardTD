@@ -19,7 +19,7 @@ import java.util.*;
 
 public final class App extends PApplet {
 
-    public final GameData gameData;
+    public GameData gameData;
     public final UiState uiState;
     /**
      * The last time at which a frame was rendered

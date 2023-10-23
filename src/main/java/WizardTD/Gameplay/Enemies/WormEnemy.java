@@ -1,5 +1,6 @@
 package WizardTD.Gameplay.Enemies;
 
+import WizardTD.*;
 import WizardTD.Event.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Rendering.*;
@@ -24,7 +25,7 @@ public class WormEnemy extends Enemy {
     @SuppressWarnings({"unused", "DataFlowIssue"})
     @OnEvent(eventTypes = EventType.AppSetup)
     private static void loadImages(final Event event) {
-        final App app = (PApplet) event.dataObject;
+        final App app = (App) event.dataObject;
         entityImage = UiManager.loadImage(app, Resources.Enemies.Worm.ONLY_TILE);
     }
 

@@ -1,5 +1,6 @@
 package WizardTD.Rendering;
 
+import WizardTD.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.UI.*;
 import processing.core.*;

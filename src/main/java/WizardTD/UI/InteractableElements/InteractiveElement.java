@@ -1,5 +1,6 @@
 package WizardTD.UI.InteractableElements;
 
+import WizardTD.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Input.*;
 import WizardTD.UI.Elements.*;
@@ -29,7 +30,7 @@ public abstract class InteractiveElement extends UiElement {
     /**
      * Activates the element (will be called whenever the element is clicked)
      */
-    public abstract void activate(PApplet app, GameData gameData, UiState uiState);
+    public abstract void activate(App app, GameData gameData, UiState uiState);
 
     /**
      * Boolean for whether the element is currently being hovered over. Will be se by {@link UiManager}

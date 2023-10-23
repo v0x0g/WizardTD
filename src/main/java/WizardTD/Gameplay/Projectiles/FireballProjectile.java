@@ -1,5 +1,6 @@
 package WizardTD.Gameplay.Projectiles;
 
+import WizardTD.*;
 import WizardTD.Event.*;
 import WizardTD.Gameplay.Enemies.*;
 import WizardTD.Gameplay.Game.*;
@@ -44,7 +45,7 @@ public class FireballProjectile extends Projectile {
     @SuppressWarnings({"unused", "DataFlowIssue"})
     @OnEvent(eventTypes = EventType.AppSetup)
     private static void loadImages(final Event event) {
-        final App app = (PApplet) event.dataObject;
+        final App app = (App) event.dataObject;
         projectileImage = UiManager.loadImage(app, Resources.Projectiles.Fireball.PROJECTILE_IMAGE);
         crosshairImage = UiManager.loadImage(app, Resources.Projectiles.Fireball.CROSSHAIR_IMAGE);
     }

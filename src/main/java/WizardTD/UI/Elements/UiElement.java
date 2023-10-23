@@ -1,5 +1,6 @@
 package WizardTD.UI.Elements;
 
+import WizardTD.*;
 import WizardTD.Rendering.*;
 import WizardTD.UI.Appearance.*;
 import lombok.*;

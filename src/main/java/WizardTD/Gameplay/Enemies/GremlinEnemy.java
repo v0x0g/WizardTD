@@ -1,5 +1,6 @@
 package WizardTD.Gameplay.Enemies;
 
+import WizardTD.*;
 import WizardTD.Event.*;
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
@@ -32,7 +33,7 @@ public class GremlinEnemy extends Enemy {
     @SuppressWarnings({"unused", "DataFlowIssue"})
     @OnEvent(eventTypes = EventType.AppSetup)
     private static void loadImages(final Event event) {
-        final App app = (PApplet) event.dataObject;
+        final App app = (App) event.dataObject;
         entityImage = UiManager.loadImage(app, Resources.Enemies.Gremlin.NORMAL);
         deathAnim = new ImageAnimation(
                 Arrays.stream(new String[]{

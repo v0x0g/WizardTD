@@ -1,5 +1,6 @@
 package WizardTD.Ext;
 
+import WizardTD.*;
 import WizardTD.UI.Appearance.*;
 import lombok.experimental.*;
 import org.checkerframework.checker.nullness.qual.*;

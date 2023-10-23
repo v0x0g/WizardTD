@@ -1,5 +1,6 @@
 package WizardTD.UI.Elements;
 
+import WizardTD.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.UI.Appearance.*;
 import WizardTD.UI.*;

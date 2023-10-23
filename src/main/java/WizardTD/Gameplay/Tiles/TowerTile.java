@@ -1,5 +1,6 @@
 package WizardTD.Gameplay.Tiles;
 
+import WizardTD.*;
 import WizardTD.Event.*;
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Enemies.*;
@@ -43,7 +44,7 @@ public final class TowerTile extends Tile {
     @SuppressWarnings({"unused", "DataFlowIssue"})
     @OnEvent(eventTypes = EventType.AppSetup)
     private static void loadImages(final Event event) {
-        final App app = (PApplet) event.dataObject;
+        final App app = (App) event.dataObject;
         tileLevel0 = UiManager.loadImage(app, Resources.Tiles.Tower.Tile0);
         tileLevel1 = UiManager.loadImage(app, Resources.Tiles.Tower.Tile1);
         tileLevel2 = UiManager.loadImage(app, Resources.Tiles.Tower.Tile2);

@@ -1,5 +1,6 @@
 package WizardTD.Gameplay.Tiles;
 
+import WizardTD.*;
 import WizardTD.Event.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Rendering.*;
@@ -16,7 +17,7 @@ public final class ShrubTile extends Tile {
     @SuppressWarnings({"unused", "DataFlowIssue"})
     @OnEvent(eventTypes = EventType.AppSetup)
     private static void loadImages(final Event event) {
-        final App app = (PApplet) event.dataObject;
+        final App app = (App) event.dataObject;
         tileImage = UiManager.loadImage(app, Resources.Tiles.Shrub.ONLY_TILE);
     }
 
