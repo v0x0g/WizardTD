@@ -8,7 +8,6 @@ import org.tinylog.*;
 
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.stream.*;
 
 @ToString
 @EqualsAndHashCode
@@ -37,13 +36,7 @@ public final class Wave {
     private double enemySpawnCounter;
     @Getter
     private double timer;
-
-    public Wave(final Wave w) {
-        this(w.duration, w.delayBeforeWave, w.spawnRateMult, w.waveNumber,
-             w.enemyFactories.stream().map(EnemyFactory::new).collect(Collectors.toList())
-            );
-    }
-
+    
     public Wave(
             final double duration, final double delayBeforeWave, final double spawnRateMult,
             final long waveNumber,

@@ -23,16 +23,6 @@ public final class Board {
      */
     public @NonNull Tile[][] tiles;
 
-    public Board(@NonNull final Board other) {
-        // Default value is filled with invalid tiles
-        tiles = new Tile[BOARD_SIZE_TILES][BOARD_SIZE_TILES];
-        for (int i = 0; i < BOARD_SIZE_TILES; i++) {
-            for (int j = 0; j < BOARD_SIZE_TILES; j++) {
-                tiles[i][j] = other.tiles[i][j];
-            }
-        }
-    }
-
     public Board() {
         // Default value is filled with invalid tiles
         tiles = new Tile[BOARD_SIZE_TILES][BOARD_SIZE_TILES];

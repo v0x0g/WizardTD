@@ -1,6 +1,7 @@
 package WizardTD.Gameplay.Spawners;
 
 import WizardTD.Delegates.*;
+import WizardTD.Ext.*;
 import WizardTD.Gameplay.Enemies.*;
 import lombok.*;
 import org.checkerframework.checker.nullness.qual.*;
@@ -44,19 +45,10 @@ public class EnemyFactory {
     /// How many enemies have been spawned so far
     private BigInteger quantitySpawned = BigInteger.valueOf(0L);
 
-    public EnemyFactory(final EnemyFactory other) {
-        this.health = other.health;
-        this.speed = other.speed;
-        this.damageMultiplier = other.damageMultiplier;
-        this.manaGainedOnKill = other.manaGainedOnKill;
-        this.maxQuantity = other.maxQuantity;
-        this.spawn = other.spawn;
-        this.quantitySpawned = BigInteger.ZERO;
-    }
-
     public Enemy spawnEnemy() {
         // Spawn cap
-        if (maxQuantity != null && maxQuantity.compareTo(quantitySpawned) < 0) {
+        if (this.maxQuantity != null && this.maxQuantity.compareTo(this.quantitySpawned) <= 0) {
+            Loggers.GAMEPLAY.trace("reached max capacity: {}", this);
             throw new NoSuchElementException("spawn cap reached");
         }
         quantitySpawned = quantitySpawned.add(BigInteger.valueOf(1));

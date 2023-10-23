@@ -290,17 +290,13 @@ public class GameManager {
     /**
      * Actually creates a game object, that can then be played
      */
-    public static GameData createGame(GameDescriptor desc) {
+    public static GameData createGame(final GameDescriptor desc) {
         trace("creating game from level desc: {}", desc);
-
-        // Since java is **** and uses reference types everywhere, we have to clone all the fields
-        // this is a real pain in the rear end
-        desc = new GameDescriptor(desc);
         
         final Board board = desc.board;
         final List<Enemy> enemies = new ArrayList<>();
         final List<Projectile> projectiles = new ArrayList<>();
-        final List<Wave> waves = new ArrayList<>(desc.waves);
+        final List<Wave> waves = desc.waves;
         final GameSpells spells = new GameSpells(new ManaSpell(desc.config.spell.manaPool.initialCost));
 
         final double mana_ = desc.config.mana.initialManaValue;
@@ -395,7 +391,7 @@ public class GameManager {
             final Wave wave = game.waves.get(0);
             wave.tick(gameDeltaTime);
             if (wave.getWaveState() == Wave.WaveState.COMPLETE) {
-                Loggers.GAMEPLAY.debug("wave {} complete, moving onto next {}", wave.waveNumber, wave);
+                Loggers.GAMEPLAY.debug("wave {} complete, moving onto next: {}  -->  {}", wave.waveNumber, wave);
                 game.waves.remove(0);
                 continue;
             }
@@ -572,9 +568,10 @@ public class GameManager {
     }
 
     /**
-     * Restarts the game, by returning a new fresh game (possibly based off the old game)
+     * Restarts the game, by creating a new game
      */
-    public GameData resetGame(final GameData game) {
-        return createGame(game.descriptor);
+    public void resetGame(final App app) {
+        // It's
+        app.gameData =  createGame(loadGameDescriptor());
     }
 }

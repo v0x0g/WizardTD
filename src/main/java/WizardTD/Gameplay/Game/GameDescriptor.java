@@ -26,13 +26,4 @@ public class GameDescriptor {
 
     public final List<Wave> waves;
 
-    public GameDescriptor(final GameDescriptor other) {
-        this.board = new Board(other.board);
-        this.name = other.name;
-        this.config = other.config;
-        this.waves = other.waves
-                .stream()
-                .map(Wave::new)
-                .collect(Collectors.toList());
-    }
 }
