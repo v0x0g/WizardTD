@@ -11,7 +11,6 @@ public class Theme {
     public final Colour RANGE_INDICATOR_OUTLINE = Colour.YELLOW;
     public final Colour RANGE_INDICATOR_FILL = Colour.YELLOW.withAlpha(0.1);
     public final Colour OUTLINE = Colour.LIGHT_GREY;
-    public final Colour SELECTION_FILL = OUTLINE.withAlpha(0.5);
 
     public final Colour TOWER_UPGRADE_RANGE = Colour.RED.withAlpha(1.0);
     public final Colour TOWER_UPGRADE_DAMAGE = Colour.RED.withAlpha(1.0);

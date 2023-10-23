@@ -484,7 +484,7 @@ public class GameManager {
         return game.enemies.stream()
                            .filter(enemy -> nearPos.distance(enemy.position) < maxDist)
 //                           .min(Comparator.comparingDouble(enemy -> nearPos.distanceSquared(enemy.position)))
-                           .max(Comparator.comparingDouble(enemy -> enemy.pathProgress))
+                           .max(Comparator.comparingDouble(enemy -> enemy.pathProgress / enemy.path.positions.length))
                            .orElse(null);
     }
 
