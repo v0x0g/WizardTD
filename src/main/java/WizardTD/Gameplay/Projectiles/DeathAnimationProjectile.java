@@ -29,7 +29,7 @@ public class DeathAnimationProjectile extends Projectile {
     }
 
     @Override
-    public void render(final PApplet app, final GameData gameData, final UiState uiState) {
+    public void render(final App app, final GameData gameData, final UiState uiState) {
         final PImage img = this.animation.getImage(progress);
         Renderer.renderSimpleEnemy(app,img, this.position);
     }

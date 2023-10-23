@@ -43,14 +43,14 @@ public final class TowerTile extends Tile {
     @SuppressWarnings({"unused", "DataFlowIssue"})
     @OnEvent(eventTypes = EventType.AppSetup)
     private static void loadImages(final Event event) {
-        final PApplet app = (PApplet) event.dataObject;
+        final App app = (PApplet) event.dataObject;
         tileLevel0 = UiManager.loadImage(app, Resources.Tiles.Tower.Tile0);
         tileLevel1 = UiManager.loadImage(app, Resources.Tiles.Tower.Tile1);
         tileLevel2 = UiManager.loadImage(app, Resources.Tiles.Tower.Tile2);
     }
 
     @Override
-    public void render(final PApplet app, final GameData gameData, final UiState uiState) {
+    public void render(final App app, final GameData gameData, final UiState uiState) {
         /*
          * NOTE: Due to tile rendering order, the upgrades might get cut off by other tiles
          * This is only an issue at stupid upgrade levels, so it's not really considered

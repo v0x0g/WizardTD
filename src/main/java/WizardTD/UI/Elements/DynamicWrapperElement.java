@@ -18,7 +18,7 @@ public class DynamicWrapperElement<T extends UiElement> extends UiElement {
     public final UiAction<T> preRender;
 
     @Override
-    public void render(final PApplet app, final GameData gameData, final UiState uiState) {
+    public void render(final App app, final GameData gameData, final UiState uiState) {
         this.preRender.invoke(this.element, app, gameData, uiState);
         this.element.render(app, gameData, uiState);
     }

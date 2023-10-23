@@ -324,7 +324,7 @@ public class GameManager {
      * @param game      The object storing the game data
      * @param deltaTime Time between the last frame start and the current frame start
      */
-    public static void tickGameWithSubtick(final PApplet app, final GameData game, final double deltaTime) {
+    public static void tickGameWithSubtick(final App app, final GameData game, final double deltaTime) {
         /*
          * If the tick takes too long, split it up into multiple smaller sub-ticks
          * This should keep everything accurate, since we aren't making massive long ticks
@@ -382,7 +382,7 @@ public class GameManager {
      * @param visualDeltaTime Delta-time used for visual purposes, such as animations and UI
      */
     private static void internalTickGame(
-            final PApplet app, final GameData game, final double gameDeltaTime, final double visualDeltaTime) {
+            final App app, final GameData game, final double gameDeltaTime, final double visualDeltaTime) {
         // Absorb mana through the atmosphere using mana accumulators
         game.mana += gameDeltaTime * game.config.mana.initialManaTrickle * game.manaGainMultiplier;
         game.mana = Math.min(game.mana, game.manaCap);

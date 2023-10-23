@@ -32,7 +32,7 @@ public class GremlinEnemy extends Enemy {
     @SuppressWarnings({"unused", "DataFlowIssue"})
     @OnEvent(eventTypes = EventType.AppSetup)
     private static void loadImages(final Event event) {
-        final PApplet app = (PApplet) event.dataObject;
+        final App app = (PApplet) event.dataObject;
         entityImage = UiManager.loadImage(app, Resources.Enemies.Gremlin.NORMAL);
         deathAnim = new ImageAnimation(
                 Arrays.stream(new String[]{
@@ -49,7 +49,7 @@ public class GremlinEnemy extends Enemy {
     }
 
     @Override
-    public void render(final PApplet app, final GameData gameData, final UiState uiState) {
+    public void render(final App app, final GameData gameData, final UiState uiState) {
         super.render(app, gameData, uiState);
         Renderer.renderSimpleEnemy(app, entityImage, this.position);
     }

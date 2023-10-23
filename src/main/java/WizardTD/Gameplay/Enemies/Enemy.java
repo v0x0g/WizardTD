@@ -75,14 +75,14 @@ public abstract class Enemy implements Tickable, Renderable {
     }
 
     @Override
-    public void render(final PApplet app, final GameData gameData, final UiState uiState) {
+    public void render(final App app, final GameData gameData, final UiState uiState) {
         this.renderHealthBar(app);
     }
 
     /**
      * Renders a health bar above the enemy
      */
-    public void renderHealthBar(final PApplet app) {
+    public void renderHealthBar(final App app) {
         /// Offset from the enemy's position to render the bar at
         final Vector2 OFFSET_PX = new Vector2(0, -16);
         /// How large the bar should be

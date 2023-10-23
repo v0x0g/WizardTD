@@ -36,7 +36,7 @@ public class UiManager {
      * @param app  Applet instance to load the image with
      * @param path Path to the image file
      */
-    public PImage loadImage(final PApplet app, @CompileTimeConstant final String path) {
+    public PImage loadImage(final App app, @CompileTimeConstant final String path) {
         Loggers.UI.debug("loading image at {}", path);
         final PImage img = app.loadImage(path);
         Loggers.UI.debug("loaded image at {}: {} (valid={})", path, img, ImageExt.isValidImage(img));
@@ -292,7 +292,7 @@ public class UiManager {
             // It's kinda cool that you can do this, I guess
             uiState.uiElements.add(new UiElement() {
                 @Override
-                public void render(final PApplet app, final GameData game, final UiState ui) {
+                public void render(final App app, final GameData game, final UiState ui) {
                     final Vector2 TOP_LEFT = new Vector2(650, 580);
                     final Vector2 BOT_RIGHT = new Vector2(750, 680);
 
@@ -347,7 +347,7 @@ public class UiManager {
             // Tower range indicator
             uiState.uiElements.add(new UiElement() {
                 @Override
-                public void render(final PApplet app, final GameData game, final UiState ui) {
+                public void render(final App app, final GameData game, final UiState ui) {
                     final Vector2 mousePos = new Vector2(app.mouseX, app.mouseY);
                     final Tile tile = UiManager.pixelCoordsToTile(mousePos, game);
 
@@ -411,13 +411,13 @@ public class UiManager {
                 public boolean keyMatches(final KeyPress keyPress) {return keyPress.equals(KEY);}
 
                 @Override
-                public void activate(final PApplet app, final GameData gameData, final UiState uiState) {
+                public void activate(final App app, final GameData gameData, final UiState uiState) {
                     GameManager.removeTower(
                             gameData, UiManager.pixelCoordsToTile(new Vector2(app.mouseX, app.mouseY), gameData));
                 }
 
                 @Override
-                public void render(final PApplet app, final GameData gameData, final UiState uiState) {}
+                public void render(final App app, final GameData gameData, final UiState uiState) {}
             });
         }
     }
@@ -461,7 +461,7 @@ public class UiManager {
     // region
 
     public void mouseEvent(
-            final PApplet app, final GameData gameData, final UiState uiState, final MousePress press) {
+            final App app, final GameData gameData, final UiState uiState, final MousePress press) {
         final @Nullable Tile tile = UiManager.pixelCoordsToTile(new Vector2(press.coords.x, press.coords.y), gameData);
         if (tile != null)
             Loggers.INPUT.debug("mouse event: {}; [{}, {}]: {}", press, tile.getPos().getX(), tile.getPos().getY(),
@@ -482,7 +482,7 @@ public class UiManager {
     }
 
     public void keyEvent(
-            final PApplet app, final GameData gameData, final UiState uiState, final KeyPress press) {
+            final App app, final GameData gameData, final UiState uiState, final KeyPress press) {
         // Pass on any key-presses to the UI elements
         Loggers.INPUT.debug("key event: {}", press);
 

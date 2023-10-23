@@ -45,7 +45,7 @@ public class Renderer {
     private static final RenderOrder[] sortedRenderOrders =
             RenderOrder.values().stream().sorted().toArray(RenderOrder[]::new);
 
-    public void render(final PApplet app, final GameData game, final UiState ui) {
+    public void render(final App app, final GameData game, final UiState ui) {
         Loggers.RENDER.debug("start render");
         final Instant startInstant = Instant.now();
         // When we render, we aggregate all the `Renderables`, and sort them into our map
@@ -89,7 +89,7 @@ public class Renderer {
      * @param centre Position of the tile, in pixel coordinates
      */
     public void renderSimpleTile(
-            final PApplet app, @Nullable PImage img, final Vector2 centre) {
+            final App app, @Nullable PImage img, final Vector2 centre) {
         if (!ImageExt.isValidImage(img)) {
             img = missingTextureImage;
             Loggers.RENDER.debug("tile [{00}, {00}]: missing texture", centre.x, centre.y);
@@ -106,7 +106,7 @@ public class Renderer {
      * @param pos Position of the entity, in tile coordinates
      */
     public void renderSimpleEnemy(
-            final PApplet app, @Nullable PImage img, final Vector2 pos) {
+            final App app, @Nullable PImage img, final Vector2 pos) {
         if (!ImageExt.isValidImage(img)) {
             img = missingTextureImage;
             Loggers.RENDER.debug("entity ({0}, {0): missing texture", pos.x, pos.y);

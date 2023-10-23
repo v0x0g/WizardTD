@@ -28,7 +28,7 @@ public class RectElement extends UiElement {
     }
 
     @Override
-    public void render(final PApplet app, final GameData gameData, final UiState uiState) {
+    public void render(final App app, final GameData gameData, final UiState uiState) {
         setColours(app, this.fillColour, this.outlineColour);
         app.rectMode(this.rectPosMode);
         app.rect(

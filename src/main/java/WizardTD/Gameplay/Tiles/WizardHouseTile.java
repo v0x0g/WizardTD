@@ -19,7 +19,7 @@ public final class WizardHouseTile extends Tile {
     @SuppressWarnings({"unused", "DataFlowIssue"})
     @OnEvent(eventTypes = EventType.AppSetup)
     private static void loadImages(final Event event) {
-        final PApplet app = (PApplet) event.dataObject;
+        final App app = (PApplet) event.dataObject;
         tileImage = UiManager.loadImage(app, Resources.Tiles.WizardHouse.ONLY_TILE);
         grassUnderTileImage = UiManager.loadImage(app, Resources.Tiles.Grass.ONLY_TILE);
     }
@@ -30,7 +30,7 @@ public final class WizardHouseTile extends Tile {
     }
 
     @Override
-    public void render(final PApplet app, final GameData gameData, final UiState uiState) {
+    public void render(final App app, final GameData gameData, final UiState uiState) {
         final Vector2 pos = UiManager.tileToPixelCoords(this);
         // Render an extra grass sprite beneath the house, because house is transparent and doesn't fill tile
         Renderer.renderSimpleTile(app, grassUnderTileImage, pos);

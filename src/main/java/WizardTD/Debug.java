@@ -50,7 +50,7 @@ public class Debug {
     /**
      * Draws a pathfinding overlay for the game to assist with debugging
      */
-    public void drawPathfindingOverlay(final PApplet app, final GameData game) {
+    public void drawPathfindingOverlay(final App app, final GameData game) {
         if (!pathfindingOverlayEnabled) return;
 
         final float LINE_THICKNESS = 2.0f;
@@ -96,7 +96,7 @@ public class Debug {
     /**
      * Draws a small overlay for which tile is currently hovered
      */
-    public void drawHoveredTileOverlay(final PApplet app, final GameData game) {
+    public void drawHoveredTileOverlay(final App app, final GameData game) {
         if (!tileHoverOverlayEnabled) return;
 
         final Vector2 mousePos = new Vector2(app.mouseX, app.mouseY);
@@ -105,7 +105,7 @@ public class Debug {
         Renderer.renderSimpleTile(app, tileHoverImage, UiManager.tileToPixelCoords(tile));
     }
 
-    public void showTowerUpgradeOverlay(final PApplet app, final GameData game) {
+    public void showTowerUpgradeOverlay(final App app, final GameData game) {
         if (!towerUpgradeOverlayEnabled) return;
 
         game.board.stream()
@@ -129,7 +129,7 @@ public class Debug {
                   });
     }
 
-    public void showF3Overlay(final PApplet app, final GameData game, final UiState ui) {
+    public void showF3Overlay(final App app, final GameData game, final UiState ui) {
         if (!f3OverlayEnabled) return;
 
         final String str = String.format(

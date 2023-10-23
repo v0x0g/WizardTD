@@ -27,7 +27,7 @@ public class TextElement extends UiElement {
     public @NonNull String text;
 
     @Override
-    public void render(final PApplet app, final GameData gameData, final UiState uiState) {
+    public void render(final App app, final GameData gameData, final UiState uiState) {
         app.fill(Theme.TEXT.asInt());
         app.rectMode(this.rectPosMode);
         app.textAlign(this.textAlignMode, this.textAlignMode);

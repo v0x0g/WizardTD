@@ -20,7 +20,7 @@ public class ImageExt {
      * @param applet PApplet so we can create the image
      * @return the new rotated image
      */
-    public PImage rotate(final PApplet applet, final PImage pImg, final double angle) {
+    public PImage rotate(final App applet, final PImage pImg, final double angle) {
         final BufferedImage img = (BufferedImage) pImg.getNative();
         final double rads = Math.toRadians(angle);
         final double sin = Math.abs(Math.sin(rads));

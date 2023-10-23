@@ -24,7 +24,7 @@ public class InvalidTile extends Tile {
     );
 
     @Override
-    public void render(final PApplet app, final GameData gameData, final UiState uiState) {
+    public void render(final App app, final GameData gameData, final UiState uiState) {
         Renderer.renderSimpleTile(app, invalidTileImg, UiManager.tileToPixelCoords(this));
     }
 }

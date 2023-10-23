@@ -24,7 +24,7 @@ public final class PathTile extends Tile {
     @SuppressWarnings("unused")
     private static void loadImages(final Event evt) {
         assert evt.dataObject != null;
-        final PApplet app = (PApplet) evt.dataObject;
+        final App app = (PApplet) evt.dataObject;
 
         // Angles to rotate by
         final double NONE = 0;
@@ -112,7 +112,7 @@ public final class PathTile extends Tile {
     }
 
     @Override
-    public void render(final PApplet app, final GameData gameData, final UiState uiState) {
+    public void render(final App app, final GameData gameData, final UiState uiState) {
         Renderer.renderSimpleTile(app, pathSidesMap.get(this.connectedPathSides), UiManager.tileToPixelCoords(this));
     }
 }

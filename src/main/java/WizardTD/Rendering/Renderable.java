@@ -16,5 +16,5 @@ public interface Renderable {
     /**
      * Renders the object, using the specified `app` instance
      */
-    void render(final PApplet app, GameData gameData, UiState uiState);
+    void render(final App app, GameData gameData, UiState uiState);
 }

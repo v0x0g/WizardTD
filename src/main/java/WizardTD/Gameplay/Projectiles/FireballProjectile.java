@@ -44,7 +44,7 @@ public class FireballProjectile extends Projectile {
     @SuppressWarnings({"unused", "DataFlowIssue"})
     @OnEvent(eventTypes = EventType.AppSetup)
     private static void loadImages(final Event event) {
-        final PApplet app = (PApplet) event.dataObject;
+        final App app = (PApplet) event.dataObject;
         projectileImage = UiManager.loadImage(app, Resources.Projectiles.Fireball.PROJECTILE_IMAGE);
         crosshairImage = UiManager.loadImage(app, Resources.Projectiles.Fireball.CROSSHAIR_IMAGE);
     }
@@ -85,7 +85,7 @@ public class FireballProjectile extends Projectile {
     }
 
     @Override
-    public void render(final PApplet app, final GameData gameData, final UiState uiState) {
+    public void render(final App app, final GameData gameData, final UiState uiState) {
         Renderer.renderSimpleEnemy(app, projectileImage, this.position);
         Renderer.renderSimpleEnemy(app, crosshairImage, this.targetEnemy.position);
     }
