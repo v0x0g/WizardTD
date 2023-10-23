@@ -304,7 +304,7 @@ public class GameManager {
 
         final GameData game = new GameData(
                 GameState.PLAYING, board, enemies, projectiles, waves,
-                new ArrayList<>(), desc.config, spells, desc
+                new ArrayList<>(), desc.config, spells
         );
         game.mana = mana_;
         game.manaCap = manaCap_;
@@ -571,7 +571,10 @@ public class GameManager {
      * Restarts the game, by creating a new game
      */
     public void resetGame(final App app) {
-        // It's
+        // It's genuinely almost impossible to get game cloning working
+        // There are references, to references, to references etc.
+        // The only feasible way without a metric fuck-ton of boilerplate
+        // is to just reload the game from disk
         app.gameData =  createGame(loadGameDescriptor());
     }
 }

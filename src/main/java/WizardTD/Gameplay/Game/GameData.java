@@ -33,11 +33,6 @@ public final class GameData {
     public @NonNull GameSpells spells;
 
     /**
-     * Template used to create this game instance.
-     */
-    public final GameDescriptor descriptor;
-
-    /**
      * Flags for controlling the speed of the game
      */
     public boolean
