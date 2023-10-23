@@ -26,7 +26,7 @@ public class GameConfig {
      * each at most SUB_TICK_THRESHOLD long
      */
     public static final double SUB_TICK_THRESHOLD = 50.0/1000.0 /*50 ms*/;
-
+    public static final int MAX_SUB_TICKS_PER_FRAME = 100;
     /**
      * How many pixels large each tile is
      */

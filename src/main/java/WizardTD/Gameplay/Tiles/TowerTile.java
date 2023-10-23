@@ -63,8 +63,8 @@ public final class TowerTile extends Tile {
         final long cappedTowerLevel = min(2, towerLevel);
 
         final PImage tileImage = cappedTowerLevel == 0 ? tileLevel0 :
-                                 cappedTowerLevel == 1 ? tileLevel1 :
-                                 tileLevel2;
+                cappedTowerLevel == 1 ? tileLevel1 :
+                        tileLevel2;
 
         Renderer.renderSimpleTile(app, tileImage, UiManager.tileToPixelCoords(this));
         final Vector2 pixelPos = UiManager.tileToPixelCoords(this);
@@ -80,7 +80,7 @@ public final class TowerTile extends Tile {
         final StringBuilder rangeStr = new StringBuilder();
         for (int i = 0; i < numRangeIndicators; i++) rangeStr.append('O');
         app.text(rangeStr.toString(), (float) rangePos.x, (float) rangePos.y);
-        
+
         // Render speed upgrade
         final float SPEED_INDICATOR_RADIUS = 20.0f;
         app.rectMode(PConstants.CENTER);
@@ -89,7 +89,7 @@ public final class TowerTile extends Tile {
         final double speedIndicatorWidth = Math.log(Math.pow(this.speedUpgrades - cappedTowerLevel, 2) + 1);
         // `a/(x+a), a=2`
         final double speedIndicatorStrength = 2.0 / (this.speedUpgrades - cappedTowerLevel + 2);
-        app.strokeWeight((float)speedIndicatorWidth);
+        app.strokeWeight((float) speedIndicatorWidth);
         app.stroke(Colour.lerp(Theme.TOWER_UPGRADE_SPEED, Colour.BLACK, speedIndicatorStrength).asInt());
         app.rect((float) pixelPos.x, (float) pixelPos.y, SPEED_INDICATOR_RADIUS, SPEED_INDICATOR_RADIUS);
 
@@ -169,24 +169,33 @@ public final class TowerTile extends Tile {
     @Override
     public void tick(final @NonNull GameData game, final double gameDeltaTime, final double visualDeltaTime) {
         this.magazine += gameDeltaTime * this.calculateSpeed(game);
-        // Clamp the magazine to 1, so we don't save up a massive burst of fireballs
-        this.magazine = Math.min(1.0, magazine);
 
-        // Don't have any fireballs
-        if (this.magazine < 1.0) return;
+        // Can shoot multiple times per frame
+        while (true) {
+            // Don't have any fireballs
+            if (this.magazine < 1.0) return;
 
-        final double range = this.calculateRange(game);
+            final double range = this.calculateRange(game);
 
-        final Vector2 thisPos = new Vector2(this.getPos().getX(), this.getPos().getY());
-        final Enemy enemy = GameManager.getNextEnemy(game, thisPos, range);
-        if (enemy == null) return;
+            final Vector2 thisPos = new Vector2(this.getPos().getX(), this.getPos().getY());
+            final Enemy enemy = GameManager.getNextEnemy(game, thisPos, range);
 
-        this.magazine--;
+            if (enemy == null) {
+                // Clamp the magazine, so we don't save up a massive burst of fireballs
+                // when there are no enemies
+                // If there are enemies nearby, it's fine
+                this.magazine = Math.min(1.0, magazine);
 
-        final double damage = this.calculateDamage(game);
+                return;
+            }
 
-        final FireballProjectile fireball = new FireballProjectile(thisPos, enemy, damage);
-        game.projectiles.add(fireball);
-        Loggers.GAMEPLAY.info("tower fire: tower={}, target={}, fireball={}", this, enemy, fireball);
+            this.magazine--;
+
+            final double damage = this.calculateDamage(game);
+
+            final FireballProjectile fireball = new FireballProjectile(thisPos, enemy, damage);
+            game.projectiles.add(fireball);
+            Loggers.GAMEPLAY.info("tower fire: tower={}, target={}, fireball={}", this, enemy, fireball);
+        }
     }
 }

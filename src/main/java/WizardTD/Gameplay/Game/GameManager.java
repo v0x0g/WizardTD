@@ -59,8 +59,7 @@ public class GameManager {
             trace("reading config file");
             dataStr = new String(Files.readAllBytes(path));
             trace("config file read: contents are \"{}\"", dataStr);
-        }
-        catch (final IOException e) {
+        } catch (final IOException e) {
             debug(e, "error reading config file");
             return empty();
         }
@@ -68,8 +67,7 @@ public class GameManager {
             final JSONObject data = JSONObject.parse(dataStr);
             trace("parsed config: {}", data);
             return Optional.of(data);
-        }
-        catch (final RuntimeException e) {
+        } catch (final RuntimeException e) {
             debug(e, "error parsing config");
             return empty();
         }
@@ -98,8 +96,7 @@ public class GameManager {
             );
 
             return Optional.of(dataStr);
-        }
-        catch (final IOException e) {
+        } catch (final IOException e) {
             debug(e, "error reading layout file");
             return empty();
         }
@@ -152,8 +149,7 @@ public class GameManager {
                     ))
             );
             trace("level config={}", gameDataConfig);
-        }
-        catch (final RuntimeException e) {
+        } catch (final RuntimeException e) {
             debug(e, "can't load level: failed parsing config json: (simple values)");
             return null;
         }
@@ -211,8 +207,7 @@ public class GameManager {
                     board.setTile(row, col, tile);
                 }
             }
-        }
-        catch (final Exception e) {
+        } catch (final Exception e) {
             debug("can't load level: failed parsing config json (layout)");
             return null;
         }
@@ -284,8 +279,7 @@ public class GameManager {
                         );
                     })
                     .collect(Collectors.toList());
-        }
-        catch (final RuntimeException e) {
+        } catch (final RuntimeException e) {
             debug(e, "can't load game: failed parsing config json (waves)");
             return null;
         }
@@ -335,11 +329,20 @@ public class GameManager {
          *
          * This essentially calculates how many ticks (`numTicks`) we need to have each tick be under the threshold
          * and does that many ticks, with each tick being (`deltaTime/numTicks`)
+         *
+         *
          */
 
         final double speedMultiplier = game.fastForward ? FAST_FORWARD_SPEED : 1.0;
 
-        final int numTicks = (int) Math.ceil(deltaTime * speedMultiplier / SUB_TICK_THRESHOLD);
+        int numTicks = (int) Math.ceil(deltaTime * speedMultiplier / SUB_TICK_THRESHOLD);
+        if (numTicks > MAX_SUB_TICKS_PER_FRAME) {
+            Loggers.EVENT.warn(
+                    "had to throttle num sub-ticks: wanted {} (max {}), delta={} ({}), mult = {}", numTicks,
+                    MAX_SUB_TICKS_PER_FRAME, deltaTime, deltaTime * speedMultiplier, speedMultiplier
+            );
+            numTicks = MAX_SUB_TICKS_PER_FRAME;
+        }
         Loggers.EVENT.trace(
                 "deltaTime = {}, thresh = {}, mult = {}, numTicks = {}",
                 deltaTime,
@@ -481,11 +484,16 @@ public class GameManager {
 
     public @Nullable Enemy getNextEnemy(final GameData game, final Vector2 nearPos, final double maxDist) {
         // This is a linear search, but it shouldn't be an issue since we should be < 1000 elems
-        return game.enemies.stream()
+        // We also add a little bit of randomness so that we don't always target the same enemy with multiple projectiles
+        final long RANDOMISE = 10;
+        final Enemy[] enemies = game.enemies.stream()
                            .filter(enemy -> nearPos.distance(enemy.position) < maxDist)
-//                           .min(Comparator.comparingDouble(enemy -> nearPos.distanceSquared(enemy.position)))
-                           .min(Comparator.comparingDouble(enemy -> enemy.path.positions.length - enemy.pathProgress))
-                           .orElse(null);
+//                           .sorted(Comparator.comparingDouble(enemy -> nearPos.distanceSquared(enemy.position)))
+                           .sorted(Comparator.comparingDouble(enemy -> enemy.path.positions.length - enemy.pathProgress))
+                            .limit(RANDOMISE)
+                            .toArray(Enemy[]::new);
+        if (enemies.length == 0) return null;
+        return enemies[ThreadLocalRandom.current().nextInt(enemies.length)];
     }
 
     /**
@@ -533,9 +541,9 @@ public class GameManager {
         // Now apply upgrades, if possible
         tower.upgradeIfPossible(game, upgradeRange, upgradeSpeed, upgradeDamage);
     }
-    
-    public void removeTower(final GameData game, final Tile tile){
-        if(!(tile instanceof TowerTile)) return;
+
+    public void removeTower(final GameData game, final Tile tile) {
+        if (!(tile instanceof TowerTile)) return;
         game.board.setTile(tile.getPos().getX(), tile.getPos().getY(), new GrassTile());
     }
 }

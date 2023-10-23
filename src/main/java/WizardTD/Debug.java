@@ -113,7 +113,7 @@ public class Debug {
                   .map(TowerTile.class::cast)
                   .forEach(t -> {
                       final String str = MessageFormat.format(
-                              "r: {0}\ns: {1}\nd: {2}\nm: {3,number,#.000}",
+                              "r: {0}\ns: {1}\nd: {2}\nm: {3,number,###00.000}",
                               t.rangeUpgrades,
                               t.speedUpgrades,
                               t.damageUpgrades,

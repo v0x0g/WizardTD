@@ -372,16 +372,18 @@ public class UiManager {
             );
             // Remove towers if we press the S key
             uiState.uiElements.add(new InteractiveElement() {
+                final KeyPress KEY = new KeyPress(KeyCode.S, false, KeyAction.PRESS);
 
                 @Override
                 public boolean isMouseOver(final Vector2 mousePos) {return false;}
 
                 @Override
-                public boolean keyMatches(final KeyPress keyPress) {return false;}
+                public boolean keyMatches(final KeyPress keyPress) {return keyPress.equals(KEY);}
 
                 @Override
                 public void activate(final PApplet app, final GameData gameData, final UiState uiState) {
-                    GameManager.removeTower(gameData, UiManager.pixelCoordsToTile(new Vector2(app.mouseX, app.mouseY), gameData));
+                    GameManager.removeTower(
+                            gameData, UiManager.pixelCoordsToTile(new Vector2(app.mouseX, app.mouseY), gameData));
                 }
 
                 @Override

@@ -66,6 +66,37 @@
       ]
     },
     {
+      "duration": 30,
+      "pre_wave_pause": 5,
+      "monsters": [
+        {
+          "type": "gremlin",
+          "hp": 15,
+          "speed": 1.0,
+          "armour": 0.7,
+          "mana_gained_on_kill": 150,
+          "quantity": 999
+        },
+        {
+          "type": "worm",
+          "hp": 1,
+          "speed": 0.3,
+          "armour": 0.7,
+          "mana_gained_on_kill": 70,
+          "quantity": 999
+        },
+        {
+          "type": "beetle",
+          "hp": 15,
+          "speed": 1.0,
+          "armour": 0.7,
+          "mana_gained_on_kill": 700,
+          "quantity": 999
+        }
+      ]
+    },
+
+    {
       "duration": 99999999999999,
       "pre_wave_pause": 0,
       "monsters": [
@@ -97,14 +128,14 @@
     }
   ],
   "initial_tower_range": 96,
-  "initial_tower_firing_speed": 1.5,
+  "initial_tower_firing_speed": 15,
   "initial_tower_damage": 40,
-  "initial_mana": 200,
+  "initial_mana": 2000,
   "initial_mana_cap": 1000,
-  "initial_mana_gained_per_second": 2,
+  "initial_mana_gained_per_second": 2000,
   "tower_cost": 100,
-  "mana_pool_spell_initial_cost": 100,
-  "mana_pool_spell_cost_increase_per_use": 150,
+  "mana_pool_spell_initial_cost": 0,
+  "mana_pool_spell_cost_increase_per_use": 15,
   "mana_pool_spell_cap_multiplier": 1.5,
-  "mana_pool_spell_mana_gained_multiplier": 1.1
+  "mana_pool_spell_mana_gained_multiplier": 10
 }
