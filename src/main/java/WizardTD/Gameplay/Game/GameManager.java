@@ -560,8 +560,18 @@ public class GameManager {
         tower.upgradeIfPossible(game, upgradeRange, upgradeSpeed, upgradeDamage);
     }
 
+    /**
+     * Removes a tower at the given tile's position
+     */
     public void removeTower(final GameData game, final Tile tile) {
         if (!(tile instanceof TowerTile)) return;
         game.board.setTile(tile.getPos().getX(), tile.getPos().getY(), new GrassTile());
+    }
+
+    /**
+     * Restarts the game, by returning a new fresh game (possibly based off the old game)
+     */
+    public GameData resetGame(final GameData game){
+        return createGame(game.descriptor);
     }
 }
