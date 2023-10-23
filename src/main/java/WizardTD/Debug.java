@@ -1,5 +1,6 @@
 package WizardTD;
 
+import WizardTD.Delegates.*;
 import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Gameplay.Pathfinding.*;
@@ -28,11 +29,23 @@ public class Debug {
                     Colour.BLACK.withAlpha(0.5),
                     Colour.WHITE.withAlpha(0.5)
             );
-    public static boolean
+    public boolean
             pathfindingOverlayEnabled = false,
             tileHoverOverlayEnabled = true,
             f3OverlayEnabled = false,
             towerUpgradeOverlayEnabled = false;
+
+    /**
+     * Times hwo long an action takes to invoke
+     */
+    public double timeAction(final Action0 action) {
+        final double NANOS_PER_SECOND = 1000_000_000.0;
+        final double before = System.nanoTime() / NANOS_PER_SECOND;
+        action.invoke();
+        final double after = System.nanoTime() / NANOS_PER_SECOND;
+
+        return after - before;
+    }
 
     /**
      * Draws a pathfinding overlay for the game to assist with debugging
@@ -60,7 +73,9 @@ public class Debug {
         for (int i = 0; i < paths.size(); i++) {
             final EnemyPath path = paths.get(i);
             // Give each line a slight offset, so they don't all overlap
-            final double offsetVal = Numerics.lerp(-GameConfig.TILE_SIZE_PX / 2.0, GameConfig.TILE_SIZE_PX / 2.0, (double) i / paths.size());
+            final double offsetVal = Numerics.lerp(-GameConfig.TILE_SIZE_PX / 2.0, GameConfig.TILE_SIZE_PX / 2.0,
+                                                   (double) i / paths.size()
+            );
             final Vector2 offset = new Vector2(offsetVal, offsetVal);
             final Colour colour = DRAW_COLOURS[i % DRAW_COLOURS.length].withAlpha(0.5);
             // Lerp along the path and draw lines/dots to visualise
@@ -125,6 +140,10 @@ public class Debug {
                 "uiElements=%02d\n" +
 
                 "\n" +
+                "===== PERF =====\n" +
+                "renderTime=%04.1f ms, tickTime=%04.1f ms\n" +
+
+                "\n" +
                 "===== TICK =====\n" +
                 "subTickThresh=%03.1f s, numTicks=%02d, speedMult=%03.1f\n" +
                 "gameDelta=%01.4f s, visualDelta=%01.4f s\n" +
@@ -144,6 +163,8 @@ public class Debug {
                 Stats.Frames.avgFps, Stats.Frames.fps, Stats.Frames.frameCount,
                 Stats.Frames.lastTick, Stats.Frames.thisTick, Stats.Frames.deltaTime,
                 ui.uiElements.size(),
+                
+                Stats.Perf.renderTime * 1000, Stats.Perf.tickTime * 1000,
 
                 Stats.Tick.subTickThresh, Stats.Tick.numTicks, Stats.Tick.speedMultiplier,
                 Stats.Tick.gameDelta, Stats.Tick.visualDelta,
@@ -153,8 +174,9 @@ public class Debug {
 
                 game.enemies.size(), game.projectiles.size(),
 
-                game.config.mana.initialManaTrickle, game.config.mana.initialManaTrickle *
-                                                     game.manaGainMultiplier, game.manaGainMultiplier
+                game.config.mana.initialManaTrickle,
+                game.config.mana.initialManaTrickle * game.manaGainMultiplier,
+                game.manaGainMultiplier
 
         );
 
@@ -184,6 +206,10 @@ public class Debug {
             public double subTickThresh, speedMultiplier;
             public double gameDelta, visualDelta;
             public long numTicks;
+        }
+        @UtilityClass
+        public class Perf {
+            public double renderTime, tickTime;
         }
     }
 }
