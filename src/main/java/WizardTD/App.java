@@ -33,14 +33,14 @@ public final class App extends PApplet {
 
         Logger.info("init game and stuff");
 
-        final GameDescriptor gameDesc = GameManager.loadGameDescriptor();
+        final GameDescriptor gameDesc = GameLoader.loadGameDescriptor();
         Logger.debug("gameDesc={}", gameDesc);
         if (gameDesc == null) {
             Logger.warn("did not manage to load game descriptor :(");
             throw new AppInitException("couldn't load game descriptor");
         }
         Logger.debug("got gameDesc");
-        this.gameData = GameManager.createGame(gameDesc);
+        this.gameData = GameLoader.createGame(gameDesc);
         Logger.debug("gameData={}", this.gameData);
 
         Logger.debug("init uiState");

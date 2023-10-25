@@ -7,7 +7,6 @@ import WizardTD.UI.Elements.*;
 import WizardTD.UI.*;
 import lombok.*;
 import mikera.vectorz.*;
-import processing.core.*;
 
 @ToString
 @EqualsAndHashCode(callSuper = true)

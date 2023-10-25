@@ -1,4 +1,4 @@
-package WizardTD.Ext;
+package WizardTD.UI;
 
 import lombok.*;
 import processing.core.*;

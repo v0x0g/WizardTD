@@ -36,12 +36,10 @@ public class EventManager {
         Loggers.EVENT.debug("start invoke event: {}", event);
         // Ensure we have the entry for corresponding event type
         final Set<EventMethod> subscribers = subscriberList(event.eventType);
-        subscribers
-                .stream()
-                .forEach(sub -> {
-                    Loggers.EVENT.trace("invoking event: {} for {}", event, sub);
-                    sub.processEvent(event);
-                });
+        subscribers.forEach(sub -> {
+            Loggers.EVENT.trace("invoking event: {} for {}", event, sub);
+            sub.processEvent(event);
+        });
 
         Loggers.EVENT.debug("done invoke event: {}", event);
     }
@@ -139,11 +137,9 @@ public class EventManager {
                             public void processEvent(final Event event) {
                                 try {
                                     method.invoke(null, event);
-                                }
-                                catch (final InvocationTargetException e) {
+                                } catch (final InvocationTargetException e) {
                                     warn(e, "exception when invoking event method {}", method);
-                                }
-                                catch (final IllegalAccessException e) {
+                                } catch (final IllegalAccessException e) {
                                     error(e, "couldn't invoke event method for {} (Illegal Access)", method);
                                 }
                             }

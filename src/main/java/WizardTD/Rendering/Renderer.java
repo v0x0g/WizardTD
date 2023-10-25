@@ -17,7 +17,10 @@ import java.util.*;
 @UtilityClass
 @ExtensionMethod(Arrays.class)
 public class Renderer {
-    public final PImage missingTextureImage = ImageExt.generatePattern(
+    /**
+     * Purple black checkers, minecraft style
+     */
+    private final PImage missingTextureImage = ImageExt.generatePattern(
             GameConfig.TILE_SIZE_PX,
             GameConfig.TILE_SIZE_PX,
             GameConfig.TILE_SIZE_PX / 2,
@@ -35,14 +38,14 @@ public class Renderer {
      * I use thread-locals here just in case, probably not necessary, but it's good practice to be certain
      * (thanks Rust)
      */
-    private static final ThreadLocal<HashMap<RenderOrder, List<Renderable>>> renderOrderMaps =
+    private final ThreadLocal<HashMap<RenderOrder, List<Renderable>>> renderOrderMaps =
             ThreadLocal.withInitial(HashMap::new);
 
     /**
      * Sorted array containing the render orders.
      * Iterate over this in order to render everything correctly
      */
-    private static final RenderOrder[] sortedRenderOrders =
+    private final RenderOrder[] sortedRenderOrders =
             RenderOrder.values().stream().sorted().toArray(RenderOrder[]::new);
 
     public void render(final App app, final GameData game, final UiState ui) {

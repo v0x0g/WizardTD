@@ -254,7 +254,7 @@ public class UiManager {
             addSidebarButton(
                     uiState, sidebarButtonPos, "R", null, "Restart Game", KeyCode.R,
                     (_elem, app, game, ui) ->
-                            GameManager.resetGame(app),
+                            GameLoader.resetGame(app),
                     (elem, app, game, ui) ->
                             elem.fillColour = Theme.buttonColour(game.gameState == GameState.PLAYING, elem.isHovered)
             );
@@ -468,32 +468,43 @@ public class UiManager {
     // ========== INPUT ========== 
     // region
 
-    public void mouseEvent(
-            final App app, final GameData gameData, final UiState uiState, final MousePress press) {
+    /**
+     * Handles a mouse event (when the mouse was moved/clicked by the user)
+     */
+    public void mouseEvent(final App app, final GameData gameData, final UiState uiState, final MousePress press) {
         final @Nullable Tile tile = UiManager.pixelCoordsToTile(new Vector2(press.coords.x, press.coords.y), gameData);
         if (tile != null)
-            Loggers.INPUT.debug("mouse event: {}; [{}, {}]: {}", press, tile.getPos().getX(), tile.getPos().getY(),
-                                tile
+            Loggers.INPUT.debug(
+                    "mouse event: {}; [{}, {}]: {}",
+                    press,
+                    tile.getPos().getX(),
+                    tile.getPos().getY(),
+                    tile
             );
         else Loggers.INPUT.debug("mouse event: {}; no tile", press);
+
+        getInteractiveElements(uiState.uiElements).forEach(elem -> elem.isHovered = elem.isMouseOver(press.coords));
 
         // Click any elements that matched on hovering
         // Hopefully this only clicks one element at a time
         if (press.action == MouseAction.CLICK) {
-            getInteractiveElements(uiState.uiElements).filter(elem -> elem.isMouseOver(press.coords)).forEach(elem -> {
-                Loggers.INPUT.debug("activate element {}", elem);
-                elem.activate(app, gameData, uiState);
-            });
+            getInteractiveElements(uiState.uiElements)
+                    .filter(elem -> elem.isMouseOver(press.coords))
+                    .forEach(elem -> {
+                        Loggers.INPUT.debug("activate element {}", elem);
+                        elem.activate(app, gameData, uiState);
+                    });
         }
-
-        getInteractiveElements(uiState.uiElements).forEach(elem -> elem.isHovered = elem.isMouseOver(press.coords));
     }
 
+    /**
+     * Handles a key event (when a key was pressed/unpressed by the user)
+     */
     public void keyEvent(
             final App app, final GameData gameData, final UiState uiState, final KeyPress press) {
-        // Pass on any key-presses to the UI elements
         Loggers.INPUT.debug("key event: {}", press);
 
+        // Pass on any key-presses to the UI elements
         // Hopefully this only clicks one element at a time
         getInteractiveElements(uiState.uiElements).filter(elem -> elem.keyMatches(press)).forEach(elem -> {
             Loggers.INPUT.debug("activate element {}", elem);
@@ -501,8 +512,11 @@ public class UiManager {
         });
     }
 
+    /**
+     * Gets a stream of all the {@link InteractiveElement}s, from the raw UI elements
+     */
     @SuppressWarnings("unchecked")
-    public static Stream<InteractiveElement> getInteractiveElements(
+    private static Stream<InteractiveElement> getInteractiveElements(
             final Collection<UiElement> uiElements) {
         /*
          SAFETY: This does use unchecked casting, however the objects are validated

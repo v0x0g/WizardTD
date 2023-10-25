@@ -15,7 +15,7 @@ public class GameSpellTests {
         final double GAIN_INCREASE = 1.1;
         final double COST_INCREASE = 10;
         
-        final GameData game = GameManager.createGame(new GameDescriptor(
+        final GameData game = GameLoader.createGame(new GameDescriptor(
                 "Test",
                 new Board(),
                 new GameDataConfig(

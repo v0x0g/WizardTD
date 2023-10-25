@@ -2,7 +2,6 @@ package WizardTD.Gameplay.Enemies;
 
 import WizardTD.*;
 import WizardTD.Event.*;
-import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Gameplay.Projectiles.*;
 import WizardTD.Rendering.*;

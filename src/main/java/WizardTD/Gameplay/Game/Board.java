@@ -21,7 +21,7 @@ public final class Board {
      * This should always be sized exactly `[BOARD_SIZE_TILES][BOARD_SIZE_TILES]`.
      * Indices are `[row][col]`
      */
-    public @NonNull Tile[][] tiles;
+    public final @NonNull Tile[][] tiles;
 
     public Board() {
         // Default value is filled with invalid tiles

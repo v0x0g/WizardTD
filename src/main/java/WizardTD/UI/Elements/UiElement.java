@@ -4,7 +4,6 @@ import WizardTD.*;
 import WizardTD.Rendering.*;
 import WizardTD.UI.Appearance.*;
 import lombok.*;
-import processing.core.*;
 
 @ToString
 public abstract class UiElement implements Renderable {
@@ -12,8 +11,8 @@ public abstract class UiElement implements Renderable {
     /**
      * Helper function that sets up simple shape parameters
      *
-     * @param outline
-     * @param fill
+     * @param outline Outline colour for the shape
+     * @param fill Fill colour for the shape
      */
     protected static void setColours(
             final App app, final Colour fill, final Colour outline) {

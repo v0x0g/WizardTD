@@ -3,7 +3,6 @@ package WizardTD.Rendering;
 import WizardTD.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.UI.*;
-import processing.core.*;
 
 /**
  * Interface for all objects that should be rendered to the screen

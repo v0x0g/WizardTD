@@ -1,7 +1,6 @@
 package WizardTD.Gameplay.Projectiles;
 
 import WizardTD.*;
-import WizardTD.Ext.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Rendering.*;
 import WizardTD.UI.*;

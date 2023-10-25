@@ -3,7 +3,6 @@ package WizardTD.Delegates;
 import WizardTD.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.UI.*;
-import processing.core.*;
 
 /**
  * Delegate type for UI actions

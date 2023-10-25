@@ -11,8 +11,6 @@ import java.util.*;
 
 /**
  * Factory class that creates enemies of a specific type
- *
- * @param <TEnemy>
  */
 @ToString
 @RequiredArgsConstructor

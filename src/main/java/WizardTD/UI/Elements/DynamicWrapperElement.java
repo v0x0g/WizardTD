@@ -5,7 +5,6 @@ import WizardTD.Delegates.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.UI.*;
 import lombok.*;
-import processing.core.*;
 
 /**
  * Fancy wrapper class that allows you to wrap an inner {@link UiElement}

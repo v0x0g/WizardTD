@@ -6,5 +6,5 @@ package WizardTD.Gameplay.Game;
 public enum GameState {
     PLAYING,
     WON,
-    LOST;
+    LOST
 }
