@@ -36,7 +36,7 @@ public final class Wave {
     private double enemySpawnCounter;
     @Getter
     private double timer;
-    
+
     public Wave(
             final double duration, final double delayBeforeWave, final double spawnRateMult,
             final long waveNumber,
@@ -66,7 +66,7 @@ public final class Wave {
     /// Gets the next enemy for this wave
     public @Nullable Enemy getEnemy() {
         if (this.getWaveState() != WaveState.SPAWNING) return null;
-        if (this.enemySpawnCounter <= 1) return null;
+        if (this.enemySpawnCounter < 1) return null;
 
         while (!enemyFactories.isEmpty()) {
             // Pick a random factory by index, and spawn an enemy from it

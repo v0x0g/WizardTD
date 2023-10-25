@@ -62,7 +62,10 @@ public class EventManager {
         subscriberList(type).remove(method);
     }
 
-    public void init() {
+    /**
+     * Uses reflection to scan all loaded methods and subscribes them to their respective events they were marked for
+     */
+    public void reflectAndSubscribe() {
         info("init event manager");
         // If we wanted to restrict this slightly, we'd do `newClassGraph.acceptPackages("WizardTD")...`
         // But I don't care lol

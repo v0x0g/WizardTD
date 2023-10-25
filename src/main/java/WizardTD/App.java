@@ -33,7 +33,6 @@ public final class App extends PApplet {
 
         Logger.info("init game and stuff");
 
-        Logger.warn("WARN: DEBUG MODE");
         final GameDescriptor gameDesc = GameManager.loadGameDescriptor();
         Logger.debug("gameDesc={}", gameDesc);
         if (gameDesc == null) {
@@ -56,7 +55,7 @@ public final class App extends PApplet {
 
         Logger.info("program start; args={}", Arrays.toString(args));
 
-        EventManager.init();
+        EventManager.reflectAndSubscribe();
         EventManager.invokeEvent(new Event(EventType.Bootstrap));
 
         Logger.debug("run PApplet.main({})", APP_CLASS_NAME);
