@@ -1,5 +1,5 @@
 {
-  "layout": "level2.txt",
+  "layout": "levels/level2.txt",
   "waves": [
     {
       "duration": 8,
