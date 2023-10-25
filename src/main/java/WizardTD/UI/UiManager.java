@@ -165,63 +165,74 @@ public class UiManager {
         // ===== SIDEBAR BUTTONS =====
         final Vector2 sidebarButtonPos = new Vector2(SIDEBAR_X_PX + 8, SIDEBAR_Y_PX + 8);
         {
-            addSidebarButton(uiState, sidebarButtonPos, "FF", "Fast Forward", KeyCode.F,
-                             (button, app, game, ui) -> Logger.debug(
-                                     "toggle fast forward = {}",
-                                     game.fastForward ^= true
-                             ), (button, app, game, ui) -> button.fillColour =
-                            Theme.buttonColour(game.fastForward, button.isHovered)
+            addSidebarButton(
+                    uiState, sidebarButtonPos, "FF", null, "Fast Forward", KeyCode.F,
+                    (button, app, game, ui) ->
+                            Logger.debug("toggle fast forward = {}", game.fastForward ^= true),
+                    (button, app, game, ui) ->
+                            button.fillColour = Theme.buttonColour(game.fastForward, button.isHovered)
             );
-            addSidebarButton(uiState, sidebarButtonPos, "P", "Pause", KeyCode.P,
-                             (button, app, game, ui) -> Logger.debug("toggle pause = {}", game.paused ^= true),
-                             (button, app, game, ui) -> button.fillColour =
-                                     Theme.buttonColour(game.paused, button.isHovered)
+            addSidebarButton(
+                    uiState, sidebarButtonPos, "P", null, "Pause", KeyCode.P,
+                    (button, app, game, ui) ->
+                            Logger.debug("toggle pause = {}", game.paused ^= true),
+                    (button, app, game, ui) -> button.fillColour =
+                            Theme.buttonColour(game.paused, button.isHovered)
             );
-            addSidebarButton(uiState, sidebarButtonPos, "T", "Build Tower", KeyCode.T,
-                             (button, app, game, ui) -> Logger.debug("toggle tower = {}", ui.wantsPlaceTower ^= true),
-                             (button, app, game, ui) -> button.fillColour =
-                                     Theme.buttonColour(ui.wantsPlaceTower, button.isHovered)
+            addSidebarButton(
+                    uiState, sidebarButtonPos, "T", "<TOWER COST>", "Build Tower", KeyCode.T,
+                    (button, app, game, ui) ->
+                            Logger.debug("toggle tower = {}", ui.wantsPlaceTower ^= true),
+                    (button, app, game, ui) -> {
+                        button.fillColour = Theme.buttonColour(ui.wantsPlaceTower, button.isHovered);
+                        button.tooltip = MessageFormat.format("Cost: {0,number,##000}", game.config.tower.towerCost);
+                    }
             );
-            addSidebarButton(uiState, sidebarButtonPos, "U1", "Upgrade Range", KeyCode.NUM_1,
-                             (button, app, game, ui) -> Logger.debug(
-                                     "toggle upgrade range = {}",
-                                     ui.upgradeRange ^= true
-                             ), (button, app, game, ui) -> button.fillColour =
-                            Theme.buttonColour(ui.upgradeRange, button.isHovered)
+            addSidebarButton(
+                    uiState, sidebarButtonPos, "U1", null, "Upgrade Range", KeyCode.NUM_1,
+                    (button, app, game, ui) ->
+                            Logger.debug("toggle upgrade range = {}", ui.upgradeRange ^= true),
+                    (button, app, game, ui) ->
+                            button.fillColour = Theme.buttonColour(ui.upgradeRange, button.isHovered)
             );
-            addSidebarButton(uiState, sidebarButtonPos, "U2", "Upgrade Speed", KeyCode.NUM_2,
-                             (button, app, game, ui) -> Logger.debug(
-                                     "toggle upgrade speed = {}",
-                                     ui.upgradeSpeed ^= true
-                             ), (button, app, game, ui) -> button.fillColour =
-                            Theme.buttonColour(ui.upgradeSpeed, button.isHovered)
+            addSidebarButton(
+                    uiState, sidebarButtonPos, "U2", null, "Upgrade Speed", KeyCode.NUM_2,
+                    (button, app, game, ui) ->
+                            Logger.debug("toggle upgrade speed = {}", ui.upgradeSpeed ^= true),
+                    (button, app, game, ui) ->
+                            button.fillColour = Theme.buttonColour(ui.upgradeSpeed, button.isHovered)
             );
-            addSidebarButton(uiState, sidebarButtonPos, "U3", "Upgrade Damage", KeyCode.NUM_3,
-                             (button, app, game, ui) -> Logger.debug(
-                                     "toggle upgrade damage = {}",
-                                     ui.upgradeDamage ^= true
-                             ), (button, app, game, ui) -> button.fillColour =
-                            Theme.buttonColour(ui.upgradeDamage, button.isHovered)
+            addSidebarButton(
+                    uiState, sidebarButtonPos, "U3", null, "Upgrade Damage", KeyCode.NUM_3,
+                    (button, app, game, ui) ->
+                            Logger.debug("toggle upgrade damage = {}", ui.upgradeDamage ^= true),
+                    (button, app, game, ui) ->
+                            button.fillColour = Theme.buttonColour(ui.upgradeDamage, button.isHovered)
             );
-            addSidebarButton(uiState, sidebarButtonPos, "M", "Mana Pool", KeyCode.M,
-                             // Nice little fade out animation
-                             (button, app, game, ui) -> {
-                                 Loggers.GAMEPLAY.debug("cast mana pool");
-                                 button.fillColour = Theme.MANA;
-                                 game.spells.manaSpell.cast(game);
-                             }, (button, app, game, ui) -> {
+            addSidebarButton(
+                    uiState, sidebarButtonPos, "M", "<COST TOOLTIP>", "Mana Pool", KeyCode.M,
+                    // Nice little fade out animation
+                    (button, app, game, ui) -> {
+                        Loggers.GAMEPLAY.debug("cast mana pool");
+                        button.fillColour = Theme.MANA;
+                        game.spells.manaSpell.cast(game);
+                    },
+                    (button, app, game, ui) -> {
                         final double ANIM_SPEED = 0.03;
                         button.fillColour = Colour.lerp(
                                 button.fillColour,
                                 button.isHovered ? Theme.BUTTON_HOVERED : Theme.BUTTON_DISABLED,
                                 ANIM_SPEED
                         );
+
                         // A slight hack to modify the text that shows the cost of the spell
                         // Don't really have a good way to access the text
                         // It would be pointless to refactor addSidebarButton() for one use case
-                        final TextElement text = ui.uiElements.stream().filter(TextElement.class::isInstance)
+                        final TextElement text = ui.uiElements.stream()
+                                                              .filter(TextElement.class::isInstance)
                                                               .map(TextElement.class::cast)
-                                                              .filter(t -> t.text.startsWith("Mana Pool")).findAny()
+                                                              .filter(t -> t.text.startsWith("Mana Pool"))
+                                                              .findAny()
                                                               .orElse(null);
                         if (text == null) {
                             Loggers.UI.warn("couldn't find the text element for the mana pool description");
@@ -232,13 +243,18 @@ public class UiManager {
                                     game.spells.manaSpell.currentCost
                             );
                         }
+
+                        button.tooltip = MessageFormat.format(
+                                "Cost: {0,number,####}",
+                                game.spells.manaSpell.currentCost
+                        );
                     }
             );
-            
+
             addSidebarButton(
-                    uiState, sidebarButtonPos, "R", "Restart Game",
-                    KeyCode.R, 
-                    (_elem, app, game, ui) -> GameManager.resetGame(app),
+                    uiState, sidebarButtonPos, "R", null, "Restart Game", KeyCode.R,
+                    (_elem, app, game, ui) ->
+                            GameManager.resetGame(app),
                     (elem, app, game, ui) ->
                             elem.fillColour = Theme.buttonColour(game.gameState == GameState.PLAYING, elem.isHovered)
             );
@@ -250,18 +266,13 @@ public class UiManager {
                     new TextElement(new Vector2(0.0, 0.0), new Vector2(WINDOW_WIDTH_PX, WINDOW_HEIGHT_PX), "") {{
                         this.fontSize = 100;
                         this.textAlignMode = PConstants.CENTER;
-                    }},
-                    (elem, app, game, ui) -> {
-                        // Stupid java doesn't have proper match statements, so I made my own
-                        final GameState s = game.gameState;
-                        elem.text =
-                                (s == GameState.PLAYING) ? "" :
-                                (s == GameState.WON) ? "YOU WON" :
-                                (s == GameState.LOST) ? "YOU LOST" :
-                                "Bro what did you do to your game, this state ain't valid";
+                    }}, (elem, app, game, ui) -> {
+                // Stupid java doesn't have proper match statements, so I made my own
+                final GameState s = game.gameState;
+                elem.text =
+                        (s == GameState.PLAYING) ? "" : (s == GameState.WON) ? "YOU WON" : (s == GameState.LOST) ? "YOU LOST" : "Bro what did you do to your game, this state ain't valid";
 
-                    }
-            ));
+            }));
         }
 
         // ===== BOARD  =====
@@ -269,7 +280,7 @@ public class UiManager {
             // Board click handler (tower upgrading)
             uiState.uiElements.add(
                     new ButtonElement(new Vector2(BOARD_X_PX, BOARD_Y_PX), new Vector2(SIDEBAR_X_PX, WINDOW_HEIGHT_PX),
-                                      null, Colour.NONE, Colour.NONE, null, (button, app, game, ui) -> {
+                                      null, null, Colour.NONE, Colour.NONE, null, (button, app, game, ui) -> {
                         Loggers.GAMEPLAY.debug("board clicked");
 
                         if (!ui.wantsPlaceTower) return;
@@ -280,9 +291,7 @@ public class UiManager {
                         final Tile tile = UiManager.pixelCoordsToTile(new Vector2(app.mouseX, app.mouseY), game);
                         assert tile != null;
 
-                        GameManager.placeOrUpgradeTower(game, tile, ui.upgradeRange, ui.upgradeSpeed,
-                                                        ui.upgradeDamage
-                        );
+                        GameManager.placeOrUpgradeTower(game, tile, ui.upgradeRange, ui.upgradeSpeed, ui.upgradeDamage);
                     }
                     ));
 
@@ -370,28 +379,28 @@ public class UiManager {
 
         // ===== DEBUG STUFF =====
         {
-            addSidebarButton(uiState, sidebarButtonPos, "H", "Hover Overlay", KeyCode.H,
+            addSidebarButton(uiState, sidebarButtonPos, "H", null, "Hover Overlay", KeyCode.H,
                              (button, app, game, ui) -> Logger.debug(
                                      "toggle tile hover overlay = {}",
                                      Debug.tileHoverOverlayEnabled ^= true
                              ), (button, app, game, ui) -> button.fillColour =
                             Theme.buttonColour(Debug.tileHoverOverlayEnabled, button.isHovered)
             );
-            addSidebarButton(uiState, sidebarButtonPos, "E", "Enemy Paths", KeyCode.E,
+            addSidebarButton(uiState, sidebarButtonPos, "E", null, "Enemy Paths", KeyCode.E,
                              (button, app, game, ui) -> Logger.debug(
                                      "toggle path overlay = {}",
                                      Debug.pathfindingOverlayEnabled ^= true
                              ), (button, app, game, ui) -> button.fillColour =
                             Theme.buttonColour(Debug.pathfindingOverlayEnabled, button.isHovered)
             );
-            addSidebarButton(uiState, sidebarButtonPos, "U", "Upgrade Overlay", KeyCode.U,
+            addSidebarButton(uiState, sidebarButtonPos, "U", null, "Upgrade Overlay", KeyCode.U,
                              (button, app, game, ui) -> Logger.debug(
                                      "toggle tower upgrade overlay = {}",
                                      Debug.towerUpgradeOverlayEnabled ^= true
                              ), (button, app, game, ui) -> button.fillColour =
                             Theme.buttonColour(Debug.towerUpgradeOverlayEnabled, button.isHovered)
             );
-            addSidebarButton(uiState, sidebarButtonPos, "F3", "Stats Overlay", KeyCode.FUNCTION_3,
+            addSidebarButton(uiState, sidebarButtonPos, "F3", null, "Stats Overlay", KeyCode.FUNCTION_3,
                              (button, app, game, ui) -> Logger.debug(
                                      "toggle f3 overlay = {}",
                                      Debug.f3OverlayEnabled ^= true
@@ -426,14 +435,15 @@ public class UiManager {
      * @param uiState       Object containing the UI data
      * @param buttonPos     Vector position of the button on-screen, will be mutated
      * @param text          Text for the button
+     * @param tooltip       Tooltip to display when the button is hovered
      * @param description   Text to display as the description (to the side of the button)
      * @param activationKey Key that activates the button
      * @param click         Function to run when the button is clicked/activated
      * @param draw          Function to be called every frame
      */
     private static void addSidebarButton(
-            final UiState uiState, final Vector2 buttonPos, final String text, final String description,
-            final @Nullable KeyCode activationKey, final UiAction<ButtonElement> click,
+            final UiState uiState, final Vector2 buttonPos, final String text, @Nullable final String tooltip,
+            final String description, final @Nullable KeyCode activationKey, final UiAction<ButtonElement> click,
             final UiAction<ButtonElement> draw) {
         final double BUTTON_SIZE = 40;
         final double SPACING = 4.0;
@@ -445,7 +455,7 @@ public class UiManager {
         buttonPos.y += buttonSize.y + SPACING;
 
         uiState.uiElements.add(new DynamicWrapperElement<>(
-                new ButtonElement(buttonPos1, buttonPos2, text, Theme.BUTTON_DISABLED, Theme.OUTLINE,
+                new ButtonElement(buttonPos1, buttonPos2, text, tooltip, Theme.BUTTON_DISABLED, Theme.OUTLINE,
                                   activationKey == null ? null : new KeyPress(activationKey, false, KeyAction.PRESS),
                                   click
                 ), draw));
