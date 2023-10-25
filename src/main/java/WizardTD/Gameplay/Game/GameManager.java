@@ -575,6 +575,8 @@ public class GameManager {
         // There are references, to references, to references etc.
         // The only feasible way without a metric fuck-ton of boilerplate
         // is to just reload the game from disk
+        
+        // As a bonus, it allows for hot-reloading from disk
         app.gameData =  createGame(loadGameDescriptor());
     }
 }

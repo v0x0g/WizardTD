@@ -21,32 +21,47 @@ public class WaveTests {
         final double mana = rng.nextDouble();
         final long qty = rng.nextInt(10000);
 
-        final EnemyFactory fac = new EnemyFactory(
-                hp, speed, dmg, mana, BigInteger.valueOf(qty),
-                fact -> new GremlinEnemy(
-                        fact.health,
-                        new Vector2(0, 0),
-                        fact.speed,
-                        fact.damageMultiplier,
-                        fact.manaGainedOnKill
-                )
-        );
-
         final double delay = rng.nextDouble();
         final int waveNum = rng.nextInt();
 
         final Wave wave = new Wave(
-                qty,
+                qty * 2,
                 delay,
                 1,
                 waveNum,
-                new ArrayList<EnemyFactory>(){{add(fac);}}
+                new ArrayList<EnemyFactory>() {{
+                    add(
+                            new EnemyFactory(
+                                    hp, speed, dmg, mana, BigInteger.valueOf(qty),
+                                    fact -> new BeetleEnemy(
+                                            fact.health,
+                                            new Vector2(0, 0),
+                                            fact.speed,
+                                            fact.damageMultiplier,
+                                            fact.manaGainedOnKill
+                                    )
+                            )
+                    );
+                    add(
+                            new EnemyFactory(
+                                    hp, speed, dmg, mana, BigInteger.valueOf(qty),
+                                    fact -> new WormEnemy(
+                                            fact.health,
+                                            new Vector2(0, 0),
+                                            fact.speed,
+                                            fact.damageMultiplier,
+                                            fact.manaGainedOnKill
+                                    )
+                            )
+                    );
+                }}
         );
 
         // Haven't ticked wave, no enemies
         assertNull(wave.getEnemy());
+        wave.tick(wave.delayBeforeWave);
 
-        for (int i = 0; i < qty; i++) {
+        for (int i = 0; i < qty * 2; i++) {
             wave.tick(1);
             final @Nullable Enemy e = wave.getEnemy();
             assertNotNull(e);
