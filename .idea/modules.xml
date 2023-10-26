@@ -3,8 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/INFO11113_-_2023-09-31_-_Assignment_1_(Game).iml" filepath="$PROJECT_DIR$/.idea/modules/INFO11113_-_2023-09-31_-_Assignment_1_(Game).iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/INFO11113_-_2023-09-31_-_Assignment_1_(Game).main.iml" filepath="$PROJECT_DIR$/.idea/modules/INFO11113_-_2023-09-31_-_Assignment_1_(Game).main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/INFO11113_-_2023-09-31_-_Assignment_1_(Game).test.iml" filepath="$PROJECT_DIR$/.idea/modules/INFO11113_-_2023-09-31_-_Assignment_1_(Game).test.iml" />
     </modules>
   </component>
 </project>

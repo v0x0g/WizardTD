@@ -20,7 +20,7 @@ import java.util.*;
 import java.util.concurrent.atomic.*;
 import java.util.stream.*;
 
-import static WizardTD.Ext.JsonExt.jsonArrayToStream;
+import static WizardTD.Ext.JsonExt.*;
 import static WizardTD.GameConfig.*;
 import static java.util.Optional.empty;
 import static org.tinylog.Logger.debug;
@@ -30,11 +30,12 @@ import static org.tinylog.Logger.trace;
 public class GameLoader {
     /**
      * Loads the game config from disk, and returns it as a JSON object
+     * @param configPath The path to the config file
      */
     @SideEffectFree
-    private Optional<JSONObject> loadGameConfig() {
+    private Optional<JSONObject> loadGameConfig(final String configPath) {
         debug("loading game config");
-        final Path path = Paths.get(WizardTD.GameConfig.CONFIG_PATH);
+        final Path path = Paths.get(configPath);
         trace("config path={}", path);
         final String dataStr;
         try {
@@ -88,13 +89,14 @@ public class GameLoader {
      * Loads the game descriptor from the disk
      * <p>
      * This can then be used to actually instantiate the gameData object
+     * @param configPath The path to the config file
      */
     @SideEffectFree
-    public @Nullable GameDescriptor loadGameDescriptor() {
+    public @Nullable GameDescriptor loadGameDescriptor(final String configPath) {
         debug("loading game descriptor");
 
         // Load the config object
-        final Optional<JSONObject> maybeConfigJson = loadGameConfig();
+        final Optional<JSONObject> maybeConfigJson = loadGameConfig(configPath);
         if (!maybeConfigJson.isPresent()) {
             debug("can't load game: failed getting config");
             return null;
@@ -307,6 +309,6 @@ public class GameLoader {
         // is to just reload the game from disk
         
         // As a bonus, it allows for hot-reloading from disk
-        app.gameData =  createGame(loadGameDescriptor());
+        app.gameData =  createGame(loadGameDescriptor(GameConfig.CONFIG_PATH));
     }
 }

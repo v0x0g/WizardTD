@@ -33,7 +33,7 @@ public final class App extends PApplet {
 
         Logger.info("init game and stuff");
 
-        final GameDescriptor gameDesc = GameLoader.loadGameDescriptor();
+        final GameDescriptor gameDesc = GameLoader.loadGameDescriptor(GameConfig.CONFIG_PATH);
         Logger.debug("gameDesc={}", gameDesc);
         if (gameDesc == null) {
             Logger.warn("did not manage to load game descriptor :(");
