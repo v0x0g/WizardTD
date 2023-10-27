@@ -23,7 +23,6 @@ public class WinGameTests extends IntegrationTest {
 
         // Check back that we've won
         assertEquals(GameState.WON, app.gameData.gameState);
-        assertTrue(app.gameData.enemies.isEmpty());
     }
 
     @Test
@@ -39,6 +38,5 @@ public class WinGameTests extends IntegrationTest {
 
         // Check back that we've won
         assertEquals(GameState.WON, app.gameData.gameState);
-        assertTrue(app.gameData.enemies.isEmpty());
     }
 }

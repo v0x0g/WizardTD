@@ -1,0 +1,30 @@
+{
+  "layout": "src/test/resources/WizardTD/full/lose_game_tests_level.txt",
+  "waves": [
+    {
+      "duration": 1,
+      "pre_wave_pause": 0,
+      "monsters": [
+        {
+          "type": "gremlin",
+          "hp": 100,
+          "speed": 10000,
+          "armour": 1,
+          "mana_gained_on_kill": 0,
+          "quantity": 1000
+        }
+      ]
+    }
+  ],
+  "initial_tower_range": 0,
+  "initial_tower_firing_speed": 0,
+  "initial_tower_damage": 0,
+  "initial_mana": 1,
+  "initial_mana_cap": 1,
+  "initial_mana_gained_per_second": 0,
+  "tower_cost": 69696696969696969696,
+  "mana_pool_spell_initial_cost": 0,
+  "mana_pool_spell_cost_increase_per_use": 0,
+  "mana_pool_spell_cap_multiplier": 0,
+  "mana_pool_spell_mana_gained_multiplier": 0
+}
