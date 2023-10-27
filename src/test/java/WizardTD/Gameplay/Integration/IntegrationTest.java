@@ -14,8 +14,9 @@ public abstract class IntegrationTest {
     @BeforeEach
     public void setUpApp() {
         app = new IntegrationTestApp();
-        app.loop();
+        app.noLoop();
         PApplet.runSketch(new String[] { "App" }, app);
         app.setup();
+        Thread.sleep(1000); // wait for it to be set up
     }
 }
