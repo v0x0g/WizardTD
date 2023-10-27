@@ -1,7 +1,7 @@
 package WizardTD.Gameplay.Projectiles;
 
+import WizardTD.Gameplay.Game.*;
 import WizardTD.Rendering.*;
-import WizardTD.*;
 import lombok.*;
 import mikera.vectorz.*;
 

@@ -44,7 +44,8 @@ public class TestResources {
             "invalid_level_02.txt",
             "invalid_level_03.txt",
             "invalid_level_04.txt",
-            "invalid_level_05.txt"
+            "invalid_level_05.txt",
+            "invalid_level_06.txt"
     );
 
     private static String[] paths(final String dir, String... paths) {

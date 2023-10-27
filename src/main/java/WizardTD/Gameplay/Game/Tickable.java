@@ -1,6 +1,4 @@
-package WizardTD;
-
-import WizardTD.Gameplay.Game.*;
+package WizardTD.Gameplay.Game;
 
 public interface Tickable {
     /**

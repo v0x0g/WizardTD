@@ -1,13 +1,10 @@
 package WizardTD.Gameplay.Tiles;
 
-import WizardTD.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Rendering.*;
 import lombok.*;
 import lombok.NonNull;
 import org.checkerframework.checker.nullness.qual.*;
-
-import java.util.*;
 
 @ToString
 @EqualsAndHashCode
