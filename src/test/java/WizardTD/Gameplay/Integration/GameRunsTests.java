@@ -1,10 +1,8 @@
 package WizardTD.Gameplay.Integration;
 
-import WizardTD.*;
 import org.junit.jupiter.api.*;
-import processing.core.*;
 
-import static java.lang.Thread.sleep;
+import static java.lang.Thread.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GameRunsTests extends IntegrationTest {
