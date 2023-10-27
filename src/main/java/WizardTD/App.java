@@ -17,7 +17,7 @@ import processing.event.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-public final class App extends PApplet {
+public class App extends PApplet {
 
     public final UiState uiState;
     public GameData gameData;

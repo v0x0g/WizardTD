@@ -19,7 +19,7 @@ public class WaveTests {
         final double speed = rng.nextDouble();
         final double dmg = rng.nextDouble();
         final double mana = rng.nextDouble();
-        final long qty = rng.nextInt(1000, 10000);
+        final long qty = rng.nextInt(10000) + 1000;
 
         final double delay = rng.nextDouble();
         final int waveNum = rng.nextInt();
