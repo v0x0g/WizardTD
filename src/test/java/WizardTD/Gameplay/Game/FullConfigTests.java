@@ -19,7 +19,7 @@ public class FullConfigTests {
 
     @Test
     public void testLevel1() {
-        final String cfgPath = TestResources.FULL_CFG_DIR + "simple_runs_tests_config.json";
+        final String cfgPath = TestResources.FULL_CFG_DIR + "full_test_1_config.json";
 
         final GameDescriptor desc = GameLoader.loadGameDescriptor(cfgPath);
         assertNotNull(desc);

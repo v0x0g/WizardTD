@@ -17,7 +17,7 @@ public class SimpleRunsTests extends IntegrationTest {
         setUpApp(CONFIG_PATH);
         assertFalse(app.finished);
     }
-    
+
     @Test
     public void drawingWorks() throws InterruptedException {
         setUpApp(CONFIG_PATH);
