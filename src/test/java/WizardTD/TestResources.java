@@ -9,9 +9,9 @@ import java.util.*;
 public class TestResources {
     public final static String BASE_DIR = "src/test/resources/WizardTD/";
 
-    public final static String CFG_DIR = "config/";
-    public final static String LVL_DIR = "levels/";
-    public final static String FULL_CFG_DIR = "full/";
+    public final static String CFG_DIR = BASE_DIR + "config/";
+    public final static String LVL_DIR = BASE_DIR + "levels/";
+    public final static String FULL_CFG_DIR = BASE_DIR + "full/";
 
     /**
      * Array of paths to valid config files
@@ -52,6 +52,6 @@ public class TestResources {
     );
 
     private static String[] paths(final String dir, String... paths) {
-        return paths.stream().map(s -> BASE_DIR + dir + s).toArray(String[]::new);
+        return paths.stream().map(s -> dir + s).toArray(String[]::new);
     }
 }

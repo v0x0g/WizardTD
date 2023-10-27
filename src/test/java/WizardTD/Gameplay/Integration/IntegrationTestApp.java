@@ -3,8 +3,8 @@ package WizardTD.Gameplay.Integration;
 import WizardTD.*;
 
 public class IntegrationTestApp extends App {
-    public IntegrationTestApp() throws AppInitException {
-        super();
+    public IntegrationTestApp(final String configPath) throws AppInitException {
+        super(configPath);
     }
 
     @Override

@@ -19,7 +19,7 @@ public class FullConfigTests {
 
     @Test
     public void testLevel1() {
-        final String cfgPath = TestResources.BASE_DIR + TestResources.FULL_CFG_DIR + "full_config_1.json";
+        final String cfgPath = TestResources.FULL_CFG_DIR + "simple_runs_tests_config.json";
 
         final GameDescriptor desc = GameLoader.loadGameDescriptor(cfgPath);
         assertNotNull(desc);
@@ -93,7 +93,7 @@ public class FullConfigTests {
 
     @Test
     public void testConfig1() {
-        final String cfgPath = TestResources.BASE_DIR + TestResources.FULL_CFG_DIR + "full_config_1.json";
+        final String cfgPath = TestResources.FULL_CFG_DIR + "simple_runs_tests_config.json";
 
         final GameDescriptor desc = GameLoader.loadGameDescriptor(cfgPath);
         assertNotNull(desc);
@@ -115,7 +115,7 @@ public class FullConfigTests {
     
     @Test
     public void testEnemies1() {
-        final String cfgPath = TestResources.BASE_DIR + TestResources.FULL_CFG_DIR + "full_config_1.json";
+        final String cfgPath = TestResources.FULL_CFG_DIR + "simple_runs_tests_config.json";
 
         final GameDescriptor desc = GameLoader.loadGameDescriptor(cfgPath);
         assertNotNull(desc);

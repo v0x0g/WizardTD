@@ -28,12 +28,12 @@ public class App extends PApplet {
      */
     private double lastFrameTime = -1.0;
 
-    public App() throws AppInitException {
+    public App(String configPath) throws AppInitException {
         Logger.info("app ctor");
 
         Logger.info("init game and stuff");
 
-        final GameDescriptor gameDesc = GameLoader.loadGameDescriptor(GameConfig.CONFIG_PATH);
+        final GameDescriptor gameDesc = GameLoader.loadGameDescriptor(configPath);
         Logger.debug("gameDesc={}", gameDesc);
         if (gameDesc == null) {
             Logger.warn("did not manage to load game descriptor :(");
@@ -60,7 +60,8 @@ public class App extends PApplet {
 
         Logger.debug("run PApplet.main({})", APP_CLASS_NAME);
         try {
-            PApplet.main(APP_CLASS_NAME);
+            final App app = new App(GameConfig.CONFIG_PATH);
+            PApplet.runSketch(new String[]{APP_CLASS_NAME}, app);
         } catch (final Exception e) {
             if (e.getCause() instanceof InvocationTargetException && e
                     .getCause()
