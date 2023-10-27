@@ -139,7 +139,7 @@ public class Pathfinder {
     @ToString
     @AllArgsConstructor
     @EqualsAndHashCode
-    public static class Vertex {
+    private static class Vertex {
         /**
          * The corresponding tile position for this vertex
          */

@@ -7,6 +7,7 @@ import WizardTD.Gameplay.Projectiles.*;
 import WizardTD.Gameplay.Spawners.*;
 import WizardTD.Gameplay.Spells.*;
 import WizardTD.Gameplay.Tiles.*;
+import com.google.common.annotations.*;
 import lombok.experimental.*;
 import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.*;
@@ -32,7 +33,7 @@ public class GameLoader {
      * @param configPath The path to the config file
      */
     @SideEffectFree
-    private @Nullable JSONObject loadGameConfig(final String configPath) {
+    @Nullable JSONObject loadGameConfig(final String configPath) {
         debug("loading game config");
         final Path path = Paths.get(configPath);
         trace("config path={}", path);
@@ -59,7 +60,8 @@ public class GameLoader {
      * Loads the given level layout file from disk
      */
     @SideEffectFree
-    private @Nullable List<String> loadLevelLayoutFile(final String fileName) {
+    @VisibleForTesting
+    @Nullable List<String> loadLevelLayoutFile(final String fileName) {
         debug("loading level layout");
         final Path path = Paths.get(fileName);
         trace("level layout path={}", path);
@@ -80,7 +82,7 @@ public class GameLoader {
     }
 
     @SideEffectFree
-    private @Nullable Board parseBoard(final List<String> lines) {
+    @Nullable Board parseBoard(final List<String> lines) {
         final Board board = new Board();
         // Parse the board
         // This is ugly as but Java doesn't have so much stuff so whatever

@@ -43,6 +43,7 @@ public class BoardTest {
             }
             board.setTile(x, y, tile);
             assertEquals(board.getTile(x, y), tile);
+            assertSame(board.getTile(x, y), tile);
         }
     }
 
