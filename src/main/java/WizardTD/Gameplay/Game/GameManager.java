@@ -142,7 +142,7 @@ public class GameManager {
             // If the enemy is closer than this threshold, they have reached the house
             // Banish them
             final double DISTANCE_THRESHOLD = 1.0;
-            if (Math.abs(enemy.pathProgress - enemy.path.positions.length) < DISTANCE_THRESHOLD) {
+            if (enemy.pathProgress - enemy.path.positions.length > DISTANCE_THRESHOLD) {
                 Loggers.GAMEPLAY.debug("enemy {} reached end of path (wizard)", enemy);
                 enemy.pathProgress = 0.0;
                 // Choose a random path for the enemy to go along
