@@ -22,18 +22,18 @@ import java.util.stream.*;
 
 import static WizardTD.Ext.JsonExt.*;
 import static WizardTD.GameConfig.*;
-import static java.util.Optional.empty;
-import static org.tinylog.Logger.debug;
-import static org.tinylog.Logger.trace;
+import static java.util.Optional.*;
+import static org.tinylog.Logger.*;
 
 @UtilityClass
 public class GameLoader {
     /**
      * Loads the game config from disk, and returns it as a JSON object
+     *
      * @param configPath The path to the config file
      */
     @SideEffectFree
-    private Optional<JSONObject> loadGameConfig(final String configPath) {
+    private @Nullable JSONObject loadGameConfig(final String configPath) {
         debug("loading game config");
         final Path path = Paths.get(configPath);
         trace("config path={}", path);
@@ -44,15 +44,15 @@ public class GameLoader {
             trace("config file read: contents are \"{}\"", dataStr);
         } catch (final IOException e) {
             debug(e, "error reading config file");
-            return empty();
+            return null;
         }
         try {
             final JSONObject data = JSONObject.parse(dataStr);
             trace("parsed config: {}", data);
-            return Optional.of(data);
+            return data;
         } catch (final RuntimeException e) {
             debug(e, "error parsing config");
-            return empty();
+            return null;
         }
     }
 
@@ -60,7 +60,7 @@ public class GameLoader {
      * Loads the given level layout file from disk
      */
     @SideEffectFree
-    private Optional<List<String>> loadLevelLayoutFile(final String fileName) {
+    private @Nullable List<String> loadLevelLayoutFile(final String fileName) {
         debug("loading level layout");
         final Path path = Paths.get(fileName);
         trace("level layout path={}", path);
@@ -72,16 +72,62 @@ public class GameLoader {
                     "layout file read: contents are \n\"\n{}\n\"",
                     String.join(
                             "\n",
-                            (Iterable<String>) dataStr
-                                    .stream()
-                                    .map((s) -> "'" + s + "'")::iterator
+                            (Iterable<String>) dataStr.stream()
+                                                      .map((s) -> "'" + s + "'")::iterator
                     )
             );
 
-            return Optional.of(dataStr);
+            return dataStr;
         } catch (final IOException e) {
             debug(e, "error reading layout file");
-            return empty();
+            return null;
+        }
+    }
+
+    @SideEffectFree
+    private @Nullable Board parseBoard(final List<String> lines) {
+        try {
+            final Board board = new Board();
+            // Parse the board
+            // This is ugly as but Java doesn't have so much stuff so whatever
+            // I hate this syntax
+            if (lines.size() != BOARD_SIZE_TILES) {
+                debug("level layout invalid: expected {} lines but got {}", BOARD_SIZE_TILES, lines.size());
+                return null;
+            }
+            for (int col = 0; col < BOARD_SIZE_TILES; col++) {
+                final String line = lines.get(col);
+                // According to https://edstem.org/au/courses/12539/discussion/1573048?comment=3524920
+                // Lines can be shorter than required, we just assume the rest is grass
+                // I still choose to fail on longer lines though
+                if (line.length() > BOARD_SIZE_TILES) {
+                    debug(
+                            "level layout invalid: line {}: expected at most {} chars but got {}", col + 1,
+                            BOARD_SIZE_TILES, line.length()
+                    );
+                    return null;
+                }
+                for (int row = 0; row < BOARD_SIZE_TILES; row++) {
+                    final Tile tile;
+                    if (row < line.length()) {
+                        final char tileChar = line.charAt(row);
+                        final Optional<Tile> maybeTile = Tile.fromChar(tileChar);
+                        trace("tile char (line)[{00}] (char)[{00}]: '{}' -> {}", col, row, tileChar, maybeTile);
+                        if (!maybeTile.isPresent()) {
+                            debug("invalid tile char '{}'", tileChar);
+                            return null;
+                        }
+                        tile = maybeTile.get();
+                    }
+                    else {
+                        // Fallback when line is shorter than expected
+                        // https://i.imgflip.com/3a8eu4.jpg
+                        trace("tile char (line)[{00}] (char)[{00}] fallback as grass", col, row);
+                        tile = new GrassTile();
+                    }
+                    board.setTile(row, col, tile);
+                }
+            }
         }
     }
 
@@ -89,6 +135,7 @@ public class GameLoader {
      * Loads the game descriptor from the disk
      * <p>
      * This can then be used to actually instantiate the gameData object
+     *
      * @param configPath The path to the config file
      */
     @SideEffectFree
@@ -277,7 +324,7 @@ public class GameLoader {
      */
     public static GameData createGame(final GameDescriptor desc) {
         trace("creating game from level desc: {}", desc);
-        
+
         final Board board = desc.board;
         final List<Enemy> enemies = new ArrayList<>();
         final List<Projectile> projectiles = new ArrayList<>();
@@ -307,8 +354,8 @@ public class GameLoader {
         // There are references, to references, to references etc.
         // The only feasible way without a metric fuck-ton of boilerplate
         // is to just reload the game from disk
-        
+
         // As a bonus, it allows for hot-reloading from disk
-        app.gameData =  createGame(loadGameDescriptor(GameConfig.CONFIG_PATH));
+        app.gameData = createGame(loadGameDescriptor(GameConfig.CONFIG_PATH));
     }
 }

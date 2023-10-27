@@ -4,6 +4,8 @@ import WizardTD.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Rendering.*;
 import lombok.*;
+import lombok.NonNull;
+import org.checkerframework.checker.nullness.qual.*;
 
 import java.util.*;
 
@@ -19,18 +21,18 @@ public abstract class Tile implements Renderable, Tickable {
      * @param c The char to parse
      * @return Either a parsed tile, or empty if the char was invalid
      */
-    public static Optional<Tile> fromChar(final char c) {
+    public static @Nullable Tile fromChar(final char c) {
         switch (c) {
             case 'S':
-                return Optional.of(new ShrubTile());
+                return new ShrubTile();
             case 'W':
-                return Optional.of(new WizardHouseTile());
+                return new WizardHouseTile();
             case ' ':
-                return Optional.of(new GrassTile());
+                return new GrassTile();
             case 'X':
-                return Optional.of(new PathTile());
+                return new PathTile();
             default:
-                return Optional.empty();
+                return null;
         }
     }
 
