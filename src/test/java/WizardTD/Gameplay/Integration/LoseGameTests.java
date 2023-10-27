@@ -1,5 +1,6 @@
-package WizardTD.Gameplay.Game;
+package WizardTD.Gameplay.Integration;
 
+import WizardTD.Gameplay.Game.*;
 import WizardTD.Gameplay.Integration.*;
 import WizardTD.*;
 import org.junit.jupiter.api.*;
@@ -12,7 +13,7 @@ public class LoseGameTests extends IntegrationTest {
     @Test
     public void yeahBroYouGotSmashedByALevel50000UltraBossGoblin() throws InterruptedException {
         setUpApp(CONFIG_PATH);
-        assertEquals(app.gameData.gameState, GameState.PLAYING);
+        Assertions.assertEquals(app.gameData.gameState, GameState.PLAYING);
 
         app.loop(); // enable ticking
         Thread.sleep(1000); // wait to spawn, and to die
