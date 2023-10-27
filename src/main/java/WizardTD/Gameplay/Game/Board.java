@@ -19,7 +19,8 @@ public final class Board {
      * Array storing the map of tiles for the board.
      * <p>
      * This should always be sized exactly `[BOARD_SIZE_TILES][BOARD_SIZE_TILES]`.
-     * Indices are `[row][col]`
+     * <p> 
+     * Indices are `[col][row]`
      */
     public final @NonNull Tile[][] tiles;
 
@@ -28,13 +29,13 @@ public final class Board {
         tiles = new Tile[BOARD_SIZE_TILES][BOARD_SIZE_TILES];
         for (int i = 0; i < BOARD_SIZE_TILES; i++) {
             for (int j = 0; j < BOARD_SIZE_TILES; j++) {
-                tiles[i][j] = new InvalidTile();
+                setTile(i, j, new InvalidTile());
             }
         }
     }
 
     public Tile getTile(final int row, final int col) {
-        return this.tiles[row][col];
+        return this.tiles[col][row];
     }
 
     public @Nullable Tile maybeGetTile(final int row, final int col) {
@@ -59,7 +60,7 @@ public final class Board {
     }
 
     public void setTile(final int row, final int col, final Tile tile) {
-        this.tiles[row][col] = tile;
+        this.tiles[col][row] = tile;
         // As a note:
         // This won't work if the tile instances are shared across positions (instanced tiling)
         // So we hope the user creates a new instance each time
@@ -75,7 +76,7 @@ public final class Board {
 
         // It maps each tile, translating via ToString and then getting the first char
         // And then prints the tiles in a grid
-        return MessageFormat.format("Board'{'tiles={0}'}'", String.join(
+        return MessageFormat.format("Board'{'tiles=\n{0}\n'}'", String.join(
                 "\n", (Iterable<String>) this.tiles.stream().map(row -> String.join(
                         " ",
                         (Iterable<String>) row.stream().map(tile -> tile.toString().substring(0, 1))::iterator
