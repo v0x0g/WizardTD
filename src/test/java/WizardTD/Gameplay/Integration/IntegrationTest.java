@@ -6,8 +6,7 @@ import org.junit.jupiter.api.*;
 import processing.core.*;
 
 public abstract class IntegrationTest {
-    @SuppressWarnings("DataFlowIssue")
-    App app = null;
+    public App app = null;
 
     @SneakyThrows
     public void setUpApp(final String configPath) {

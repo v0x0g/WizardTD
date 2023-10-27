@@ -1,5 +1,5 @@
 {
-  "layout": "src/test/resources/WizardTD/full/simple_runs_tests_configs.txt",
+  "layout": "src/test/resources/WizardTD/full/simple_runs_tests_level.txt",
   "waves": [
     {
       "duration": 64,

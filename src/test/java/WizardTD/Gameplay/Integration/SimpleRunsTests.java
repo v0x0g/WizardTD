@@ -19,7 +19,7 @@ public class SimpleRunsTests extends IntegrationTest {
     }
 
     @Test
-    public void drawingWorks() throws InterruptedException {
+    public void exitWorks() throws InterruptedException {
         setUpApp(CONFIG_PATH);
         sleep(1000);
         assertFalse(app.finished);
