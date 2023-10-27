@@ -7,11 +7,11 @@
       "monsters": [
         {
           "type": "gremlin",
-          "hp": 1,
+          "hp": 100,
           "speed": 10000,
           "armour": 1,
           "mana_gained_on_kill": 0,
-          "quantity": 1
+          "quantity": 1000
         }
       ]
     }
