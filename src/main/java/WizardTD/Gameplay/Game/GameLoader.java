@@ -277,6 +277,7 @@ public class GameLoader {
         final Board board = parseBoard(layoutData);
         if (board == null) {
             debug("can't load level: board couldn't be parsed");
+            return null;
         }
 
         final List<Wave> waves;

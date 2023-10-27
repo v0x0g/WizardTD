@@ -69,7 +69,7 @@ public final class Board {
 
     @Override
     public String toString() {
-        // Don't question it
+        // Don't question it.
         // It works, ok???
         // Stop judging me like that
 

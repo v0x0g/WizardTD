@@ -8,8 +8,11 @@ import java.util.*;
 @ExtensionMethod(Arrays.class)
 public class TestResources {
     public final static String BASE_DIR = "src/test/resources/WizardTD/";
+
     public final static String CFG_DIR = "config/";
     public final static String LVL_DIR = "levels/";
+    public final static String FULL_CFG_DIR = "full/";
+
     /**
      * Array of paths to valid config files
      */
