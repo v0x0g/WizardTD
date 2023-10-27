@@ -79,7 +79,7 @@ public final class Board {
                 "\n", (Iterable<String>) this.tiles.stream().map(row -> String.join(
                         " ",
                         (Iterable<String>) row.stream().map(tile -> tile.toString().substring(0, 1))::iterator
-                                                                                   ))::iterator));
+                ))::iterator));
     }
 
     /**

@@ -29,7 +29,7 @@ public class EnemyPath {
         final int idxLow = (int) Math.floor(distance); // Index for the rounded down position
         final int idxHigh = (int) Math.ceil(distance); // Index for the rounded up position
         final double interpolation = distance - idxLow; // How far between (high and low) we are
-        
+
         final TilePos posLow = positions[idxLow];
         final TilePos posHigh = positions[idxHigh];
 

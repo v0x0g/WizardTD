@@ -13,7 +13,7 @@ import processing.core.*;
 import java.util.*;
 import java.util.stream.*;
 
-import static WizardTD.GameConfig.REFERENCE_FPS;
+import static WizardTD.GameConfig.*;
 
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)

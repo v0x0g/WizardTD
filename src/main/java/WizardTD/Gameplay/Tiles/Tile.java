@@ -2,16 +2,18 @@ package WizardTD.Gameplay.Tiles;
 
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Rendering.*;
-import lombok.*;
 import lombok.NonNull;
+import lombok.*;
 import org.checkerframework.checker.nullness.qual.*;
 
 @ToString
 @EqualsAndHashCode
 public abstract class Tile implements Renderable, Tickable {
 
-    @Getter @NonNull private final TilePos pos = new TilePos(0,0);
-    
+    @Getter
+    @NonNull
+    private final TilePos pos = new TilePos(0, 0);
+
     /**
      * Parses a char as a Tile
      *

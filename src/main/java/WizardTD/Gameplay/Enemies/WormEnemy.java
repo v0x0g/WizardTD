@@ -32,6 +32,6 @@ public class WormEnemy extends Enemy {
     @Override
     public void render(final App app, final GameData gameData, final UiState uiState) {
         Renderer.renderSimpleEnemy(app, entityImage, this.position);
-        super.render(app,gameData,uiState);
+        super.render(app, gameData, uiState);
     }
 }

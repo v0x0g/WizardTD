@@ -11,8 +11,7 @@ import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import processing.core.*;
 
-import static WizardTD.GameConfig.REFERENCE_FPS;
-import static WizardTD.GameConfig.TILE_SIZE_PX;
+import static WizardTD.GameConfig.*;
 
 @ToString
 @EqualsAndHashCode(callSuper = true)
@@ -56,10 +55,11 @@ public class FireballProjectile extends Projectile {
         // This prioritises a target near to the existing target, or else near the fireball's position
         if (!this.targetEnemy.isAlive) {
             // Range is arbitrary, so I chose tower range
-            final Enemy e = GameManager.getNextEnemy(game, this.targetEnemy.position, game.config.tower.initialTowerRange);
+            final Enemy e =
+                    GameManager.getNextEnemy(game, this.targetEnemy.position, game.config.tower.initialTowerRange);
             if (e == null) GameManager.getNextEnemy(game, this.position, game.config.tower.initialTowerRange);
-            if(e == null) {
-                GameManager.killProjectile(game,this);
+            if (e == null) {
+                GameManager.killProjectile(game, this);
                 return;
             }
             // We should never get a dead enemy
@@ -70,17 +70,19 @@ public class FireballProjectile extends Projectile {
         // Move towards target
         final Vector2 targetDir = (Vector2) this.targetEnemy.position.subCopy(this.position).toNormal();
         double enemyDistance = this.position.distance(this.targetEnemy.position);
-        final double motionAmount = Math.min(FIREBALL_SPEED_TILES * gameDeltaTime, enemyDistance); // Don't overcompensate
+        final double motionAmount =
+                Math.min(FIREBALL_SPEED_TILES * gameDeltaTime, enemyDistance); // Don't overcompensate
         final Vector2 motion = (Vector2) targetDir.multiplyCopy(motionAmount);
         this.position.add(motion);
 
         // Calculate distance again on we've moved, to see if we're close enough to kill
         enemyDistance = this.position.distance(this.targetEnemy.position);
         if (enemyDistance < HIT_DISTANCE_THRESHOLD) {
-            final double damageDealt = Math.min(this.targetEnemy.health / this.targetEnemy.damageMultiplier, this.damage);
+            final double damageDealt =
+                    Math.min(this.targetEnemy.health / this.targetEnemy.damageMultiplier, this.damage);
             GameManager.damageEnemy(game, this.targetEnemy, this.damage);
             // Allow this fireball to keep going after hitting an enemy, if it still had damage left
-            if(this.targetEnemy.isAlive) GameManager.killProjectile(game, this);
+            if (this.targetEnemy.isAlive) GameManager.killProjectile(game, this);
             else this.damage -= damageDealt;
         }
     }

@@ -158,7 +158,7 @@ public class Debug {
                 Stats.Frames.avgFps, Stats.Frames.fps, Stats.Frames.frameCount,
                 Stats.Frames.lastTick, Stats.Frames.thisTick, Stats.Frames.deltaTime,
                 ui.uiElements.size(),
-                
+
                 Stats.Perf.renderTime * 1000, Stats.Perf.tickTime * 1000,
 
                 Stats.Tick.subTickThresh, Stats.Tick.numTicks, Stats.Tick.speedMultiplier,

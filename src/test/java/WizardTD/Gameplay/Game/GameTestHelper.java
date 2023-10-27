@@ -25,7 +25,7 @@ public class GameTestHelper {
                 ),
                 new ArrayList<>()
         );
-        
+
         return GameLoader.createGame(descriptor);
     }
 }

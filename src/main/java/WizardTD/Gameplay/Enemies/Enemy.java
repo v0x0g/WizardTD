@@ -1,9 +1,9 @@
 package WizardTD.Gameplay.Enemies;
 
+import WizardTD.*;
 import WizardTD.Gameplay.Game.*;
 import WizardTD.Gameplay.Pathfinding.*;
 import WizardTD.Rendering.*;
-import WizardTD.*;
 import WizardTD.UI.Appearance.*;
 import WizardTD.UI.*;
 import lombok.*;
@@ -44,6 +44,7 @@ public abstract class Enemy implements Tickable, Renderable {
     public double manaGainedOnKill;
     public EnemyPath path;
     public double pathProgress;
+
     protected Enemy(
             final double health, final Vector2 position, final double speed, final double damageMultiplier,
             final double manaGainedOnKill) {

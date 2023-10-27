@@ -58,7 +58,7 @@ public class ButtonElement extends InteractiveElement {
         app.rect(
                 (float) this.corner1.x, (float) this.corner1.y,
                 (float) this.corner2.x, (float) this.corner2.y
-                );
+        );
 
         if (this.text != null && this.fontSize != 0) {
             app.fill(Theme.TEXT.asInt());
@@ -69,7 +69,7 @@ public class ButtonElement extends InteractiveElement {
                     // For some reason text coords are backwards????
                     (float) this.corner2.x, (float) this.corner2.y,
                     (float) this.corner1.x, (float) this.corner1.y
-                    );
+            );
         }
 
         if (this.tooltip != null && this.isHovered) {

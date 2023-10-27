@@ -23,7 +23,7 @@ public class Theme {
     public final Colour MANA = Colour.LIGHT_BLUE;
     public final Colour HEALTH_FULL = Colour.GREEN;
     public final Colour HEALTH_MISSING = Colour.RED;
-    
+
     public final float OUTLINE_WEIGHT = 2.0f;
     public final float TEXT_SIZE_NORMAL = 12.0f;
     public final float TEXT_SIZE_LARGE = 28.0f;

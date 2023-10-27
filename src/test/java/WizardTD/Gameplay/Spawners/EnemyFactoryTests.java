@@ -46,7 +46,7 @@ public class EnemyFactoryTests {
                     () -> assertNull(e.path)
             );
         }
-        
+
         // Should be no more elements as we reached spawn cap
         assertThrows(NoSuchElementException.class, fac::spawnEnemy);
     }

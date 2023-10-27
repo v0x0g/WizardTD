@@ -9,12 +9,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class GameSpellTests {
     @Test
-    public void test(){
+    public void test() {
         final double INITIAL_COST = 10;
         final double CAP_INCREASE = 2;
         final double GAIN_INCREASE = 1.1;
         final double COST_INCREASE = 10;
-        
+
         final GameData game = GameLoader.createGame(new GameDescriptor(
                 "Test",
                 new Board(),
@@ -32,12 +32,12 @@ public class GameSpellTests {
 
         final ManaSpell spell = game.spells.manaSpell;
         assertEquals(spell.currentCost, INITIAL_COST);
-        
+
         // Shouldn't be able to cast with no mana
         game.mana = 0.0;
         spell.cast(game);
         assertEquals(game.mana, 0.0);
-        
+
         // Should cast
         game.mana = INITIAL_COST;
         spell.cast(game);

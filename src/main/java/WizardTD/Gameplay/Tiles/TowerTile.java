@@ -64,12 +64,12 @@ public final class TowerTile extends Tile {
         final long cappedTowerLevel = min(2, towerLevel);
 
         final PImage tileImage = cappedTowerLevel == 0 ? tileLevel0 :
-                cappedTowerLevel == 1 ? tileLevel1 :
-                        tileLevel2;
+                                 cappedTowerLevel == 1 ? tileLevel1 :
+                                 tileLevel2;
 
         Renderer.renderSimpleTile(app, tileImage, UiManager.tileToPixelCoords(this));
         final Vector2 pixelPos = UiManager.tileToPixelCoords(this);
-        
+
         // Render speed upgrade
         final float SPEED_INDICATOR_RADIUS = 20.0f;
         app.rectMode(PConstants.CENTER);
@@ -81,7 +81,7 @@ public final class TowerTile extends Tile {
         app.strokeWeight((float) speedIndicatorWidth);
         app.stroke(Colour.lerp(Theme.TOWER_UPGRADE_SPEED, Colour.BLACK, speedIndicatorStrength).asInt());
         app.rect((float) pixelPos.x, (float) pixelPos.y, SPEED_INDICATOR_RADIUS, SPEED_INDICATOR_RADIUS);
-        
+
         // Render range upgrade
         final float RANGE_INDICATOR_SIZE = 10.0f;
         app.rectMode(PConstants.CENTER);

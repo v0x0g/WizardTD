@@ -17,7 +17,7 @@ import processing.core.*;
 public class DeathAnimationProjectile extends Projectile {
     public final ImageAnimation animation;
     public double progress = 0.0;
-    
+
     public DeathAnimationProjectile(final Vector2 position, final ImageAnimation animation) {
         super(position);
         this.animation = animation;
@@ -31,12 +31,12 @@ public class DeathAnimationProjectile extends Projectile {
     @Override
     public void render(final App app, final GameData gameData, final UiState uiState) {
         final PImage img = this.animation.getImage(progress);
-        Renderer.renderSimpleEnemy(app,img, this.position);
+        Renderer.renderSimpleEnemy(app, img, this.position);
     }
 
     @Override
     public void tick(final @NonNull GameData game, final double gameDeltaTime, final double visualDeltaTime) {
         this.progress += visualDeltaTime;
-        if(this.progress >= this.animation.duration) GameManager.killProjectile(game, this);
+        if (this.progress >= this.animation.duration) GameManager.killProjectile(game, this);
     }
 }

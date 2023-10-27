@@ -10,10 +10,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtensionMethod(Arrays.class)
 public class EventTests {
     @Test
-    
+
     public void eventManagement() {
         // Test all methods can be subscribed, unsubscribed, and invoked correctly
-        
+
         final EventType[] types = EventType.values();
         final Set<EventType> events = new HashSet<>();
 

@@ -72,8 +72,8 @@ public final class PathTile extends Tile {
     @Override
     public void tick(final @NonNull GameData game, final double gameDeltaTime, final double visualDeltaTime) {
         // Don't recalculate every frame
-        if(!this.connectedPathSides.isEmpty()) return;
-        
+        if (!this.connectedPathSides.isEmpty()) return;
+
         // Update what sides are connected.
         boolean left = sideConnected(game.board, -1, 0);
         boolean right = sideConnected(game.board, +1, 0);
@@ -95,7 +95,6 @@ public final class PathTile extends Tile {
      * @param board   Board data, holds the tiles
      * @param offsetX X offset from this tile
      * @param offsetY Y offset from this tile
-     *
      * @return Whether that given side should be considered connected or not
      */
     private boolean sideConnected(final Board board, final int offsetX, final int offsetY) {

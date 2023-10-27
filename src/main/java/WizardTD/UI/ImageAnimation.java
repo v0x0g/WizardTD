@@ -13,7 +13,7 @@ public class ImageAnimation {
     public final double duration;
 
     public PImage getImage(final double time) {
-        double t = time/duration;
+        double t = time / duration;
         t = Math.max(0, Math.min(1, t)); // clamp
         final int idx = (int) Math.floor((frames.size() - 1) * t);
         return frames.get(idx);

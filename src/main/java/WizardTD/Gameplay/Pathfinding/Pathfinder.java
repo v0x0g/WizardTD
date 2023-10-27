@@ -61,7 +61,7 @@ public class Pathfinder {
                 // If we are on a tile that is on the 'edge of the edge'
                 if (i == -1 || i == BOARD_SIZE_TILES
                     || j == -1 || j == BOARD_SIZE_TILES) {
-                    spawnPoints.add(new TilePos(i,j));
+                    spawnPoints.add(new TilePos(i, j));
                 }
             }
         }

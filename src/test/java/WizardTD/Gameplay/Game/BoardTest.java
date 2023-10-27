@@ -62,7 +62,7 @@ public class BoardTest {
             assertThrows(IndexOutOfBoundsException.class, () -> board.getTile(x, y));
         }
     }
-    
+
     @Test
     public void getGeneric() {
         final Board board = new Board();
@@ -73,7 +73,7 @@ public class BoardTest {
             final int y = rng.nextInt(BOARD_SIZE_TILES);
 
             board.setTile(x, y, new GrassTile());
-            assertNotNull(board.maybeGetTileGeneric(GrassTile.class, x,y));
+            assertNotNull(board.maybeGetTileGeneric(GrassTile.class, x, y));
             assertNull(board.maybeGetTileGeneric(PathTile.class, x, y));
         }
     }

@@ -8,7 +8,7 @@ import WizardTD.Gameplay.Projectiles.*;
 import WizardTD.Gameplay.Spawners.*;
 import WizardTD.Gameplay.Tiles.*;
 import WizardTD.Rendering.*;
-import com.google.common.collect.Streams;
+import com.google.common.collect.*;
 import lombok.experimental.*;
 import mikera.vectorz.*;
 import org.checkerframework.checker.nullness.qual.*;
@@ -20,7 +20,7 @@ import java.util.concurrent.*;
 import static WizardTD.GameConfig.*;
 
 /**
- * Static class that handles all the game 
+ * Static class that handles all the game
  */
 @UtilityClass
 public class GameManager {

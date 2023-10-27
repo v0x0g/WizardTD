@@ -19,8 +19,8 @@ import java.util.*;
 
 public final class App extends PApplet {
 
-    public GameData gameData;
     public final UiState uiState;
+    public GameData gameData;
     /**
      * The last time at which a frame was rendered
      * <p/>
@@ -155,7 +155,8 @@ public final class App extends PApplet {
         Loggers.RENDER.trace("background");
         background(Colour.DEEP_PURPLE.asInt());
 
-        final double tickDuration = Debug.timeAction(() -> GameManager.tickGameWithSubtick(this, this.gameData, deltaTime));
+        final double tickDuration =
+                Debug.timeAction(() -> GameManager.tickGameWithSubtick(this, this.gameData, deltaTime));
         final double renderDuration = Debug.timeAction(() -> Renderer.render(this, this.gameData, this.uiState));
 
         Debug.Stats.Frames.deltaTime = deltaTime;

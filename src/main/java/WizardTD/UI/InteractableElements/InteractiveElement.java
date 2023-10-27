@@ -14,6 +14,11 @@ import mikera.vectorz.*;
 @NoArgsConstructor
 public abstract class InteractiveElement extends UiElement {
     /**
+     * Boolean for whether the element is currently being hovered over. Will be se by {@link UiManager}
+     */
+    public boolean isHovered = false;
+
+    /**
      * Checks whether the mouse is currently over this UI Element
      *
      * @param mousePos Mouse position, pixel coords
@@ -30,9 +35,4 @@ public abstract class InteractiveElement extends UiElement {
      * Activates the element (will be called whenever the element is clicked)
      */
     public abstract void activate(App app, GameData gameData, UiState uiState);
-
-    /**
-     * Boolean for whether the element is currently being hovered over. Will be se by {@link UiManager}
-     */
-    public boolean isHovered = false;
 }

@@ -20,8 +20,10 @@ public class ManaSpell extends Spell {
         game.manaCap *= game.config.spell.manaPool.manaCapMultiplier;
         this.currentCost += game.config.spell.manaPool.costIncrease;
         // Calculate what the current multiplier is
-        double timesActivatedPreviously = (game.manaGainMultiplier - 1.0) / (game.config.spell.manaPool.manaGainMultiplier - 1.0);
+        double timesActivatedPreviously =
+                (game.manaGainMultiplier - 1.0) / (game.config.spell.manaPool.manaGainMultiplier - 1.0);
         timesActivatedPreviously += 1;
-        game.manaGainMultiplier = ((timesActivatedPreviously) * (game.config.spell.manaPool.manaGainMultiplier - 1.0)) + 1;
+        game.manaGainMultiplier =
+                ((timesActivatedPreviously) * (game.config.spell.manaPool.manaGainMultiplier - 1.0)) + 1;
     }
 }

@@ -37,7 +37,7 @@ dependencies {
     implementation 'io.github.classgraph:classgraph:4.8.162'
 
     implementation 'org.javatuples:javatuples:1.2'
-    
+
     // Dev tools
     compileOnly 'org.projectlombok:lombok:1.18.28'
     annotationProcessor 'org.projectlombok:lombok:1.18.28'

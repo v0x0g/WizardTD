@@ -17,7 +17,7 @@ import java.util.*;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public final class GameData {
-    
+
     public @NonNull GameState gameState;
 
     public @NonNull Board board;
@@ -29,7 +29,7 @@ public final class GameData {
     public @NonNull List<EnemyPath> enemyPaths;
 
     public @NonNull GameDataConfig config;
-    
+
     public @NonNull GameSpells spells;
 
     /**

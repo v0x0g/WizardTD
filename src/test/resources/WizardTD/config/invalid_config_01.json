@@ -1,8 +1,12 @@
 {
   "layout": "levels/level2.txt",
   "waves": [
-    MWAHAHAHAH THIS IS NOT VALID HEHEHEHHEEH,
-    
+    MWAHAHAHAH
+    THIS
+    IS
+    NOT
+    VALID
+    HEHEHEHHEEH,
     {
       "duration": 8,
       "pre_wave_pause": 0.5,
