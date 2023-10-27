@@ -279,20 +279,30 @@ public class UiManager {
         {
             // Board click handler (tower upgrading)
             uiState.uiElements.add(
-                    new ButtonElement(new Vector2(BOARD_X_PX, BOARD_Y_PX), new Vector2(SIDEBAR_X_PX, WINDOW_HEIGHT_PX),
-                                      null, null, Colour.NONE, Colour.NONE, null, (button, app, game, ui) -> {
-                        Loggers.GAMEPLAY.debug("board clicked");
+                    new ButtonElement(
+                            new Vector2(BOARD_X_PX, BOARD_Y_PX),
+                            new Vector2(SIDEBAR_X_PX, WINDOW_HEIGHT_PX),
+                            null, null, Colour.NONE, Colour.NONE, null,
+                            (button, app, game, ui) -> {
+                                Loggers.GAMEPLAY.debug("board clicked");
 
-                        if (!ui.wantsPlaceTower) return;
+                                if (!ui.wantsPlaceTower) return;
 
-                        Loggers.INPUT.info("place tower interaction");
-                        // Find which tile is hovered
-                        // Should never be null, since this element should perfectly cover the board
-                        final Tile tile = UiManager.pixelCoordsToTile(new Vector2(app.mouseX, app.mouseY), game);
-                        assert tile != null;
+                                Loggers.INPUT.info("place tower interaction");
+                                // Find which tile is hovered
+                                // Should never be null, since this element should perfectly cover the board
+                                final Tile tile =
+                                        UiManager.pixelCoordsToTile(new Vector2(app.mouseX, app.mouseY), game);
+                                assert tile != null;
 
-                        GameManager.placeOrUpgradeTower(game, tile, ui.upgradeRange, ui.upgradeSpeed, ui.upgradeDamage);
-                    }
+                                GameManager.placeOrUpgradeTower(
+                                        game,
+                                        tile,
+                                        ui.upgradeRange,
+                                        ui.upgradeSpeed,
+                                        ui.upgradeDamage
+                                );
+                            }
                     ));
 
             // Tower upgrade cost indicator
